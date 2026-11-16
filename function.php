@@ -11,34 +11,54 @@ function Connect(){
     } catch (PDOException $e) {
         exit('エラー：'. $e->getMessage());
     }
-    
-
-};
+}
 
 
 function isUser($userId, $userPw){
-    Connect();
-    try {
-        $stmt = $db->prepare("
-        ")
-    }
+    $db = Connect();
+    $stmt = $db->prepare('SELECT * FROM user WHERE userId = :userId');
+    $stmt->execute();
+    // ここからがんばれ！
+
     return ;
 };
 
 function getUser($userId, $userPw){
-    
+    $db = Connect();
+    $sql = 'SELECT * FROM user WHERE userId = :userId';
+// ここからもがんばれ！
     return ;
 };
 
-function addUser($viewName, $userId, $userPw){
+function addUser($viewName, $userId, $userPw){    
+    $result = false; 
+    try {
+        $db = Connect();
+        $stmt = $db->prepare("
+        INSERT INTO user(name , userid , password)
+    VALUES(:viewName, :userId, :userPw)"
+        );
+        $stmt->bindParam(':viewName',$viewName,PDO::PARAM_STR);
+        $stmt->bindParam(':userId',$userId,PDO::PARAM_STR);
+        $stmt->bindParam(':userPw',$userPw,PDO::PARAM_STR);
+        $stmt->execute();
+        $result = true;
+    } catch (PDOException $e){
+        // exit('エラー：' . $e->getMessage());
+        $result = false;
+    }   
     
-    return ;
+    return $result;
 };
 
-function getQuestion(){
-    
-    return ;
-};
+function getQuestion(){    
+    $db = Connect();
+    $stmt = $db->prepare("SELECT * FROM question WHERE deleteFlg = 0 ORDER BY date DESC ");
+    $stmt->execute();
+    $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $questions;
+
+} 
 
 function addQuestion($userId, $question){
     
