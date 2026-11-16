@@ -2,14 +2,26 @@
 
 function Connect(){
     $dsn = 'mysql:host=localhost;dbname=ideastock;charset=utf8';
-    $user = 'user';
-    $password = 'password';
-    return $db = new PDO($dsn, $user ,$password);
+    $user = 'root';
+    $password = 'pass';
+    try {
+        $db = new PDO($dsn, $user ,$password);
+        $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);  
+        return $db;      
+    } catch (PDOException $e) {
+        exit('エラー：'. $e->getMessage());
+    }
+    
+
 };
 
 
 function isUser($userId, $userPw){
-    
+    Connect();
+    try {
+        $stmt = $db->prepare("
+        ")
+    }
     return ;
 };
 
