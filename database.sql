@@ -39,5 +39,15 @@ desc user;
 desc question;
 desc answer;
 
+INSERT INTO `user` (loginId, password, name) 
+VALUES ('testuser1', 'password12', '山田太郎');
 
+INSERT INTO `question` (userId, question, date, deleteFlg) 
+VALUES (1, '皆さんはいつから、PHPを書いていますか？', '2026-06-07 10:00:00', 0);
 
+INSERT INTO `answer` (questionId, userId, answer, date, deleteFlg) 
+VALUES (1, 1, '私は１０年以上前から書いています', '2026-06-07 11:30:00', 0);
+
+select * from user;
+select * from question;
+select * from answer;
