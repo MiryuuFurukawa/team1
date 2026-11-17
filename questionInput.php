@@ -20,7 +20,7 @@
     </header>
 
     <!-- 投稿画面 -->
-    <form action="questionInput.php" method="POST">
+    <form action="questions.php" method="POST">
         <div>
             <label>質問を投稿する</label><br>
             <textarea name="question" rows="5" cols="40"></textarea>
