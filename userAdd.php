@@ -18,12 +18,12 @@
     <form action="userAdd.php" method="post">
         利用者登録</br>
         <div>
-            <label for="userID">表示名</label>
+            <label for="viewName">表示名</label>
             <input type="text" name="viewName" >
         </div>
         <div>
-            <label for="userID">ユーザーID</label>
-            <input type="text" name="userID" >
+            <label for="userId">ユーザーID</label>
+            <input type="text" name="userId" >
         </div>
         <div>
             <label for="userPw">パスワード</label>
