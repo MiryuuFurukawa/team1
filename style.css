@@ -1,10 +1,14 @@
 /*カラー見本
-ヘッダー：#3D5878
 背景　　：#F3F2EE
-カード　：#FFF
 文字色　：#333
 リンク　：#52758E
+
+ヘッダー：#3D5878
 フッター：#D5E1E8
+
+カード　：#FFF
+ボタン　：#D5E1E8
+削除　　：#D9A5A5
 */
 
 html {
@@ -46,15 +50,34 @@ a:active {
     text-decoration: none;
 }
 
+/* ボタン */
+input {
+    color: #3D5878;
+    text-align: center;
+    font-weight: 600;
+    padding: 10px;
+    margin: 0 auto;
+    border: none;
+    cursor: pointer;
+    background-color: #D5E1E8;
+    width: 120px;
+    border-radius: 5px;
+    letter-spacing: 0.25em;
+}
+
 /* ヘッダー */
 header {
     background-color: #3D5878;
-    border: none;
-    flex-shrink: 0;
+    height: 180px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 5%;
 }
 
 header h1 {
     margin: 0;
+    align-self: center;
 }
 
 header h1 a:link,
@@ -64,25 +87,57 @@ header h1 a:active {
     color: #FFF;
 }
 
+/* ヘッダーのボタン */
+.header-btn {
+    display: flex;
+    align-items: end;
+    gap: 30px;
+}
+
+.header-btn input {
+    background-color: #7895AD;
+    color: #FFF;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 6px 6px 0 0;
+    cursor: pointer;
+}
+
+.header-btn .question-btn {
+    background-color: #F3F2EE;
+    color: #3D5878;
+}
 
 /* メイン画面 */
 main {
     margin: 40px auto;
-    max-width: 90%;
+    max-width: 80%;
     width: 100%;
     flex: 1;
 }
 
-/* ボタン */
-input {
-    text-align: center;
-    padding: 2px;
-    margin: 5px auto;
-    border: none;
-    cursor: pointer;
+/* 質問画面一覧 */
+
+.queston-container {
+    background-color: #FFF;
+    border-radius: 10px;
+    padding: 30px;
+    margin-bottom: 20px;
+}
+
+.queston-container-btn {
+    display: flex;
+    justify-content: flex-end;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.detail-btn {
     background-color: #D5E1E8;
-    width: 100px;
-    border-radius: 5px;
+}
+
+.delete-btn {
+    background-color: #D9A5A5;
 }
 
 
@@ -92,4 +147,5 @@ footer {
     text-align: center;
     height: 50px;
     flex-shrink: 0;
+    padding: 10px 0;
 }
