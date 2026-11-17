@@ -36,13 +36,12 @@
         <div>回答者：</div>
         <div>回答内容：</div>
         <div>回答投稿日時：</div>
+        <!-- 回答ID　回答削除ボタン -->
+        <form action="detail.php" method="POST">
+            <input type="hidden" value="回答ID" name="answerId">
+            <input type="submit" value="削除" name="delete">
+        </form>
     </div>
-
-    <!-- 回答ID　回答削除ボタン -->
-    <form action="detail.php" method="POST">
-        <input type="hidden" value="回答ID" name="answerId">
-        <input type="submit" value="削除" name="delete">
-    </form>
 
     <!-- 戻るボタン -->
     <form action="questions.php" method="GET">
