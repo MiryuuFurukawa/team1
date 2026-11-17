@@ -10,17 +10,17 @@
 <body>
     <!-- ここから本文 -->
     <header>
-        <form>
+        <form action="question.php" method="GET" >
         <h1><a href="question.php">アイデア倉庫</a></h1><br>
         </form>
-        
-        <form>
+
+        <form action="index.php" method="POST">
             <input type="submit" value="ログアウト">
         </form>
     </header>
 
     <!-- 投稿画面 -->
-    <form action="post.php" method="post">
+    <form action="questionInput.php" method="POST">
         <div>
             <label>質問を投稿する</label><br>
             <textarea name="question" rows="5" cols="40"></textarea>
@@ -29,7 +29,7 @@
         <input type="submit" value="登録"><br>
     </form>
 
-    <form>
+    <form action="question.php" method="GET">
         <input type="submit" value="戻る"><br>
     </form>
 </body>

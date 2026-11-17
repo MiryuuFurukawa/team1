@@ -10,10 +10,11 @@
 <body>
     <!-- ここから本文 -->
     <header>
-
-        <h1>
-        <a href="question.php">アイデア倉庫</a>
-        </h1>
+        <form>
+            <h1>
+                <a href="question.php">アイデア倉庫</a>
+            </h1>
+        </form>
 
         <form>
             <input type="submit" value="ログアウト">
@@ -22,16 +23,16 @@
 
     <!-- 質問-->
 
-    <div>
+    
         <!-- question.phpからもてくる -->
         <label>質問</label>
         <form action="question.php" method="POST">
             <!-- どの質問に対する回答可送るための質問ID -->
-            <input type="hidden" name="questionId" value="">
+            <input type="hidden" name="questionId" value=""><br>
             <div>
 
                 <!-- 回答 -->
-                <label for="answer">回答</label>
+                <label for="answer">回答</label><br>
                 <textarea id="answer" name="answer" value="空白" rows="5" cols="40"></textarea>
             </div>
             <input type="submit" value="登録"><br>
@@ -40,7 +41,7 @@
         <form action="detail.php" method="GET">
             <!-- 戻る際にも質問IDが必要 -->
             <input type="hidden" name="questionId" value="">
-            <input type="submit"  value="戻る"><br>
+            <input type="submit" value="戻る"><br>
         </form>
 
 </body>
