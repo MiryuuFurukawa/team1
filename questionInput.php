@@ -10,8 +10,8 @@
 <body>
     <!-- ここから本文 -->
     <header>
-        <form action="question.php" method="GET" >
-        <h1><a href="question.php">アイデア倉庫</a></h1><br>
+        <form action="questions.php" method="GET">
+            <h1><a href="questions.php">アイデア倉庫</a></h1><br>
         </form>
 
         <form action="index.php" method="POST">
@@ -29,7 +29,7 @@
         <input type="submit" value="登録"><br>
     </form>
 
-    <form action="question.php" method="GET">
+    <form action="questions.php" method="GET">
         <input type="submit" value="戻る"><br>
     </form>
 </body>
