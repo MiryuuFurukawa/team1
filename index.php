@@ -18,8 +18,8 @@
     <!-- ユーザーIDとパスワードでログイン -->
     <form action="index.php" method="post">
         <div>
-            <label for="userID">ユーザーID</label>
-            <input type="text" name="userID" >
+            <label for="userId">ユーザーID</label>
+            <input type="text" name="userId" >
         </div>
         <div>
             <label for="userPw">パスワード</label>
