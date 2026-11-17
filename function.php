@@ -149,7 +149,7 @@ function deleteQuestion($questionId)
 function getQuestionById($questionId)
 {
     $db = Connect();
-    $stmt = $db->prepare('SELECT * FROM question WHERE id = questionId AND deleteFlg = 0');
+    $stmt = $db->prepare('SELECT * FROM question WHERE id = :questionId AND deleteFlg = 0');
     $stmt->bindValue(':questionId', $questionId, PDO::PARAM_INT);
     $stmt->execute();
     // 1件だけ取得して返す（見つからない場合はfalse）
