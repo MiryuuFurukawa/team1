@@ -1,6 +1,18 @@
+/*カラー見本
+ヘッダー：#3D5878
+背景　　：#F3F2EE
+カード　：#FFF
+文字色　：#333
+リンク　：#52758E
+フッター：#D5E1E8
+*/
+
 html {
     font-size : 16px;
     font-family: sans-serif;
+    color: #333;
+    background-color: #F3F2EE;
+    line-height: 1.5;
 }
 
 * {
@@ -8,33 +20,76 @@ html {
 }
 
 body {
-    margin: 0 0 0 0;
-}
-
-.header {
-    padding-top: 20px;
+    margin: 0;
+    min-height: 100vh;
     display: flex;
-    justify-content: center;
-    gap: 40px;
+    flex-direction: column;
 }
 
 a:link {
+    color:#52758E;
     text-decoration: none;
 }
 
 a:visited {
+    color:#52758E;
     text-decoration: none;
 }
 
 a:hover {
+    color:#52758E;
     text-decoration: none;
 }
 
 a:active {
+    color:#52758E;
     text-decoration: none;
 }
 
+/* ヘッダー */
+header {
+    background-color: #3D5878;
+    border: none;
+    flex-shrink: 0;
+}
+
+header h1 {
+    margin: 0;
+}
+
+header h1 a:link,
+header h1 a:visited,
+header h1 a:hover,
+header h1 a:active {
+    color: #FFF;
+}
+
+
+/* メイン画面 */
 main {
-    margin: 90px auto 90px auto;
-    max-width: 1000px;
+    margin: 40px auto;
+    max-width: 90%;
+    width: 100%;
+    flex: 1;
+}
+
+/* ボタン */
+input {
+    text-align: center;
+    padding: 2px;
+    margin: 5px auto;
+    border: none;
+    cursor: pointer;
+    background-color: #D5E1E8;
+    width: 100px;
+    border-radius: 5px;
+}
+
+
+/* フッター */
+footer {
+    background-color: #D5E1E8;
+    text-align: center;
+    height: 50px;
+    flex-shrink: 0;
 }
