@@ -23,7 +23,7 @@ function Connect(){
 
 function isUser($userId, $userPw){
     $db = Connect();
-    $stmt = $db->prepare('SELECT * FROM user WHERE userId = :userId');
+    $stmt = $db->prepare('SELECT * FROM user WHERE loginId = :userId');
     $stmt->bindValue(':userId',$userId,PDO::PARAM_STR);
     $stmt->execute();
     $user = $stmt->fetch();
@@ -41,7 +41,7 @@ function isUser($userId, $userPw){
 // @return array|false array: 利用者情報 / false: DB未登録
 function getUser($userId, $userPw){
     $db = Connect();
-    $stmt = $db->prepare('SELECT * FROM user WHERE userId = :userId');
+    $stmt = $db->prepare('SELECT * FROM user WHERE loginId = :userId');
     $stmt->bindValue(':userId',$userId,PDO::PARAM_STR);
     $stmt->execute();
     $user = $stmt->fetch();
@@ -65,12 +65,12 @@ function addUser($viewName, $userId, $userPw){
         // パスワードを安全なハッシュ値に変換する
         $hashedPassword = password_hash($userPw, PASSWORD_DEFAULT);
         $stmt = $db->prepare("
-        INSERT INTO user(name , userid , password)
+        INSERT INTO user(name , loginId , password)
     VALUES(:viewName, :userId, :userPw)"
         );
         $stmt->bindParam(':viewName',$viewName,PDO::PARAM_STR);
         $stmt->bindParam(':userId',$userId,PDO::PARAM_STR);
-        $stmt->bindParam(':userPw',$userPw,PDO::PARAM_STR);
+        $stmt->bindParam(':userPw',$hashedPassword,PDO::PARAM_STR);
         $stmt->execute();
         $result = true;
     } catch (PDOException $e){
@@ -99,7 +99,7 @@ function getQuestion(){
 
 function addQuestion($userId, $question){
     $db = Connect();
-    $stmt = $db->prepare('INSERT INTO question(userId ,question,created_at)VALUES(:userId,:question,NOW())');
+    $stmt = $db->prepare('INSERT INTO question(userId ,question,date)VALUES(:userId,:question,NOW())');
     $stmt->bindValue(':userId',$userId,PDO::PARAM_INT);
     $stmt->bindValue(':question',$question,PDO::PARAM_STR);
     return $stmt->execute();
@@ -131,36 +131,88 @@ function deleteQuestion($questionId){
 }
 }
 
+// 8. 質問IDに紐つく質問情報を取得する
+ 
+// @param int $questionId 質問ID
+// @return array|false
 
 function getQuestionById($questionId){
-    
-    return ;
-};
+    $db = Connect();
+    $stmt = $db->prepare('SELECT * FROM question WHERE id = questionId AND deleteFlg = 0');
+    $stmt->bindValue(':questionId',$questionId,PDO::PARAM_INT);
+    $stmt->execute();
+    // 1件だけ取得して返す（見つからない場合はfalse）
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+// 9. 質問IDに紐つく回答情報を取得する（日付の新しい順、回答番号順） 
+// @param int $questionId 質問ID
+// @return array|false
 
 function getAnswersByQuestionId($questionId){
-    
-    return ;
-};
+    $db = Connect();
+    $stmt = $db->prepare('SELECT * FROM answer WHERE questionId = :questionId AND deleteFlg = 0 ORDER BY date DESC, id ASC');
+    $stmt->bindValue(':questionId',$questionId,PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
-function addAnswer($userId, $questionid, $answer){
-    
-    return ;
-};
+// 10. 登録時点の日時を取得し、回答をDBに登録する
 
-function updateQuestion($questionId, $question ){
-    
-    return ;
-};
+// @param int $userId 質問者のID（回答者ID）
+// @param int $questionId 質問ID
+// @param string $answer 回答
+// @return bool true: 登録成功
+
+function addAnswer($userId, $questionId, $answer){
+    $db = Connect();
+    $stmt = $db->prepare('INSERT INTO answer (questionId , userId, answer , date, deleteFlg) VALUES (:questionId, :userId, :answer, NOW(), 0)
+    ');
+    $stmt->bindValue(':questionId',$questionId,PDO::PARAM_INT);
+    $stmt->bindValue(':userId',$userId,PDO::PARAM_INT);
+    $stmt->bindValue(':answer',$answer,PDO::PARAM_STR);
+
+    return $stmt->execute();
+}
+
+// 11. 質問IDに紐づく質問内容をDBで更新する
+
+// @param int $questionId 更新対象の質問ID
+// @param string $question 更新後の質問内容
+// @return bool true: 更新成功 / false: 更新失敗
+
+function updateQuestion($questionId, $question){
+    $db = Connect();
+    $stmt = $db->prepare('UPDATE question SET question = :question WHERE id = :questionId');
+    $stmt->bindValue(':question',$question,PDO::PARAM_STR);
+    $stmt->bindValue(':questionId',$questionId,PDO::PARAM_INT);
+    return $stmt->execute();
+}
+
+// 12. 質問IDに紐づく回答一覧をDBから取得する（該当なし・エラー時は空配列）
+
+// @param int $questionId 取得対象の質問ID
+// @return array
 
 function getAnswers($questionId){
-    
-    return ;
-};
+    $db = Connect();
+    $stmt = $db->prepare('SELECT * FROM answer WHERE questionId = :questionId AND deleteFlg = 0 ORDER BY date DESC, id ASC');
+    $stmt->bindValue(':questionId',$questionId,PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+// 13. 回答IDに紐つく回答をDBから論理削除する
+
+// @param int $answerId 削除対象の回答ID
+// @return bool true: 削除成功
 
 function deleteAnswer($answerId){
-    
-    return ;
-};
+    $db = Connect();
+    $stmt = $db->prepare('UPDATE answer SET deleteFlg = 1 WHERE id = :answerId');
+    $stmt->bindValue(':answerId',$answerId,PDO::PARAM_INT);
+    return $stmt->execute();
+}
 
 
 ?>
