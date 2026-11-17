@@ -36,8 +36,9 @@
             <div>質問内容：</div>
             <div>投稿日時：</div>
         <div class="queston-container-btn">
-        <form action="">
-            <input type="submit" class="detail-btn" value="詳細">
+        <form action="detail.php" name="detail" method="GET">
+        <input type="hidden" name="questionId">
+        <input type="submit" class="detail-btn" value="詳細">
         </form>
         <form action="questions.php" name="delete" method="POST">
             <input type="hidden" name="questionId">
