@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -22,7 +23,6 @@
     </header>
 
     <!-- 質問-->
-
     
         <!-- question.phpからもてくる -->
         <label>質問</label>
@@ -47,3 +47,20 @@
 </body>
 
 </html>
+
+
+
+<?php
+//データの受け取り
+$question = $_GET['question'];
+
+//必須項目のチェック
+if ($question == ''){
+    header("Location: questionInput.php"); //空の時questionInput.phpへ移動
+    exit();
+}
+
+//DBに接続
+$dsn = 'mysql:host=localhost;dbname=ideastock;charset=utf8';
+
+?>
