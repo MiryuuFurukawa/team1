@@ -1,5 +1,5 @@
 <?php
-
+date_default_timezone_set('Asia/Tokyo');
 // 1. データベース接続オブジェクト(PDO)を生成する
 // @return PDO
 
@@ -30,12 +30,12 @@ function isUser($userId, $userPw)
     $stmt->execute();
     $user = $stmt->fetch();
 
-    if ($user && password_verify($userPw, $user['password'])) {
+    // ユーザーが存在し、かつパスワードが一致するか確認する
+    if ($user && $user['password'] === $userPw) {
         return true;
     }
     return false;
 }
-;
 
 // 3. ログインID、パスワードを基にユーザー情報を取得し、連想配列で返却する
 
@@ -48,14 +48,13 @@ function getUser($userId, $userPw)
     $stmt = $db->prepare('SELECT * FROM user WHERE loginId = :userId');
     $stmt->bindValue(':userId', $userId, PDO::PARAM_STR);
     $stmt->execute();
-    $user = $stmt->fetch();
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($user && password_verify($userPw, $user['password'])) {
+    if ($user && $user['password'] === $userPw) {
         return $user;
     }
     return false;
 }
-;
 
 // 4. 引数を基に利用者情報をDBに登録する（ログインIDとパスワードはユニーク）
 // @param string $viewName 表示名
@@ -68,24 +67,20 @@ function addUser($viewName, $userId, $userPw)
     $result = false;
     try {
         $db = Connect();
-        // パスワードを安全なハッシュ値に変換する
-        $hashedPassword = password_hash($userPw, PASSWORD_DEFAULT);
         $stmt = $db->prepare("
-        INSERT INTO user(name , loginId , password)
-    VALUES(:viewName, :userId, :userPw)"
-        );
-        $stmt->bindParam(':viewName', $viewName, PDO::PARAM_STR);
-        $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
-        $stmt->bindParam(':userPw', $hashedPassword, PDO::PARAM_STR);
+            INSERT INTO user (name, loginId, password) 
+            VALUES (:viewName, :userId, :userPw)
+        ");
+        $stmt->bindValue(':viewName', $viewName, PDO::PARAM_STR);
+        $stmt->bindValue(':userId', $userId, PDO::PARAM_STR);
+        $stmt->bindValue(':userPw', $userPw, PDO::PARAM_STR); // ハッシュ化せずそのまま
         $stmt->execute();
         $result = true;
     } catch (PDOException $e) {
-        // exit('エラー：' . $e->getMessage());
         $result = false;
     }
     return $result;
 }
-;
 
 // 5. DBから質問表示に必要な情報を2次元連想配列で取得する（新しい順）
 // @return array|false
@@ -93,9 +88,15 @@ function addUser($viewName, $userId, $userPw)
 function getQuestion()
 {
     $db = Connect();
-    $stmt = $db->prepare("SELECT * FROM question WHERE deleteFlg = 0 ORDER BY date DESC ");
+    $stmt = $db->prepare("SELECT * FROM question WHERE deleteFlg = 0 ORDER BY date DESC");
     $stmt->execute();
     $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // データが空の場合は false を返す（設計書の定義「array | false」に厳密に合わせる場合）
+    if (empty($questions)) {
+        return false;
+    }
+
     return $questions;
 }
 
@@ -166,8 +167,13 @@ function getAnswersByQuestionId($questionId)
     $stmt = $db->prepare('SELECT * FROM answer WHERE questionId = :questionId AND deleteFlg = 0 ORDER BY date DESC, id ASC');
     $stmt->bindValue(':questionId', $questionId, PDO::PARAM_INT);
     $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $answers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if (empty($answers)) {
+        return false;
+    }
+    return $answers;
 }
+
 
 // 10. 登録時点の日時を取得し、回答をDBに登録する
 
