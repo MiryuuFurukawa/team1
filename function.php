@@ -88,7 +88,11 @@ function addUser($viewName, $userId, $userPw)
 function getQuestion()
 {
     $db = Connect();
-    $stmt = $db->prepare("SELECT * FROM question WHERE deleteFlg = 0 ORDER BY date DESC");
+    $stmt = $db->prepare("SELECT question.*, user.name AS userName 
+        FROM question 
+        JOIN user ON question.userId = user.id 
+        WHERE question.deleteFlg = 0 
+        ORDER BY question.date DESC");
     $stmt->execute();
     $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
