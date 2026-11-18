@@ -24,7 +24,7 @@
     <main>
         <form action="answer.php" method="GET">
             <h2>質問</h2>
-            <div class="queston-container">
+            <div class="question-container">
 
                 <div>質問者：</div>
                 <div>質問ID：</div>
@@ -38,7 +38,7 @@
         <!-- 回答内容表示 -->
         <div class="answer-container">
             <h2>回答</h2>
-            <div class="queston-container">
+            <div class="question-container">
                 <div>回答者：</div>
                 <div>回答内容：</div>
                 <div>回答投稿日時：</div>
