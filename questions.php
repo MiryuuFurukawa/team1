@@ -31,10 +31,10 @@ require_once 'function.php';
     </header>
     <main>
         <!--以下質問一覧画面 -->
-                <?php
-                // 質問一覧を取得
-                $questions = getQuestion();
-                foreach ($questions as $question): ?>
+        <?php
+        // 質問一覧を取得
+        $questions = getQuestion();
+        foreach ($questions as $question): ?>
             <div class="queston-container">
                 <div>質問ID：<?= htmlspecialchars($question['id']) ?></div>
                 <div>投稿者：<?= htmlspecialchars(getUser($question['userId'], $userPw)) ?></div>
@@ -51,7 +51,7 @@ require_once 'function.php';
                     </form>
                 </div>
             </div>
-                <?php endforeach; ?>
+        <?php endforeach; ?>
     </main>
     <footer>
         <div>@アイデア倉庫</div>
