@@ -35,12 +35,12 @@ require_once 'function.php';
     // 質問一覧を取得
     $questions = getQuestion();
     foreach ($questions as $question): ?>
-    <div class="queston-container">
-            <div>質問ID：<?= htmlspecialchars($question['id']) ?></div>
-            <div>投稿者：<?= htmlspecialchars(getUser($question['userId'], $userPw)) ?></div>
-            <div>質問内容：<?= htmlspecialchars($question['question']) ?></div>
-            <div>投稿日時：<?= htmlspecialchars($question['date']) ?></div>
-        <div class="queston-container-btn">
+    <div class="question-container">
+            <div>質問ID：<?= htmlspecialchars($question['id'], ENT_QUOTES, 'UTF-8') ?></div>
+            <div>投稿者：<?= htmlspecialchars($question['userName'], ENT_QUOTES, 'UTF-8') ?></div>
+            <div>質問内容：<?= htmlspecialchars($question['question'], ENT_QUOTES, 'UTF-8') ?></div>
+            <div>投稿日時：<?= htmlspecialchars($question['date'], ENT_QUOTES, 'UTF-8') ?></div>
+        <div class="question-container-btn">
         <form action="detail.php" name="detail" method="GET">
         <input type="hidden" name="questionId">
         <input type="submit" class="detail-btn" value="詳細">

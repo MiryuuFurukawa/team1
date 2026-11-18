@@ -9,6 +9,7 @@
 カード　：#FFF
 ボタン　：#D5E1E8
 削除　　：#D9A5A5
+アクセント：#D9BFA5
 */
 
 html {
@@ -50,8 +51,18 @@ a:active {
     text-decoration: none;
 }
 
+/* 入力欄とパスワード */
+input[type="text"],
+input[type="password"] {
+    width: 200px;
+    margin: 0.2rem auto;
+    padding: 10px;
+    border: 1px solid #CCC;
+    border-radius: 5px;
+}
+
 /* ボタン */
-input {
+input[type="submit"] {
     color: #3D5878;
     text-align: center;
     font-weight: 600;
@@ -120,9 +131,51 @@ h2 {
     margin: 0;
 }
 
+/* 登録・ログインフォーム */
+.form-container {
+    background-color: #FFF;
+    border-radius: 10px;
+    padding: 30px;
+    margin-bottom: 20px;
+}
+
+.userAdd {
+    color: #3D5878;
+    text-align: center;
+    font-weight: 600;
+    padding: 10px;
+    margin: 0 auto;
+    border: none;
+    cursor: pointer;
+    background-color: #D9BFA5;
+    width: 120px;
+    border-radius: 5px;
+    letter-spacing: 0.25em;
+}
+
 /* 質問詳細 */
 .answer-container {
-    margin-left: 20px; 
+    margin-left: 50px; 
+}
+
+/* 質問・回答・編集入力用テキストエリア */
+
+.edit-form label {
+    display: block;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: left;
+    font-weight: 600;
+}
+
+.edit-form textarea {
+    display: block;
+    width: 100%;
+    max-width: 600px;
+    height: 100px;
+    margin: 20px auto;
+    padding: 10px;
 }
 
 /* 質問画面一覧 */
