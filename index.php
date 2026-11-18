@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </form>
 
-        <div>
+        <div class="userAdd">
             <a href="userAdd.php">新規登録</a>
         </div>
     </main>
