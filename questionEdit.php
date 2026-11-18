@@ -23,24 +23,24 @@
 
     <!-- 編集画面 -->
     <main>
-        <div class="queston-container">
+        <div class="question-container">
             <form action="questionEdit.php" method="POST">
                 <div class="edit-form">
                     <div><label>質問を編集する</label></div>
                     <textarea name="question"></textarea>
                 </div>
                 <input type="hidden" name="questionId">
-                <div class="queston-container-btn">
+                <div class="question-container-btn">
                     <input type="submit" value="編集">
             </form>
 
-            
+
         </div>
         </div>
-        
-            <form action="detail.php" method="GET">
-                <input type="submit" value="戻る">
-            </form>
+
+        <form action="detail.php" method="GET">
+            <input type="submit" value="戻る">
+        </form>
     </main>
     <footer>
         <div>@アイデア倉庫</div>
