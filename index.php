@@ -1,22 +1,21 @@
 <?php
-session_start();
-// redirect処理は関数？
-if (isset($_SESSION['userId'])) {
-    header('Location: questions.php');
-    exit;
-}
-// functions.phpをつなげる
 require_once 'function.php';
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $userId = $_POST['userId'] ?? '';
-    $userPw = $_POST['userPw'] ?? '';
+startSessionIfNeeded();
 
-    if (isUser($userId, $userPw)) {
-        $_SESSION['userId'] = $userId;
-        header('Location: questions.php');
-        exit;
+$err = '';
+$userId = '';
+$from = $_GET['from'] ?? ($_POST['from'] ?? '');
+$questionId = $_GET['questionId'] ?? ($_POST['questionId'] ?? '');
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['logout'])) {
+        // ログアウト処理（画面遷移図：ログアウト時は質問一覧へ遷移）
+        logoutProcess();
     } else {
-        $error = 'ユーザーIDまたはパスワードが違います。';
+        // ログイン処理
+        $userId = $_POST['userID'] ?? '';
+        $userPw = $_POST['userPw'] ?? '';
+        $err = loginProcess($userId, $userPw, $from, $questionId);
     }
 }
 
@@ -32,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
-<!-- ヘッダー -->
+    <!-- ヘッダー -->
     <header>
         <form>
             <h1><a href="questions.php">アイデア倉庫</a></h1>
@@ -57,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <form>
         <a href="userAdd.php">新規登録</a>
     </form>
-<!-- フッター -->
+    <!-- フッター -->
     <footer>
         <div>@アイデア倉庫</div>
     </footer>
