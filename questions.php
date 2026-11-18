@@ -1,7 +1,12 @@
 <?php
 require_once 'function.php';
-?>
 
+startSessionIfNeeded();
+$loginUser = $_SESSION['user'] ?? null;
+
+$err = $_SESSION['err'] ?? '';
+unset($_SESSION['err']);
+?>
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -14,45 +19,48 @@ require_once 'function.php';
 
 <body>
     <header>
-        <!-- ここらへんにエラーメッセージ表示させたい -->
-        <!-- ヘッダー -->
-        <h1>
-            <a href="questions.php">アイデア倉庫</a>
-        </h1>
+        <h1><a href="questions.php">アイデア倉庫</a></h1>
         <div class="header-btn">
             <form action="questionInput.php" method="GET">
                 <input type="submit" class="question-btn" value="質問">
             </form>
-            <form action="index.php" method="POST">
-                <input type="submit" name="logout" value="ログアウト">
-            </form>
+            <?php if (isLoggedIn()): ?>
+                <form action="index.php" method="POST">
+                    <input type="submit" name="logout" value="ログアウト">
+                </form>
+            <?php endif; ?>
         </div>
-
     </header>
+
     <main>
-        <!--以下質問一覧画面 -->
-        <?php
-        // 質問一覧を取得
-        $questions = getQuestion();
-        foreach ($questions as $question): ?>
-            <div class="queston-container">
-                <div>質問ID：<?= htmlspecialchars($question['id']) ?></div>
-                <div>投稿者：<?= htmlspecialchars(getUser($question['userId'], $userPw)) ?></div>
-                <div>質問内容：<?= htmlspecialchars($question['question']) ?></div>
-                <div>投稿日時：<?= htmlspecialchars($question['date']) ?></div>
-                <div class="queston-container-btn">
-                    <form action="detail.php" name="detail" method="GET">
-                        <input type="hidden" name="questionId">
-                        <input type="submit" class="detail-btn" value="詳細">
-                    </form>
-                    <form action="questions.php" name="delete" method="POST">
-                        <input type="hidden" name="questionId">
-                        <input type="submit" class="delete-btn" value="削除">
-                    </form>
+        <?php if ($questions = getQuestion()): ?>
+            <?php foreach ($questions as $n => $q): ?>
+                <div class="queston-container">
+                    <div>質問ID：<?= htmlspecialchars($questions[$n]['id'], ENT_QUOTES, 'UTF-8') ?></div>
+                    <div>投稿者：<?= htmlspecialchars($questions[$n]['name'], ENT_QUOTES, 'UTF-8') ?></div>
+                    <div>質問内容：<?= htmlspecialchars($questions[$n]['question'], ENT_QUOTES, 'UTF-8') ?></div>
+                    <div>投稿日時：<?= htmlspecialchars($questions[$n]['date'], ENT_QUOTES, 'UTF-8') ?></div>
+
+                    <div class="queston-container-btn">
+                        <form action="detail.php" method="GET">
+                            <input type="hidden" name="questionId"
+                                value="<?= htmlspecialchars($questions[$n]['id'], ENT_QUOTES, 'UTF-8') ?>">
+                            <input type="submit" class="detail-btn" value="詳細">
+                        </form>
+
+                        <?php if ($loginUser && (int) $loginUser['id'] === (int) $questions[$n]['userId']): ?>
+                            <form action="questions.php" method="POST">
+                                <input type="hidden" name="questionId"
+                                    value="<?= htmlspecialchars($questions[$n]['id'], ENT_QUOTES, 'UTF-8') ?>">
+                                <input type="submit" class="delete-btn" value="削除" onclick="return confirm('本当に削除しますか？');">
+                            </form>
+                        <?php endif; ?>
+                    </div>
                 </div>
-            </div>
-        <?php endforeach; ?>
+            <?php endforeach; ?>
+        <?php endif; ?>
     </main>
+
     <footer>
         <div>@アイデア倉庫</div>
     </footer>
