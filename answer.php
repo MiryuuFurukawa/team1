@@ -55,13 +55,27 @@ require_once 'function.php';
 //DBに接続
 $db = Connect();
 
+// 3. フォームがPOST送信されたときに関数を呼び出してデータを登録する
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $answer = $_POST['answer'] ?? '';
+    $questionId = $_POST['questionId'] ?? '';
+    $userId = 1; // ログイン中のユーザーIDなど
+
+    if ($answer !== '') {
+        // --- ★ 関数を呼び出す ---
+        addAnswer($userId, $questionId, $answer);
+
+        header("Location: detail.php?id=" . $questionId);
+        exit();
+    }
+}
+
 
 //データの受け取り
-$question = $_POST['question'];
+//$question = $_POST['question'];
 
 //必須項目チェック
-if ($question = ''){
+if ($question = '') {
     header("Location: questionInput.php");//書式が違うとき questionInput.phpへ移動
     exit();
 }
-
