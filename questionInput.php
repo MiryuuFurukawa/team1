@@ -40,19 +40,29 @@
 <?php
 //requier at once
 require_once 'function.php';
+
 //DBに接続
 $db = Connect();
 
+//$db を使って、データを登録する処理を行う
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $question = $_POST['question'] ?? '';
 
+    
+    if (trim($question) !== '') {
+// functionから持ってきた $db を使って準備と実行を行う
+        $sql = "INSERT INTO questions (question, created_at) VALUES (:question, NOW())";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([':question' => $question]);
 
-//データの受け取り
-$question = $_POST['question'];
-
+        header("Location: questions.php");
+        exit();
+    }
+}
 //必須項目チェック
 if ($question = ''){
     header("Location: questionInput.php");//書式が違うとき questionInput.phpへ移動
     exit();
 }
-
-
 ?>
+

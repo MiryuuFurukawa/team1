@@ -26,6 +26,8 @@
 
 
     <!-- question.phpからもてくる -->
+
+    
     <label>質問</label>
     <form action="questions.php" method="POST">
         <!-- どの質問に対する回答可送るための質問ID -->
