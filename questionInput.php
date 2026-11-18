@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>質問入力画面</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -35,3 +36,23 @@
 </body>
 
 </html>
+
+<?php
+//requier at once
+require_once 'function.php';
+//DBに接続
+$db = Connect();
+
+
+
+//データの受け取り
+$question = $_POST['question'];
+
+//必須項目チェック
+if ($question = ''){
+    header("Location: questionInput.php");//書式が違うとき questionInput.phpへ移動
+    exit();
+}
+
+
+?>
