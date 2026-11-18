@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="hidden" name="questionId" value="<?= htmlspecialchars($questionId, ENT_QUOTES, 'UTF-8') ?>">
 
             <div>
-                <label for="userID">ユーザーID</label>
+                <label for="userId">ユーザーID</label>
                 <input type="text" id="userId" name="userId"
                     value="<?= htmlspecialchars($userId, ENT_QUOTES, 'UTF-8') ?>">
             </div>
@@ -58,6 +58,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <a href="userAdd.php">新規登録</a>
         </div>
     </main>
+    <footer>
+        <div>@アイデア倉庫</div>
+    </footer>
 
 </body>
 
