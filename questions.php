@@ -4,16 +4,18 @@ require_once 'function.php';
 
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>質問一覧画面</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-<header>
-    <!-- ここらへんにエラーメッセージ表示させたい -->
-    <!-- ヘッダー -->
+    <header>
+        <!-- ここらへんにエラーメッセージ表示させたい -->
+        <!-- ヘッダー -->
         <h1>
             <a href="questions.php">アイデア倉庫</a>
         </h1>
@@ -55,4 +57,5 @@ require_once 'function.php';
     <div>@アイデア倉庫</div>
 </footer>
 </body>
+
 </html>

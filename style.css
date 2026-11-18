@@ -127,14 +127,14 @@ h2 {
 
 /* 質問画面一覧 */
 
-.queston-container {
+.question-container {
     background-color: #FFF;
     border-radius: 10px;
     padding: 30px;
     margin-bottom: 20px;
 }
 
-.queston-container-btn {
+.question-container-btn {
     display: flex;
     justify-content: flex-end;
     gap: 30px;
