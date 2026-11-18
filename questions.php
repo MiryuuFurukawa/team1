@@ -2,6 +2,17 @@
 require_once 'function.php';
 
 startSessionIfNeeded();
+
+// 削除ボタンがPOST送信されてきた場合の処理
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['questionId'])) {
+    if (isLoggedIn()) {
+        $questionId = (int) $_POST['questionId'];
+        deleteQuestion($questionId);
+        header('Location: questions.php');
+        exit;
+    }
+}
+
 $loginUser = $_SESSION['user'] ?? null;
 
 $err = $_SESSION['err'] ?? '';
@@ -52,7 +63,7 @@ unset($_SESSION['err']);
                             <form action="questions.php" method="POST">
                                 <input type="hidden" name="questionId"
                                     value="<?= htmlspecialchars($questions[$n]['id'], ENT_QUOTES, 'UTF-8') ?>">
-                                <input type="submit" class="delete-btn" value="削除" onclick="return confirm('本当に削除しますか？');">
+                                <input type="submit" class="delete-btn" value="削除">
                             </form>
                         <?php endif; ?>
                     </div>
