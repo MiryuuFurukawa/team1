@@ -1,4 +1,13 @@
 <?php
+session_start();//セッション開始
+if (isset($_SESSION['id'])) {
+    header('Location:questions.php');
+} else if (isset($_POST['name']) && isset($_POST['password'])) {
+//ログインしていないときDBに接続
+{function Connect()
+
+
+}}
 
 ?>
 <!DOCTYPE html>
@@ -21,11 +30,11 @@
     <form action="index.php" method="post">
         <div>
             <label for="userId">ユーザーID</label>
-            <input type="text" name="userId" >
+            <input type="text" name="userId">
         </div>
         <div>
             <label for="userPw">パスワード</label>
-            <input type="password" name="userPw" >
+            <input type="password" name="userPw">
         </div>
         <div>
             <input type="submit" value="ログイン">
