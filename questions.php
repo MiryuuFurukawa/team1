@@ -1,8 +1,6 @@
 <?php
 require_once 'function.php';
-
 ?>
-
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -37,7 +35,7 @@ require_once 'function.php';
     foreach ($questions as $question): ?>
     <div class="queston-container">
             <div>質問ID：<?= htmlspecialchars($question['id']) ?></div>
-            <div>投稿者：<?= htmlspecialchars($question['userId']) ?></div>
+            <div>投稿者：<?= htmlspecialchars(getUser($question['userId'], $userPw)) ?></div>
             <div>質問内容：<?= htmlspecialchars($question['question']) ?></div>
             <div>投稿日時：<?= htmlspecialchars($question['date']) ?></div>
         <div class="queston-container-btn">
