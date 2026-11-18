@@ -17,7 +17,7 @@ function Connect()
     }
 }
 
-// 2. ログインID、パスワードを基にDBに登録されているユーザーか確認する]
+// 2. ログインID、パスワードを基にDBに登録されているユーザーか確認する
 // @param string $userId ログインID
 // @param string $userPw パスワード
 // @return bool true: 登録ユーザー / false: 未登録
@@ -38,7 +38,6 @@ function isUser($userId, $userPw)
 }
 
 // 3. ログインID、パスワードを基にユーザー情報を取得し、連想配列で返却する
-
 // @param string $userId ログインID
 // @param string $userPw パスワード
 // @return array|false array: 利用者情報 / false: DB未登録
@@ -92,7 +91,6 @@ function getQuestion()
     $stmt->execute();
     $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // データが空の場合は false を返す（設計書の定義「array | false」に厳密に合わせる場合）
     if (empty($questions)) {
         return false;
     }
@@ -101,7 +99,6 @@ function getQuestion()
 }
 
 // 6. 登録時点の日時を取得し、質問をDBに登録する
-
 // @param int $userId 質問者のID
 // @param string $question 質問
 // @return bool true: 登録成功
@@ -116,7 +113,6 @@ function addQuestion($userId, $question)
 }
 
 // 7. 質問IDに紐づく質問と回答を論理削除する（排他制御を意識）
-
 // @param int $questionId 削除対象の質問ID
 // @return bool true: 削除成功
 function deleteQuestion($questionId)
@@ -125,7 +121,7 @@ function deleteQuestion($questionId)
     try {
         $db->beginTransaction();
 
-        // 質問の論理削除 (deleteFlgを１に)
+        // 質問の論理削除 (deleteFlgを1に)
         $stmt1 = $db->prepare('UPDATE question SET deleteFlg = 1 WHERE id = :questionId');
         $stmt1->bindValue(':questionId', $questionId, PDO::PARAM_INT);
         $stmt1->execute();
@@ -143,7 +139,6 @@ function deleteQuestion($questionId)
 }
 
 // 8. 質問IDに紐つく質問情報を取得する
-
 // @param int $questionId 質問ID
 // @return array|false
 
@@ -153,7 +148,6 @@ function getQuestionById($questionId)
     $stmt = $db->prepare('SELECT * FROM question WHERE id = :questionId AND deleteFlg = 0');
     $stmt->bindValue(':questionId', $questionId, PDO::PARAM_INT);
     $stmt->execute();
-    // 1件だけ取得して返す（見つからない場合はfalse）
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
@@ -174,9 +168,7 @@ function getAnswersByQuestionId($questionId)
     return $answers;
 }
 
-
 // 10. 登録時点の日時を取得し、回答をDBに登録する
-
 // @param int $userId 質問者のID（回答者ID）
 // @param int $questionId 質問ID
 // @param string $answer 回答
@@ -185,8 +177,7 @@ function getAnswersByQuestionId($questionId)
 function addAnswer($userId, $questionId, $answer)
 {
     $db = Connect();
-    $stmt = $db->prepare('INSERT INTO answer (questionId , userId, answer , date, deleteFlg) VALUES (:questionId, :userId, :answer, NOW(), 0)
-    ');
+    $stmt = $db->prepare('INSERT INTO answer (questionId , userId, answer , date, deleteFlg) VALUES (:questionId, :userId, :answer, NOW(), 0)');
     $stmt->bindValue(':questionId', $questionId, PDO::PARAM_INT);
     $stmt->bindValue(':userId', $userId, PDO::PARAM_INT);
     $stmt->bindValue(':answer', $answer, PDO::PARAM_STR);
@@ -195,7 +186,6 @@ function addAnswer($userId, $questionId, $answer)
 }
 
 // 11. 質問IDに紐づく質問内容をDBで更新する
-
 // @param int $questionId 更新対象の質問ID
 // @param string $question 更新後の質問内容
 // @return bool true: 更新成功 / false: 更新失敗
@@ -210,7 +200,6 @@ function updateQuestion($questionId, $question)
 }
 
 // 12. 質問IDに紐づく回答一覧をDBから取得する（該当なし・エラー時は空配列）
-
 // @param int $questionId 取得対象の質問ID
 // @return array
 
@@ -224,7 +213,6 @@ function getAnswers($questionId)
 }
 
 // 13. 回答IDに紐つく回答をDBから論理削除する
-
 // @param int $answerId 削除対象の回答ID
 // @return bool true: 削除成功
 
@@ -236,12 +224,9 @@ function deleteAnswer($answerId)
     return $stmt->execute();
 }
 
-
-
 // 以下、ログイン系の関数
 
-//セッションを開始する（未開始の場合のみ）
-
+// セッションを開始する（未開始の場合のみ）
 function startSessionIfNeeded(): void
 {
     if (session_status() === PHP_SESSION_NONE) {
@@ -249,25 +234,23 @@ function startSessionIfNeeded(): void
     }
 }
 
-//ログイン中かどうかを判定する
-//@return bool
-
+// ログイン中かどうかを判定する
+// @return bool
 function isLoggedIn(): bool
 {
     startSessionIfNeeded();
     return isset($_SESSION['user']) && !empty($_SESSION['user']['id']);
 }
 
-//未ログイン時にログイン画面へリダイレクトする（画面遷移図の制御用）
-//@param string $from 遷移元識別子（'questionInput' や 'answer'）
-//@param string $questionId 質問ID（回答画面からの遷移時など）
-
-function requireLogin(string $from = '', string $questionId = ''): void
+// 未ログイン時にログイン画面へリダイレクトする（画面遷移図の制御用）
+// @param string $page 遷移元識別子（'questionInput' や 'answer'）
+// @param string $questionId 質問ID（回答画面からの遷移時など）
+function requireLogin(string $page = '', string $questionId = ''): void
 {
     if (!isLoggedIn()) {
         $params = [];
-        if ($from !== '') {
-            $params['from'] = $from;
+        if ($page !== '') {
+            $params['page'] = $page;
         }
         if ($questionId !== '') {
             $params['questionId'] = $questionId;
@@ -278,9 +261,7 @@ function requireLogin(string $from = '', string $questionId = ''): void
     }
 }
 
-
-//ログアウト処理を実行し、質問一覧画面へ遷移する（画面遷移図）
-
+// ログアウト処理を実行し、質問一覧画面へ遷移する（画面遷移図）
 function logoutProcess(): void
 {
     startSessionIfNeeded();
@@ -290,15 +271,13 @@ function logoutProcess(): void
     exit;
 }
 
-//ログイン認証と成功時のリダイレクト処理を行う（index.php用）
-
-//@param string $userId
-//@param string $userPw
-//@param string $from
-//@param string $questionId
-//@return string 
-
-function loginProcess(string $userId, string $userPw, string $from = '', string $questionId = ''): string
+// ログイン認証と成功時のリダイレクト処理を行う（index.php用）
+// @param string $userId
+// @param string $userPw
+// @param string $page
+// @param string $questionId
+// @return string 
+function loginProcess(string $userId, string $userPw, string $page = '', string $questionId = ''): string
 {
     startSessionIfNeeded();
 
@@ -317,11 +296,11 @@ function loginProcess(string $userId, string $userPw, string $from = '', string 
 
     $_SESSION['user'] = $user;
 
-    // 画面遷移図に基づくログイン成功時の遷移先分岐
-    if ($from === 'questionInput') {
+    // 画面遷移図に基づくログイン成功時の遷移先分岐（$pageで判定）
+    if ($page === 'questionInput') {
         header('Location: questionInput.php');
         exit;
-    } elseif ($from === 'answer' && $questionId !== '') {
+    } elseif ($page === 'answer' && $questionId !== '') {
         header('Location: answer.php?questionId=' . urlencode($questionId));
         exit;
     } else {
@@ -329,5 +308,3 @@ function loginProcess(string $userId, string $userPw, string $from = '', string 
         exit;
     }
 }
-
-?>
