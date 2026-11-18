@@ -236,5 +236,98 @@ function deleteAnswer($answerId)
     return $stmt->execute();
 }
 
+// =========================================================================
+// 以下、各画面で利用する共通セッション・認証・遷移ヘルパー関数
+// =========================================================================
+
+//セッションを開始する（未開始の場合のみ）
+
+function startSessionIfNeeded(): void
+{
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+}
+
+//ログイン中かどうかを判定する
+//@return bool
+
+function isLoggedIn(): bool
+{
+    startSessionIfNeeded();
+    return isset($_SESSION['user']) && !empty($_SESSION['user']['id']);
+}
+
+//未ログイン時にログイン画面へリダイレクトする（画面遷移図の制御用）
+//@param string $from 遷移元識別子（'questionInput' や 'answer'）
+//@param string $questionId 質問ID（回答画面からの遷移時など）
+
+function requireLogin(string $from = '', string $questionId = ''): void
+{
+    if (!isLoggedIn()) {
+        $params = [];
+        if ($from !== '') {
+            $params['from'] = $from;
+        }
+        if ($questionId !== '') {
+            $params['questionId'] = $questionId;
+        }
+        $query = !empty($params) ? '?' . http_build_query($params) : '';
+        header('Location: index.php' . $query);
+        exit;
+    }
+}
+
+
+//ログアウト処理を実行し、質問一覧画面へ遷移する（画面遷移図）
+
+function logoutProcess(): void
+{
+    startSessionIfNeeded();
+    $_SESSION = [];
+    session_destroy();
+    header('Location: questions.php');
+    exit;
+}
+
+//ログイン認証と成功時のリダイレクト処理を行う（index.php用）
+
+//@param string $userId
+//@param string $userPw
+//@param string $from
+//@param string $questionId
+//@return string 
+
+function loginProcess(string $userId, string $userPw, string $from = '', string $questionId = ''): string
+{
+    startSessionIfNeeded();
+
+    if ($userId === '' || $userPw === '') {
+        return 'ユーザーIDとパスワードを入力してください。';
+    }
+
+    if (!isUser($userId, $userPw)) {
+        return 'ユーザーIDまたはパスワードが間違っています。';
+    }
+
+    $user = getUser($userId, $userPw);
+    if ($user === false) {
+        return 'ユーザー情報の取得に失敗しました。';
+    }
+
+    $_SESSION['user'] = $user;
+
+    // 画面遷移図に基づくログイン成功時の遷移先分岐
+    if ($from === 'questionInput') {
+        header('Location: questionInput.php');
+        exit;
+    } elseif ($from === 'answer' && $questionId !== '') {
+        header('Location: answer.php?questionId=' . urlencode($questionId));
+        exit;
+    } else {
+        header('Location: questions.php');
+        exit;
+    }
+}
 
 ?>
