@@ -8,15 +8,9 @@ $from = $_GET['from'] ?? ($_POST['from'] ?? '');
 $questionId = $_GET['questionId'] ?? ($_POST['questionId'] ?? '');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['logout'])) {
-        // ログアウト処理（画面遷移図：ログアウト時は質問一覧へ遷移）
-        logoutProcess();
-    } else {
-        // ログイン処理
-        $userId = $_POST['userID'] ?? '';
-        $userPw = $_POST['userPw'] ?? '';
-        $err = loginProcess($userId, $userPw, $from, $questionId);
-    }
+    $userId = $_POST['userID'] ?? '';
+    $userPw = $_POST['userPw'] ?? '';
+    $err = loginProcess($userId, $userPw, $from, $questionId);
 }
 
 ?>
