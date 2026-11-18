@@ -154,7 +154,10 @@ function deleteQuestion($questionId)
 function getQuestionById($questionId)
 {
     $db = Connect();
-    $stmt = $db->prepare('SELECT * FROM question WHERE id = :questionId AND deleteFlg = 0');
+    $stmt = $db->prepare('SELECT question.*, user.name AS userName 
+        FROM question 
+        JOIN user ON question.userId = user.id 
+        WHERE question.id = :questionId AND question.deleteFlg = 0');
     $stmt->bindValue(':questionId', $questionId, PDO::PARAM_INT);
     $stmt->execute();
     // 1件だけ取得して返す（見つからない場合はfalse）
@@ -168,7 +171,12 @@ function getQuestionById($questionId)
 function getAnswersByQuestionId($questionId)
 {
     $db = Connect();
-    $stmt = $db->prepare('SELECT * FROM answer WHERE questionId = :questionId AND deleteFlg = 0 ORDER BY date DESC, id ASC');
+    $stmt = $db->prepare('
+        SELECT answer.*, user.name AS answererName 
+        FROM answer 
+        JOIN user ON answer.userId = user.id 
+        WHERE answer.questionId = :questionId AND answer.deleteFlg = 0 
+        ORDER BY answer.date DESC, answer.id ASC');
     $stmt->bindValue(':questionId', $questionId, PDO::PARAM_INT);
     $stmt->execute();
     $answers = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -221,7 +229,12 @@ function updateQuestion($questionId, $question)
 function getAnswers($questionId)
 {
     $db = Connect();
-    $stmt = $db->prepare('SELECT * FROM answer WHERE questionId = :questionId AND deleteFlg = 0 ORDER BY date DESC, id ASC');
+    $stmt = $db->prepare('
+    SELECT answer.*, user.name AS answererName 
+        FROM answer 
+        JOIN user ON answer.userId = user.id 
+        WHERE answer.questionId = :questionId AND answer.deleteFlg = 0 
+        ORDER BY answer.date DESC, id ASC');
     $stmt->bindValue(':questionId', $questionId, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
