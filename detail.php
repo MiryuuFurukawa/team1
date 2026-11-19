@@ -43,9 +43,9 @@ if ($answers === false) {
     </header>
 
     <main>
-        <form action="answer.php" method="GET">
-            <h2>質問</h2>
-            <div class="question-container">
+        <h2>質問</h2>
+        <div class="question-container">
+            <form action="answer.php" method="GET">
                 <div>質問者：<?= htmlspecialchars((string) $question['name'], ENT_QUOTES, 'UTF-8') ?></div>
                 <div>質問ID：<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?></div>
                 <div>質問内容：<?= nl2br(htmlspecialchars((string) $question['question'], ENT_QUOTES, 'UTF-8')) ?></div>
@@ -56,8 +56,15 @@ if ($answers === false) {
                 <input type="hidden" name="page" value="answer">
 
                 <input type="submit" value="回答" name="answer">
-            </div>
-        </form>
+            </form>
+            <?php if (isLoggedIn() && (int) $question['userId'] === (int) $_SESSION['user']['id']): ?>
+                <form action="questionEdit.php" method="GET">
+                    <input type="hidden" name="questionId"
+                        value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
+                    <input type="submit" value="編集">
+                </form>
+            <?php endif; ?>
+        </div>
 
         <div class="answer-container">
             <h2>回答</h2>
@@ -78,6 +85,15 @@ if ($answers === false) {
                                 <input type="hidden" value="<?= htmlspecialchars((string) $ans['id'], ENT_QUOTES, 'UTF-8') ?>"
                                     name="answerId">
                                 <input type="submit" value="削除" name="delete">
+                            </form>
+                        <?php endif; ?>
+                        <?php if (isLoggedIn() && (int) $ans['userId'] === (int) $_SESSION['user']['id']): ?>
+                            <form action="answerEdit.php" method="GET">
+                                <input type="hidden" name="answerId"
+                                    value="<?= htmlspecialchars((string) $ans['id'], ENT_QUOTES, 'UTF-8') ?>">
+                                <input type="hidden" name="questionId"
+                                    value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
+                                <input type="submit" value="編集">
                             </form>
                         <?php endif; ?>
                     </div>
