@@ -48,21 +48,21 @@ unset($_SESSION['err']);
                 <div class="question-container">
                     <form><input type="hidden" name="questionId" value="<?= htmlspecialchars($questions[$n]['id'], ENT_QUOTES, 'UTF-8') ?>"></form>
                     <div class="question-name"><?= htmlspecialchars($questions[$n]['name'], ENT_QUOTES, 'UTF-8') ?></div>
-                    <div class="question-text"><?= htmlspecialchars($questions[$n]['question'], ENT_QUOTES, 'UTF-8') ?></div>
                     <div class="question-time"><?= htmlspecialchars($questions[$n]['date'], ENT_QUOTES, 'UTF-8') ?></div>
+                    <div class="question-text"><?= htmlspecialchars($questions[$n]['question'], ENT_QUOTES, 'UTF-8') ?></div>
 
                     <div class="question-container-btn">
                         <form action="detail.php" method="GET">
                             <input type="hidden" name="questionId"
                                 value="<?= htmlspecialchars($questions[$n]['id'], ENT_QUOTES, 'UTF-8') ?>">
-                            <input type="submit" class="detail-btn" value="詳細">
+                            <input type="submit" id="detail-btn" value="詳細">
                         </form>
 
                         <?php if ($loginUser && (int) $loginUser['id'] === (int) $questions[$n]['userId']): ?>
                             <form action="questions.php" method="POST">
                                 <input type="hidden" name="questionId"
                                     value="<?= htmlspecialchars($questions[$n]['id'], ENT_QUOTES, 'UTF-8') ?>">
-                                <input type="submit" class="delete-btn" value="削除">
+                                <input type="submit" id="delete-btn" value="削除">
                             </form>
                         <?php endif; ?>
                     </div>

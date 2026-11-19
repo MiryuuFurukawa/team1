@@ -187,19 +187,44 @@ h2 {
     margin-bottom: 20px;
 }
 
+.question-name {
+    font-weight: 600;
+    letter-spacing: 0.2rem;
+}
+
+.question-text {
+    margin-top: 1.2rem;
+}
+
+.question-time {
+    color: #7895AD;
+    font-size: 0.8rem;
+    text-align: right;
+    border-bottom: 1px dashed #D5E1E8;
+}
+
+
 .question-container-btn {
     display: flex;
     justify-content: flex-end;
-    gap: 30px;
+    gap: 15px;
     margin-top: 20px;
 }
 
-.detail-btn {
+#detail-btn {
+    font-size: 0.8rem;
     background-color: #D5E1E8;
+    padding: 5px 0;
+    width: 80px;
+    height: 36px;
 }
 
-.delete-btn {
+#delete-btn {
+    font-size: 0.8rem;
     background-color: #D9A5A5;
+    padding: 5px 0;
+    width: 80px;
+    height: 36px;
 }
 
 
