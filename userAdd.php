@@ -40,6 +40,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($viewName === '' || $userId === '' || $userPw === '') {
         $error = '入力してください。';
+    } else if (mb_strlen($userId) < 6) {
+        $error = 'ユーザーIDは6文字以上で入力してください。';
+    } else if (mb_strlen($userPw) < 8) {
+    $error = 'パスワードは8文字以上で入力してください。';
     } else if ($user !== false) {
         $error = 'このユーザーIDはすでに使用されています。';
     } else if (!addUser($viewName, $userId, $userPw)) {
