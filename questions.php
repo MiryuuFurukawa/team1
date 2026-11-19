@@ -45,13 +45,13 @@ unset($_SESSION['err']);
     <main>
         <?php if ($questions = getQuestion()): ?>
             <?php foreach ($questions as $n => $q): ?>
-                <div class="queston-container">
+                <div class="question-container">
                     <div>質問ID：<?= htmlspecialchars($questions[$n]['id'], ENT_QUOTES, 'UTF-8') ?></div>
                     <div>投稿者：<?= htmlspecialchars($questions[$n]['name'], ENT_QUOTES, 'UTF-8') ?></div>
                     <div>質問内容：<?= htmlspecialchars($questions[$n]['question'], ENT_QUOTES, 'UTF-8') ?></div>
                     <div>投稿日時：<?= htmlspecialchars($questions[$n]['date'], ENT_QUOTES, 'UTF-8') ?></div>
 
-                    <div class="queston-container-btn">
+                    <div class="question-container-btn">
                         <form action="detail.php" method="GET">
                             <input type="hidden" name="questionId"
                                 value="<?= htmlspecialchars($questions[$n]['id'], ENT_QUOTES, 'UTF-8') ?>">
