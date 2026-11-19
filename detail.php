@@ -1,16 +1,13 @@
 <?php
 require_once 'function.php';
 
-// GETで渡ってきた questionId を取得
 $questionId = $_GET['questionId'] ?? '';
 
-// 質問IDが空、または数字以外の場合は一覧画面へリダイレクト
 if ($questionId === '' || !ctype_digit((string) $questionId)) {
     header('Location: questions.php');
     exit;
 }
 
-// 質問情報を取得
 $question = getQuestionById((int) $questionId);
 if ($question === false) {
     header('Location: questions.php');
@@ -18,7 +15,6 @@ if ($question === false) {
 }
 $question['name'] = $question['userName'] ?? '';
 
-// 質問に紐づく回答一覧を取得する（取得できない場合は空配列にする）
 $answers = getAnswersByQuestionId((int) $questionId);
 if ($answers === false) {
     $answers = [];
@@ -37,7 +33,6 @@ if ($answers === false) {
 <body>
     <header>
         <h1><a href="questions.php">アイデア倉庫</a></h1>
-        <!-- ログアウトボタン（ログイン時のみ表示） -->
         <?php if (isLoggedIn()): ?>
             <div class="header-btn">
                 <form action="index.php" method="POST">
@@ -47,9 +42,7 @@ if ($answers === false) {
         <?php endif; ?>
     </header>
 
-    <!-- 質問内容表示-->
     <main>
-        <!-- 回答ボタンのフォーム（未ログイン時はloginProcessへpage=answerを伝える） -->
         <form action="answer.php" method="GET">
             <h2>質問</h2>
             <div class="question-container">
@@ -58,7 +51,6 @@ if ($answers === false) {
                 <div>質問内容：<?= nl2br(htmlspecialchars((string) $question['question'], ENT_QUOTES, 'UTF-8')) ?></div>
                 <div>投稿日時：<?= htmlspecialchars((string) $question['date'], ENT_QUOTES, 'UTF-8') ?></div>
 
-                <!-- 質問IDと遷移先ページ名(answer)をhiddenで持たせる -->
                 <input type="hidden" name="questionId"
                     value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
                 <input type="hidden" name="page" value="answer">
@@ -67,13 +59,11 @@ if ($answers === false) {
             </div>
         </form>
 
-        <!-- 回答内容表示 -->
         <div class="answer-container">
             <h2>回答</h2>
             <?php if (!empty($answers)): ?>
                 <?php foreach ($answers as $ans): ?>
                     <?php
-                    // 画面定義書の $ans['name'] に合わせるために代入
                     $ans['name'] = $ans['answererName'] ?? '';
                     ?>
                     <div class="question-container">
@@ -81,7 +71,6 @@ if ($answers === false) {
                         <div>回答内容：<?= nl2br(htmlspecialchars((string) $ans['answer'], ENT_QUOTES, 'UTF-8')) ?></div>
                         <div>回答投稿日時：<?= htmlspecialchars((string) $ans['date'], ENT_QUOTES, 'UTF-8') ?></div>
 
-                        <!-- 回答IDと回答削除ボタン（※ログイン中で、かつ自分の投稿した回答の場合に表示する制御などを必要に応じて追加できます） -->
                         <?php if (isLoggedIn() && (int) $ans['userId'] === (int) $_SESSION['user']['id']): ?>
                             <form
                                 action="detail.php?questionId=<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>"
@@ -98,7 +87,6 @@ if ($answers === false) {
             <?php endif; ?>
         </div>
 
-        <!-- 戻るボタン -->
         <form action="questions.php" method="GET">
             <input type="submit" value="戻る">
         </form>
