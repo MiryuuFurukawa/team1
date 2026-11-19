@@ -33,10 +33,10 @@
             </div>
         </form>
     </main>
+    <footer>
         <form action="index.php" method="get">
             <button type="submit" class="return-btn">戻る</button>
         </form>
-    <footer>
         <div>@アイデア倉庫</div>
     </footer>
 </body>

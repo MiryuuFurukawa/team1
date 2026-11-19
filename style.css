@@ -76,13 +76,6 @@ input[type="submit"] {
     letter-spacing: 0.25em;
 }
 
-/* 戻るボタン */
-.return-btn {
-    
-}
-
-
-
 /* ヘッダー */
 header {
     background-color: #0f3f9f;
@@ -295,9 +288,30 @@ h2 {
 
 /* フッター */
 footer {
+    font-size: 0.8rem;
+    position: relative;
     background-color: #D5E1E8;
     text-align: center;
     height: 50px;
     flex-shrink: 0;
-    padding: 10px 0;
+    padding: 15px 0;
+}
+
+/* 戻るボタン */
+.return-btn {
+    position: absolute;
+    left: 10%;
+    top: 0;
+
+    font-size: 0.8rem;
+    background-color: #F3F4F6;
+    color: #0f3f9f;
+    font-weight: 600;
+    border: none;
+    margin: 0;
+    padding: 3px 15px;
+    border-radius: 0 0 6px 6px;
+    width: 80px;
+    height: 30px;
+    cursor: pointer;
 }
