@@ -1,3 +1,14 @@
+<?php
+require_once 'function.php';
+
+startSessionIfNeeded();
+// 未ログインの場合はログイン画面へリダイレクトし、ログイン後に questionInput.php に戻るようにする
+requireLogin('questionInput');
+
+$loginUser = $_SESSION['user'] ?? null;
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,6 +16,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>

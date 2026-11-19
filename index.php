@@ -1,4 +1,24 @@
+<?php
+require_once 'function.php';
+startSessionIfNeeded();
 
+$err = '';
+$userId = '';
+$page = $_GET['page'] ?? ($_POST['page'] ?? '');
+$questionId = $_GET['questionId'] ?? ($_POST['questionId'] ?? '');
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // ログアウトボタンが押された場合の処理を追加
+    if (isset($_POST['logout'])) {
+        logoutProcess();
+    }
+
+    // 通常のログイン処理
+    $userId = $_POST['userId'] ?? '';
+    $userPw = $_POST['userPw'] ?? '';
+    $err = loginProcess($userId, $userPw, $page, $questionId);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,28 +32,42 @@
 <body>
 
     <header>
-        <form>
-            <h1><a href="questions.php">アイデア倉庫</a></h1>
-        </form>
+        <h1><a href="questions.php">アイデア倉庫</a></h1>
     </header>
-    <!-- ユーザーIDとパスワードでログイン -->
-    <form action="index.php" method="post">
-        <div>
-            <label for="userId">ユーザーID</label>
-            <input type="text" name="userId" >
+
+    <main>
+        <h2>ログイン</h2>
+
+        <?php if ($err !== ''): ?>
+            <p><?= htmlspecialchars($err, ENT_QUOTES, 'UTF-8') ?></p>
+        <?php endif; ?>
+
+        <form action="index.php" method="post">
+            <input type="hidden" name="page" value="<?= htmlspecialchars($page, ENT_QUOTES, 'UTF-8') ?>">
+            <input type="hidden" name="questionId" value="<?= htmlspecialchars($questionId, ENT_QUOTES, 'UTF-8') ?>">
+
+            <div>
+                <label for="userId">ユーザーID</label>
+                <input type="text" id="userId" name="userId"
+                    value="<?= htmlspecialchars($userId, ENT_QUOTES, 'UTF-8') ?>">
+            </div>
+            <div>
+                <label for="userPw">パスワード</label>
+                <input type="password" id="userPw" name="userPw">
+            </div>
+            <div>
+                <input type="submit" value="ログイン">
+            </div>
+        </form>
+
+        <div class="userAdd">
+            <a href="userAdd.php">新規登録</a>
         </div>
-        <div>
-            <label for="userPw">パスワード</label>
-            <input type="password" name="userPw" >
-        </div>
-        <div>
-            <input type="submit" value="ログイン">
-        </div>
-    </form>
-    <!-- 新規登録ページへ移動リンク -->
-    <form>
-        <a href="userAdd.php">新規登録</a>
-    </form>
+    </main>
+    <footer>
+        <div>@アイデア倉庫</div>
+    </footer>
+
 </body>
 
 </html>
