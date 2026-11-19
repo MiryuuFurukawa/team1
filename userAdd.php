@@ -1,3 +1,56 @@
+<?php
+// function.php をつなげる
+require_once 'function.php';
+// セッションスタート
+startSessionIfNeeded();
+
+
+// すでに同じユーザーID（loginId）が使われているかチェックする関数
+function isUserIdExists(string $userId): bool
+{
+    try {
+        $db = Connect();
+        $stmt = $db->prepare("SELECT COUNT(*) FROM user WHERE loginId = :userId");
+        $stmt->bindValue(':userId', $userId, PDO::PARAM_STR);
+        $stmt->execute();
+
+        // 件数が1以上なら「すでに使われている（true）」を返す
+        return (int) $stmt->fetchColumn() > 0;
+    } catch (PDOException $e) {
+        // エラー時は安全のため重複扱い（true）にして登録を止める
+        return true;
+    }
+}
+
+
+
+// 新規登録処理
+$error = "";
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $viewName = $_POST['viewName'];
+    $userId = $_POST['userId'];
+    $userPw = $_POST['userPw'];
+
+    $db = Connect();
+    $stmt = $db->prepare('SELECT * FROM user WHERE loginId = :userId');
+    $stmt->bindValue(':userId', $userId, PDO::PARAM_STR);
+    $stmt->execute();
+    $user = $stmt->fetch();
+
+    if ($viewName === '' || $userId === '' || $userPw === '') {
+        $error = '入力してください。';
+    } else if ($user !== false) {
+        $error = 'このユーザーIDはすでに使用されています。';
+    } else if (!addUser($viewName, $userId, $userPw)) {
+        $error = '登録できませんでした。';
+    } else {
+        header('Location: index.php');
+        exit;
+    }
+}
+?>
+<!-- ここからHTML -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,6 +69,11 @@
     <main>
         <!-- 表示名、ユーザーID、パスワードを登録 -->
         <form action="userAdd.php" method="post">
+
+            <?php if ($error !== ''): ?>
+                <p style="color: red;"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p>
+            <?php endif; ?>
+
             <div>利用者登録</div>
             <div>
                 <label for="viewName">表示名</label>
