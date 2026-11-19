@@ -1,3 +1,35 @@
+<?php
+// function.php をつなげる
+require_once 'function.php';
+// セッションスタート
+startSessionIfNeeded();
+
+$error = "";
+$viewName = "";
+$userId = "";
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $viewName = trim($_POST['viewName'] ?? '');
+    $userId = trim($_POST['userId'] ?? '');
+    $userPw = $_POST['userPw'] ?? '';
+
+    if ($viewName === '' || $userId === '' || $userPw === '') {
+        $error = '入力してください。';
+    } else if (mb_strlen($userId) < 6) {
+        $error = 'ユーザーIDは6文字以上で入力してください。';
+    } else if (mb_strlen($userPw) < 8) {
+        $error = 'パスワードは8文字以上で入力してください。';
+    } else if (isUserIdExists($userId)) { // ← function.php の関数を使用
+        $error = 'このユーザーIDはすでに使用されています。';
+    } else if (!addUser($viewName, $userId, $userPw)) {
+        $error = '登録できませんでした。';
+    } else {
+        header('Location: index.php');
+        exit;
+    }
+}
+?>
+<!-- ここからHTML -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,13 +48,21 @@
     <main>
         <!-- 表示名、ユーザーID、パスワードを登録 -->
         <h2>利用者登録</h2>
+        <?php if ($error !== ''): ?>
+                <p style="color: red;"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p>
+            <?php endif; ?>
+
         <form action="userAdd.php" method="post" class="index-main">
             <div><label for="viewName">表示名　　　</label>
-                <input type="text" name="viewName">
-            </div>
+                <input type="text" name="viewName" value="<?= htmlspecialchars($viewName, ENT_QUOTES, 'UTF-8') ?>">
+        <form action="userAdd.php" method="post">
+
+            
+
+            
             <div>
                 <label for="userId">ユーザーID　</label>
-                <input type="text" name="userId">
+                <input type="text" name="userId" value="<?= htmlspecialchars($userId, ENT_QUOTES, 'UTF-8') ?>">
             </div>
             <div>
                 <label for="userPw">パスワード　</label>
