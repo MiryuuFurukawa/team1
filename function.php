@@ -87,7 +87,7 @@ function addUser($viewName, $userId, $userPw)
 function getQuestion()
 {
     $db = Connect();
-    $stmt = $db->prepare("SELECT question.*, user.name AS userName 
+    $stmt = $db->prepare("SELECT question.*, user.name AS name
         FROM question 
         JOIN user ON question.userId = user.id 
         WHERE question.deleteFlg = 0 

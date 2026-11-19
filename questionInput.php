@@ -1,3 +1,14 @@
+<?php
+require_once 'function.php';
+
+startSessionIfNeeded();
+// 未ログインの場合はログイン画面へリダイレクトし、ログイン後に questionInput.php に戻るようにする
+requireLogin('questionInput');
+
+$loginUser = $_SESSION['user'] ?? null;
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
