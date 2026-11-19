@@ -1,16 +1,36 @@
 <?php
+// function.phpの読み込み
 require_once 'function.php';
 
-startSessionIfNeeded();
-// 未ログインの場合はログイン画面へリダイレクトし、ログイン後に questionInput.php に戻るようにする
+// 未ログイン時はログイン画面へリダイレクト（画面定義書に基づく）
 requireLogin('questionInput');
 
-$loginUser = $_SESSION['user'] ?? null;
+$err = '';
+
+// 登録ボタンが押された（POSTリクエストされた）場合の処理
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['question'])) {
+    $questionText = trim($_POST['question']);
+
+    // バリデーション（空チェック）
+    if ($questionText === '') {
+        $err = '質問内容を入力してください。';
+    } else {
+        // セッションからログイン中のユーザーIDを取得
+        $userId = $_SESSION['user']['id'];
+
+        // function.php の addQuestion 関数を使ってDBに登録
+        if (addQuestion($userId, $questionText)) {
+            // 登録成功時は質問一覧画面へ遷移
+            header('Location: questions.php');
+            exit;
+        } else {
+            $err = '質問の登録に失敗しました。';
+        }
+    }
+}
 ?>
-
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 
 <head>
     <meta charset="UTF-8">
@@ -32,11 +52,17 @@ $loginUser = $_SESSION['user'] ?? null;
     </header>
 
     <!-- 投稿画面 -->
-    <form action="questions.php" method="POST">
+    <form action="questionInput.php" method="POST">
         <div>
             <label>質問を投稿する</label><br>
-            <textarea name="question" rows="5" cols="40"></textarea>
+            <textarea name="question" rows="5"
+                cols="40"><?php echo isset($_POST['question']) ? htmlspecialchars($_POST['question'], ENT_QUOTES, 'UTF-8') : ''; ?></textarea>
         </div>
+
+        <!-- エラーメッセージ表示 -->
+        <?php if (!empty($err)): ?>
+            <p><?php echo htmlspecialchars($err, ENT_QUOTES, 'UTF-8'); ?></p>
+        <?php endif; ?>
 
         <input type="submit" value="登録"><br>
     </form>
@@ -47,33 +73,3 @@ $loginUser = $_SESSION['user'] ?? null;
 </body>
 
 </html>
-
-<?php
-//requier at once
-require_once 'function.php';
-
-//DBに接続
-$db = Connect();
-
-//$db を使って、データを登録する処理を行う
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $question = $_POST['question'] ?? '';
-
-    
-    if (trim($question) !== '') {
-// functionから持ってきた $db を使って準備と実行を行う
-        $sql = "INSERT INTO questions (question, created_at) VALUES (:question, NOW())";
-        $stmt = $db->prepare($sql);
-        $stmt->execute([':question' => $question]);
-
-        header("Location: questions.php");
-        exit();
-    }
-}
-//必須項目チェック
-if ($question = ''){
-    header("Location: questionInput.php");//書式が違うとき questionInput.phpへ移動
-    exit();
-}
-?>
-
