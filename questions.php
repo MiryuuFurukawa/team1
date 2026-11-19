@@ -3,7 +3,6 @@ require_once 'function.php';
 
 startSessionIfNeeded();
 
-// 削除ボタンがPOST送信されてきた場合の処理
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['questionId'])) {
     if (isLoggedIn()) {
         $questionId = (int) $_POST['questionId'];
