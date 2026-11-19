@@ -16,7 +16,7 @@
     <main>
         <!-- 表示名、ユーザーID、パスワードを登録 -->
         <form action="userAdd.php" method="post">
-            <div>利用者登録</div>
+            <h2>利用者登録</h2>
             <div>
                 <label for="viewName">表示名</label>
                 <input type="text" name="viewName">
