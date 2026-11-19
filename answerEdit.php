@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>質問編集画面</title>
+    <title>回答編集画面</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -26,7 +26,7 @@
         <div class="question-container">
             <form action="questionEdit.php" method="POST">
                 <div class="edit-form">
-                    <div><label>質問を編集する</label></div>
+                    <div><label>回答を編集する</label></div>
                     <textarea name="question"></textarea>
                 </div>
                 <input type="hidden" name="questionId">
