@@ -35,7 +35,7 @@ unset($_SESSION['err']);
                 <input type="submit" class="question-btn" value="質問">
             </form>
             <?php if (isLoggedIn()): ?>
-                <form action="index.php" method="POST">
+                <form action="index.php" method="POST" id="logout-btn">
                     <input type="submit" name="logout" value="ログアウト">
                 </form>
             <?php endif; ?>

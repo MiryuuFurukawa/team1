@@ -15,28 +15,27 @@
     </header>
     <main>
         <!-- 表示名、ユーザーID、パスワードを登録 -->
-        <form action="userAdd.php" method="post">
-            <h2>利用者登録</h2>
-            <div>
-                <label for="viewName">表示名</label>
+        <h2>利用者登録</h2>
+        <form action="userAdd.php" method="post" class="index-main">
+            <div><label for="viewName">表示名　　　</label>
                 <input type="text" name="viewName">
             </div>
             <div>
-                <label for="userId">ユーザーID</label>
+                <label for="userId">ユーザーID　</label>
                 <input type="text" name="userId">
             </div>
             <div>
-                <label for="userPw">パスワード</label>
+                <label for="userPw">パスワード　</label>
                 <input type="password" name="userPw">
             </div>
             <div>
-                <input type="submit" value="登録">
+                <input type="submit" value="登録" class="login-btn">
             </div>
         </form>
-        <form action="index.php" method="get">
-            <button type="submit">戻る</button>
-        </form>
     </main>
+        <form action="index.php" method="get">
+            <button type="submit" class="return-btn">戻る</button>
+        </form>
     <footer>
         <div>@アイデア倉庫</div>
     </footer>
