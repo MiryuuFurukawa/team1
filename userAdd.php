@@ -4,26 +4,6 @@ require_once 'function.php';
 // セッションスタート
 startSessionIfNeeded();
 
-
-// すでに同じユーザーID（loginId）が使われているかチェックする関数
-function isUserIdExists(string $userId): bool
-{
-    try {
-        $db = Connect();
-        $stmt = $db->prepare("SELECT COUNT(*) FROM user WHERE loginId = :userId");
-        $stmt->bindValue(':userId', $userId, PDO::PARAM_STR);
-        $stmt->execute();
-
-        // 件数が1以上なら「すでに使われている（true）」を返す
-        return (int) $stmt->fetchColumn() > 0;
-    } catch (PDOException $e) {
-        // エラー時は安全のため重複扱い（true）にして登録を止める
-        return true;
-    }
-}
-
-
-
 // 新規登録処理
 $error = "";
 
