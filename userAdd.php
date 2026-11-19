@@ -4,27 +4,22 @@ require_once 'function.php';
 // セッションスタート
 startSessionIfNeeded();
 
-// 新規登録処理
 $error = "";
+$viewName = "";
+$userId = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $viewName = $_POST['viewName'];
-    $userId = $_POST['userId'];
-    $userPw = $_POST['userPw'];
-
-    $db = Connect();
-    $stmt = $db->prepare('SELECT * FROM user WHERE loginId = :userId');
-    $stmt->bindValue(':userId', $userId, PDO::PARAM_STR);
-    $stmt->execute();
-    $user = $stmt->fetch();
+    $viewName = trim($_POST['viewName'] ?? '');
+    $userId = trim($_POST['userId'] ?? '');
+    $userPw = $_POST['userPw'] ?? '';
 
     if ($viewName === '' || $userId === '' || $userPw === '') {
         $error = '入力してください。';
     } else if (mb_strlen($userId) < 6) {
         $error = 'ユーザーIDは6文字以上で入力してください。';
     } else if (mb_strlen($userPw) < 8) {
-    $error = 'パスワードは8文字以上で入力してください。';
-    } else if ($user !== false) {
+        $error = 'パスワードは8文字以上で入力してください。';
+    } else if (isUserIdExists($userId)) { // ← function.php の関数を使用
         $error = 'このユーザーIDはすでに使用されています。';
     } else if (!addUser($viewName, $userId, $userPw)) {
         $error = '登録できませんでした。';
@@ -61,11 +56,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div>利用者登録</div>
             <div>
                 <label for="viewName">表示名</label>
-                <input type="text" name="viewName">
+                <input type="text" name="viewName" value="<?= htmlspecialchars($viewName, ENT_QUOTES, 'UTF-8') ?>">
             </div>
             <div>
                 <label for="userId">ユーザーID</label>
-                <input type="text" name="userId">
+                <input type="text" name="userId" value="<?= htmlspecialchars($userId, ENT_QUOTES, 'UTF-8') ?>">
             </div>
             <div>
                 <label for="userPw">パスワード</label>
