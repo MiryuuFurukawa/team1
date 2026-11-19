@@ -83,7 +83,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    padding: 0 5%;
+    padding: 0 10%;
 }
 
 header h1 {
@@ -105,12 +105,14 @@ header h1 a:active {
     gap: 30px;
 }
 
-.header-btn input {
+.header-btn input{
+    font-size: 0.9rem;
     background-color: #7895AD;
     color: #FFF;
     border: none;
-    padding: 12px 22px;
+    padding: 12px 15px;
     border-radius: 6px 6px 0 0;
+    width: 120px;
     cursor: pointer;
 }
 
@@ -131,26 +133,69 @@ h2 {
     margin: 0;
 }
 
+/* ログイン画面 */
+.index-main {
+    margin-top: 10px;
+    width: 300px;
+}
+
+.index-main::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.login-btn {
+    float: right;
+    margin-top: 10px;
+}
+.login-btn input[type="submit"] {
+    font-family: sans-serif;
+    font-size: 0.9rem;
+
+    width: 120px;
+    height: 40px;
+}
+
 /* 登録・ログインフォーム */
 .form-container {
     background-color: #FFF;
     border-radius: 10px;
-    padding: 30px;
+    padding: 50px;
     margin-bottom: 20px;
 }
 
+/* 新規登録リンク */
 .userAdd {
+    font-family: sans-serif;
+    font-size: 0.9rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     color: #3D5878;
     text-align: center;
     font-weight: 600;
-    padding: 10px;
-    margin: 0 auto;
+    margin: 10px auto;
+    padding: 0;
     border: none;
     cursor: pointer;
     background-color: #D9BFA5;
     width: 120px;
+    height: 40px;
     border-radius: 5px;
     letter-spacing: 0.25em;
+    float: left;
+}
+
+.userAdd a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: 100%;
 }
 
 /* 質問詳細 */
@@ -183,13 +228,13 @@ h2 {
 .question-container {
     background-color: #FFF;
     border-radius: 10px;
-    padding: 30px;
+    padding: 55px;
     margin-bottom: 20px;
 }
 
 .question-name {
+    font-size: 1.1rem;
     font-weight: 600;
-    letter-spacing: 0.2rem;
 }
 
 .question-text {
@@ -212,19 +257,19 @@ h2 {
 }
 
 #detail-btn {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     background-color: #D5E1E8;
     padding: 5px 0;
-    width: 80px;
-    height: 36px;
+    width: 100px;
+    height: 45px;
 }
 
 #delete-btn {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     background-color: #D9A5A5;
     padding: 5px 0;
-    width: 80px;
-    height: 36px;
+    width: 100px;
+    height: 45px;
 }
 
 
