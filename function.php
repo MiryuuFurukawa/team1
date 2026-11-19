@@ -325,3 +325,16 @@ function loginProcess(string $userId, string $userPw, string $page = '', string 
         exit;
     }
 }
+
+
+// 指定したユーザーIDが既に登録されているか確認する
+// @param string $userId ログインID
+// @return bool true: 存在する / false: 存在しない
+function isUserIdExists($userId)
+{
+    $db = Connect();
+    $stmt = $db->prepare('SELECT COUNT(*) FROM user WHERE loginId = :userId');
+    $stmt->bindValue(':userId', $userId, PDO::PARAM_STR);
+    $stmt->execute();
+    return $stmt->fetchColumn() > 0;
+}
