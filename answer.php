@@ -1,14 +1,17 @@
 <?php
+// DB接続や共通関数の読み込み
 require_once 'function.php';
+
 
 $questionId = $_GET['questionId'] ?? $_POST['questionId'] ?? '';
 requireLogin('answer', (string) $questionId);
 
+// 質問IDが空、または数字以外の不正な値なら一覧画面へ戻す
 if ($questionId === '' || !ctype_digit((string) $questionId)) {
     header('Location: questions.php');
     exit;
 }
-
+// 対象となる質問データを取得（存在しなければ一覧画面へ戻す）
 $question = getQuestionById((int) $questionId);
 if ($question === false) {
     header('Location: questions.php');
@@ -21,11 +24,14 @@ $question['name'] = $question['userName'];
 $err = '';
 $answer = '';
 
+// 回答登録フォーム送信時（POST）の処理
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $answer = trim($_POST['answer'] ?? '');
 
     if ($answer === '') {
         $err = '回答を入力してください。';
+        
+        // 登録成功時は質問詳細画面へ遷移
     } elseif (addAnswer((int) $_SESSION['user']['id'], (int) $question['id'], $answer)) {
         header('Location: detail.php?questionId=' . urlencode((string) $question['id']));
         exit;
