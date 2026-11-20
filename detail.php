@@ -122,8 +122,8 @@ if ($answers === false) {
                                         value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
                                     <input type="submit" value="編集" id="edit-btn">
                                 </form>
-
                             <?php endif; ?>
+
                             <?php if (isLoggedIn() && (int) $ans['userId'] === (int) $_SESSION['user']['id']): ?>
                                 <form
                                     action="detail.php?questionId=<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>"
@@ -134,12 +134,11 @@ if ($answers === false) {
                                 </form>
                             <?php endif; ?>
                         </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p>まだ回答はありません。</p>
-                <?php endif; ?>
-            </div>
-        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>まだ回答はありません。</p>
+            <?php endif; ?>
         </div>
     </main>
     <footer>
