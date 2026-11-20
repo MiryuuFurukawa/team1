@@ -8,6 +8,22 @@ if ($questionId === '' || !ctype_digit((string) $questionId)) {
     exit;
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
+    requireLogin();
+    $answerId = $_POST['answerId'] ?? '';
+
+    if ($answerId !== '' && ctype_digit((string) $answerId)) {
+        $targetAnswer = getAnswerById((int) $answerId);
+
+        if ($targetAnswer && (int) $targetAnswer['userId'] === (int) $_SESSION['user']['id']) {
+            deleteAnswer((int) $answerId);
+        }
+    }
+
+    header('Location: detail.php?questionId=' . urlencode($questionId));
+    exit;
+}
+
 $question = getQuestionById((int) $questionId);
 if ($question === false) {
     header('Location: questions.php');
@@ -62,7 +78,7 @@ if ($answers === false) {
                         <input type="hidden" name="page" value="answer">
                         <input type="submit" value="回答" name="answer" id="answer-btn">
                     </form>
-                    <?php if (isLoggedIn() && (int) $question['userId'] === (int) $_SESSION['user']['id']): ?>
+                    <?php if (isLoggedIn() && (int) $question['userId'] === (int) $_SESSION['user']['id'] && empty($answers)): ?>
                         <form action="questionEdit.php" method="GET">
                             <input type="hidden" name="questionId"
                                 value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
