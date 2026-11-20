@@ -338,3 +338,25 @@ function isUserIdExists($userId)
     $stmt->execute();
     return $stmt->fetchColumn() > 0;
 }
+
+function getAnswerById($answerId)
+{
+    $db = Connect();
+    $stmt = $db->prepare('
+        SELECT answer.*, user.name AS answererName 
+        FROM answer 
+        JOIN user ON answer.userId = user.id 
+        WHERE answer.id = :answerId AND answer.deleteFlg = 0');
+    $stmt->bindValue(':answerId', $answerId, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+function updateAnswer($answerId, $answer)
+{
+    $db = Connect();
+    $stmt = $db->prepare('UPDATE answer SET answer = :answer WHERE id = :answerId');
+    $stmt->bindValue(':answer', $answer, PDO::PARAM_STR);
+    $stmt->bindValue(':answerId', $answerId, PDO::PARAM_INT);
+    return $stmt->execute();
+}
