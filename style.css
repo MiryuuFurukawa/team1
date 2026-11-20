@@ -1,21 +1,23 @@
 /*カラー見本
-背景　　：#F3F2EE
+メイン　：#003B90(株式会社インテックス様 コーポレートカラー)
+背景　　：#F3F4F6（株式会社インテックス様背景色）
 文字色　：#333
-リンク　：#52758E
+リンク　：#003B90
 
-ヘッダー：#3D5878
-フッター：#D5E1E8
+ヘッダー：#003B90(株式会社インテックス様 コーポレートカラー)
+フッター：#003B90
 
 カード　：#FFF
-ボタン　：#D5E1E8
-削除　　：#D9A5A5
+ボタン　：#003B90
+削除　　：#EE1111
+アクセント：#E1C954
 */
 
 html {
     font-size : 16px;
     font-family: sans-serif;
     color: #333;
-    background-color: #F3F2EE;
+    background-color: #F3F4F6;
     line-height: 1.5;
 }
 
@@ -31,54 +33,79 @@ body {
 }
 
 a:link {
-    color:#52758E;
+    color:#003B90;
     text-decoration: none;
 }
 
 a:visited {
-    color:#52758E;
+    color:#003B90;
     text-decoration: none;
 }
 
 a:hover {
-    color:#52758E;
+    color:#003B90;
     text-decoration: none;
 }
 
 a:active {
-    color:#52758E;
+    color:#003B90;
     text-decoration: none;
 }
 
+/* 入力欄とパスワード */
+input[type="text"],
+input[type="password"] {
+    width: 200px;
+    margin: 0.2rem auto;
+    padding: 10px;
+    border: 1px solid #CCC;
+    border-radius: 5px;
+}
+
 /* ボタン */
-input {
-    color: #3D5878;
+input[type="submit"] {
+    color: #FFF;
     text-align: center;
     font-weight: 600;
     padding: 10px;
     margin: 0 auto;
     border: none;
     cursor: pointer;
-    background-color: #D5E1E8;
+    background-color: #003B90;
     width: 120px;
     border-radius: 5px;
     letter-spacing: 0.25em;
 }
 
 /* ヘッダー */
-header {
-    background-color: #3D5878;
+/* header {
+    background-color: #003B90;
     height: 180px;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    padding: 0 5%;
+    padding: 0 10%;
 }
 
 header h1 {
     margin: 0;
     align-self: center;
+} */
+header {
+    background-color: #003B90;
+    height: 170px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0px 10%;
 }
+
+header h1 {
+    margin: 0;
+    padding-top: 40px;
+}
+
 
 header h1 a:link,
 header h1 a:visited,
@@ -91,21 +118,41 @@ header h1 a:active {
 .header-btn {
     display: flex;
     align-items: end;
-    gap: 30px;
+    gap: 15px;
+    align-self: flex-end;
 }
 
-.header-btn input {
-    background-color: #7895AD;
-    color: #FFF;
+#current-btn{
+    font-size: 0.9rem;
+    background-color: #F3F4F6;
+    color: #003B90;
     border: none;
-    padding: 12px 22px;
+    padding: 12px 15px;
     border-radius: 6px 6px 0 0;
+    width: 120px;
     cursor: pointer;
 }
 
-.header-btn .question-btn {
-    background-color: #F3F2EE;
-    color: #3D5878;
+#other-btn{
+    font-size: 0.9rem;
+    background-color: #E1C954;
+    color: #003B90;
+    border: none;
+    padding: 12px 15px;
+    border-radius: 6px 6px 0 0;
+    width: 120px;
+    cursor: pointer;
+}
+
+#logout-btn input{
+    font-size: 0.9rem;
+    color: #003B90;
+    background-color: #EE1111;
+    border: none;
+    width: 120px;
+    cursor: pointer;
+    padding: 12px 15px;
+    border-radius: 6px 6px 0 0;
 }
 
 /* メイン画面 */
@@ -117,12 +164,129 @@ main {
 }
 
 h2 {
-    margin: 0;
+    margin: 5px 0 10px 0;
+}
+
+/* ログイン画面・新登録画面 */
+.index-main {
+    width: 300px;
+}
+
+.index-main::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+#login-btn {
+    float: right;
+    margin-top: 10px;
+}
+#login-btn input[type="submit"] {
+    font-family: sans-serif;
+    font-size: 0.9rem;
+
+    width: 120px;
+    height: 40px;
+}
+
+/* 登録・ログインフォーム */
+.form-container {
+    background-color: #FFF;
+    border-radius: 10px;
+    padding: 50px;
+    margin-bottom: 20px;
+}
+
+/* 新規登録リンク */
+.userAdd {
+    font-family: sans-serif;
+    font-size: 0.9rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: #003B90;
+    text-align: center;
+    font-weight: 600;
+    margin: 10px auto;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+    background-color: #E1C954;
+    width: 120px;
+    height: 40px;
+    border-radius: 5px;
+    letter-spacing: 0.25em;
+    float: left;
+}
+
+.userAdd a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: 100%;
 }
 
 /* 質問詳細 */
 .answer-container {
-    margin-left: 20px; 
+    margin-left: 50px; 
+}
+
+#answer-btn {
+    font-size: 0.9rem;
+    color: #FFF;
+    background-color: #E1C954;
+    padding: 5px 0;
+    width: 100px;
+    height: 45px;
+}
+
+#edit-btn {
+    font-size: 0.9rem;
+    color: #FFF;
+    background-color: #003B90;
+    padding: 5px 0;
+    width: 100px;
+    height: 45px;
+}
+
+#question-h2 {
+    color: #003B90;
+}
+
+#answer-h2 {
+    color: #E1C954;
+}
+/* 質問・回答・編集入力用テキストエリア */
+
+.edit-form label {
+    display: block;
+    width: 100%;
+    max-width: 600px;
+    text-align: left;
+    font-weight: 600;
+}
+
+.edit-form textarea {
+    color: #333;
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#entry-btn {
+    font-size: 0.9rem;
+    color: #FFF;
+    background-color: #003B90;
+    padding: 5px 0;
+    width: 100px;
+    height: 45px;
+    float: right;
 }
 
 /* 質問画面一覧 */
@@ -130,31 +294,83 @@ h2 {
 .question-container {
     background-color: #FFF;
     border-radius: 10px;
-    padding: 30px;
+    padding: 55px;
     margin-bottom: 20px;
+}
+
+.question-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.question-text {
+    margin-top: 1.2rem;
+}
+.question-time {
+    color: #7895AD;
+    font-size: 0.8rem;
+    text-align: right;
+    border-bottom: 1px dashed #D5E1E8;
 }
 
 .question-container-btn {
     display: flex;
     justify-content: flex-end;
-    gap: 30px;
+    gap: 15px;
     margin-top: 20px;
 }
 
-.detail-btn {
-    background-color: #D5E1E8;
+#detail-btn {
+    font-size: 0.9rem;
+    background-color: #003B90;
+    padding: 5px 0;
+    width: 100px;
+    height: 45px;
 }
 
-.delete-btn {
-    background-color: #D9A5A5;
+#delete-btn {
+    font-size: 0.9rem;
+    color: #FFF;
+    background-color: #EE1111;
+    padding: 5px 0;
+    width: 100px;
+    height: 45px;
+}
+
+/* エラー */
+#error {
+    color :#EE1111;
+    text-align: right;
 }
 
 
 /* フッター */
 footer {
-    background-color: #D5E1E8;
+    font-size: 0.8rem;
+    position: relative;
+    color: #FFF;
+    background-color: #003B90;
     text-align: center;
     height: 50px;
     flex-shrink: 0;
-    padding: 10px 0;
+    padding: 15px 0;
+}
+
+/* 戻るボタン */
+.return-btn {
+    position: absolute;
+    left: 10%;
+    top: 0;
+
+    font-size: 0.8rem;
+    background-color: #F3F4F6;
+    color: #003B90;
+    font-weight: 600;
+    border: none;
+    margin: 0;
+    padding: 3px 15px;
+    border-radius: 0 0 6px 6px;
+    width: 80px;
+    height: 30px;
+    cursor: pointer;
 }

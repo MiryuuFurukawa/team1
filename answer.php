@@ -46,38 +46,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <header>
         <h1><a href="questions.php">アイデア倉庫</a></h1>
-        <?php if (isLoggedIn()): ?>
-            <form action="index.php" method="POST">
-                <input type="submit" name="logout" value="ログアウト">
+        <div class="header-btn">
+            <form action="questions.php" method="GET">
+                <input type="submit" id="current-btn" value="質問一覧">
             </form>
-        <?php endif; ?>
-    </header>
-
-    <section>
-        <p>質問者：<?= htmlspecialchars((string) $question['name'], ENT_QUOTES, 'UTF-8') ?></p>
-        <p>質問：<?= nl2br(htmlspecialchars((string) $question['question'], ENT_QUOTES, 'UTF-8')) ?></p>
-        <p>質問投稿日：<?= htmlspecialchars((string) $question['date'], ENT_QUOTES, 'UTF-8') ?></p>
-    </section>
-
-    <form action="answer.php" method="POST">
-        <input type="hidden" name="questionId"
-            value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
-        <div>
-            <label for="answer">回答</label><br>
-            <textarea id="answer" name="answer" rows="5"
-                cols="40"><?= htmlspecialchars($answer, ENT_QUOTES, 'UTF-8') ?></textarea>
+            <form action="questionInput.php" method="GET">
+                <input type="submit" id="other-btn" value="質問する">
+            </form>
+            <?php if (isLoggedIn()): ?>
+                <form action="index.php" method="POST" id="logout-btn">
+                    <input type="submit" name="logout" value="ログアウト">
+                </form>
+            <?php endif; ?>
+            <?php if (isLoggedIn()): ?>
+                <form action="index.php" method="POST" id="logout-btn">
+                    <input type="submit" name="login" value="ログイン">
+                </form>
+            <?php endif; ?>
         </div>
-        <?php if ($err !== ''): ?>
-            <p style="color: red;"><?= htmlspecialchars($err, ENT_QUOTES, 'UTF-8') ?></p>
-        <?php endif; ?>
-        <input type="submit" value="登録">
-    </form>
+    </header>
+    <main>
+    <h2 id="question-h2">Question</h2>
+    <div class="question-container">
+        <div class="question-name"><?= htmlspecialchars((string) $question['name'], ENT_QUOTES, 'UTF-8') ?></div>
+        <div class="question-time"><?= htmlspecialchars((string) $question['date'], ENT_QUOTES, 'UTF-8') ?></div>
+        <div class="question-text"><?= nl2br(htmlspecialchars((string) $question['question'], ENT_QUOTES, 'UTF-8')) ?></div>
+    </div>
 
-    <form action="detail.php" method="GET">
+    <form action="answer.php" method="POST" class="answer-container">
         <input type="hidden" name="questionId"
             value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
-        <input type="submit" value="戻る">
-    </form>
-</body>
+        <div class="edit-form">
+            <h2 id="answer-h2"><label for="answer">Answer</label></h2>
+            <textarea id="answer"name="answer"><?= htmlspecialchars($answer, ENT_QUOTES, 'UTF-8') ?></textarea>
+        </div>
 
+        <?php if ($err !== ''): ?>
+            <span id="error"><?= htmlspecialchars($err, ENT_QUOTES, 'UTF-8') ?></span>
+        <?php endif; ?>
+        <input type="submit" value="登録" id="entry-btn">
+    </form>
+    </main>
+
+    <footer>
+        <form action="questions.php" method="GET">
+            <input type="hidden" name="questionId"
+            value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
+            <button type="submit" class="return-btn">戻る</button>
+        </form>
+        <div>@アイデア倉庫</div>
+    </footer>
+</body>
 </html>
