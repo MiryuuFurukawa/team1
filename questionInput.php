@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['question'])) {
         <h1><a href="questions.php">アイデア倉庫</a></h1>
 
         <div class="header-btn">
-            <form action="index.php" method="POST">
+            <form action="index.php" method="POST" id="logout-btn">
                 <input type="submit" name="logout" value="ログアウト">
             </form>
         </div>
@@ -46,24 +46,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['question'])) {
 
     <main>
         <form action="questionInput.php" method="POST">
-            <div>
-                <label>質問を投稿する</label><br>
+            <div class="edit-form">
+                <h2>質問を投稿する</h2>
                 <textarea name="question" rows="5"
                 cols="40"><?php echo isset($_POST['question']) ? htmlspecialchars($_POST['question'], ENT_QUOTES, 'UTF-8') : ''; ?></textarea>
             </div>
 
         <?php if (!empty($err)): ?>
-            <p><?php echo htmlspecialchars($err, ENT_QUOTES, 'UTF-8'); ?></p>
+            <p id="error"><?php echo htmlspecialchars($err, ENT_QUOTES, 'UTF-8'); ?></p>
         <?php endif; ?>
 
             <input type="submit" value="登録"><br>
         </form>
-
-        <form action="questions.php" method="GET">
-            <input type="submit" value="戻る"><br>
-        </form>
     </main>
+
     <footer>
+        <form action="questions.php" method="GET">
+            <button type="submit" class="return-btn">戻る</button>
+        </form>
         <div>@アイデア倉庫</div>
     </footer>
 </body>

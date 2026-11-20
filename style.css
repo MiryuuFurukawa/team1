@@ -1,15 +1,16 @@
 /*カラー見本
-背景　　：#F3F4F6（株式会社インテックス様背景色）  #F3F2EE
+メイン　：#003B90(株式会社インテックス様 コーポレートカラー)
+背景　　：#F3F4F6（株式会社インテックス様背景色）
 文字色　：#333
-リンク　：#0f3f9f
+リンク　：#003B90
 
-ヘッダー：#0f3f9f(株式会社インテックス様 コーポレートカラー)  #3D5878
-フッター：#D5E1E8
+ヘッダー：#003B90(株式会社インテックス様 コーポレートカラー)
+フッター：#003B90
 
 カード　：#FFF
-ボタン　：#D5E1E8
-削除　　：#EE1111 #D9A5A5
-アクセント：#E1C954 #D9BFA5
+ボタン　：#003B90
+削除　　：#EE1111
+アクセント：#E1C954
 */
 
 html {
@@ -32,22 +33,22 @@ body {
 }
 
 a:link {
-    color:#0f3f9f;
+    color:#003B90;
     text-decoration: none;
 }
 
 a:visited {
-    color:#0f3f9f;
+    color:#003B90;
     text-decoration: none;
 }
 
 a:hover {
-    color:#0f3f9f;
+    color:#003B90;
     text-decoration: none;
 }
 
 a:active {
-    color:#0f3f9f;
+    color:#003B90;
     text-decoration: none;
 }
 
@@ -63,14 +64,14 @@ input[type="password"] {
 
 /* ボタン */
 input[type="submit"] {
-    color: #0f3f9f;
+    color: #FFF;
     text-align: center;
     font-weight: 600;
     padding: 10px;
     margin: 0 auto;
     border: none;
     cursor: pointer;
-    background-color: #D5E1E8;
+    background-color: #003B90;
     width: 120px;
     border-radius: 5px;
     letter-spacing: 0.25em;
@@ -78,7 +79,7 @@ input[type="submit"] {
 
 /* ヘッダー */
 header {
-    background-color: #0f3f9f;
+    background-color: #003B90;
     height: 180px;
     display: flex;
     justify-content: space-between;
@@ -107,7 +108,7 @@ header h1 a:active {
 
 .header-btn input{
     font-size: 0.9rem;
-    background-color: #D5E1E8;
+    background-color: #003B90;
     color: #FFF;
     border: none;
     padding: 12px 15px;
@@ -118,12 +119,12 @@ header h1 a:active {
 
 .header-btn .question-btn {
     background-color: #F3F4F6;
-    color: #0f3f9f;
+    color: #003B90;
 }
 
 #logout-btn input{
     font-size: 0.9rem;
-    color: #0f3f9f;
+    color: #003B90;
     background-color: #E1C954;
     border: none;
     width: 120px;
@@ -142,12 +143,11 @@ main {
 }
 
 h2 {
-    margin: 0;
+    margin: 5px 0 10px 0;
 }
 
 /* ログイン画面・新登録画面 */
 .index-main {
-    margin-top: 10px;
     width: 300px;
 }
 
@@ -157,11 +157,11 @@ h2 {
     clear: both;
 }
 
-.login-btn {
+#login-btn {
     float: right;
     margin-top: 10px;
 }
-.login-btn input[type="submit"] {
+#login-btn input[type="submit"] {
     font-family: sans-serif;
     font-size: 0.9rem;
 
@@ -186,7 +186,7 @@ h2 {
     justify-content: center;
     align-items: center;
 
-    color: #0f3f9f;
+    color: #003B90;
     text-align: center;
     font-weight: 600;
     margin: 10px auto;
@@ -215,24 +215,56 @@ h2 {
     margin-left: 50px; 
 }
 
+#answer-btn {
+    font-size: 0.9rem;
+    color: #FFF;
+    background-color: #E1C954;
+    padding: 5px 0;
+    width: 100px;
+    height: 45px;
+}
+
+#edit-btn {
+    font-size: 0.9rem;
+    color: #FFF;
+    background-color: #003B90;
+    padding: 5px 0;
+    width: 100px;
+    height: 45px;
+}
+
+#question-h2 {
+    color: #003B90;
+}
+
+#answer-h2 {
+    color: #E1C954;
+}
 /* 質問・回答・編集入力用テキストエリア */
 
 .edit-form label {
     display: block;
     width: 100%;
     max-width: 600px;
-    margin: 0 auto;
     text-align: left;
     font-weight: 600;
 }
 
 .edit-form textarea {
-    display: block;
+    color: #333;
     width: 100%;
-    max-width: 600px;
     height: 100px;
-    margin: 20px auto;
     padding: 10px;
+}
+
+#entry-btn {
+    font-size: 0.9rem;
+    color: #FFF;
+    background-color: #003B90;
+    padding: 5px 0;
+    width: 100px;
+    height: 45px;
+    float: right;
 }
 
 /* 質問画面一覧 */
@@ -260,7 +292,6 @@ h2 {
     border-bottom: 1px dashed #D5E1E8;
 }
 
-
 .question-container-btn {
     display: flex;
     justify-content: flex-end;
@@ -270,7 +301,7 @@ h2 {
 
 #detail-btn {
     font-size: 0.9rem;
-    background-color: #D5E1E8;
+    background-color: #003B90;
     padding: 5px 0;
     width: 100px;
     height: 45px;
@@ -285,12 +316,19 @@ h2 {
     height: 45px;
 }
 
+/* エラー */
+#error {
+    color :#EE1111;
+    text-align: right;
+}
+
 
 /* フッター */
 footer {
     font-size: 0.8rem;
     position: relative;
-    background-color: #D5E1E8;
+    color: #FFF;
+    background-color: #003B90;
     text-align: center;
     height: 50px;
     flex-shrink: 0;
@@ -305,7 +343,7 @@ footer {
 
     font-size: 0.8rem;
     background-color: #F3F4F6;
-    color: #0f3f9f;
+    color: #003B90;
     font-weight: 600;
     border: none;
     margin: 0;

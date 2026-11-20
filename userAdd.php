@@ -57,9 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="text" name="viewName" value="<?= htmlspecialchars($viewName, ENT_QUOTES, 'UTF-8') ?>">
         <form action="userAdd.php" method="post">
 
-            
-
-            
             <div>
                 <label for="userId">ユーザーID　</label>
                 <input type="text" name="userId" value="<?= htmlspecialchars($userId, ENT_QUOTES, 'UTF-8') ?>">
@@ -69,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="password" name="userPw">
             </div>
             <div>
-                <input type="submit" value="登録" class="login-btn">
+                <input type="submit" value="登録" id="login-btn">
             </div>
         </form>
     </main>

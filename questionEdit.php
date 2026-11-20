@@ -15,7 +15,7 @@
         <h1><a href="questions.php">アイデア倉庫</a></h1>
         <!-- </form> -->
         <div class="header-btn">
-            <form action="index.php" classmethod="POST">
+            <form action="index.php" classmethod="POST" id="logout-btn">
                 <input type="submit" name="logout" value="ログアウト">
             </form>
         </div>
@@ -37,12 +37,12 @@
 
         </div>
         </div>
+    </main>
 
+    <footer>
         <form action="detail.php" method="GET">
             <input type="submit" value="戻る">
         </form>
-    </main>
-    <footer>
         <div>@アイデア倉庫</div>
     </footer>
 </body>
