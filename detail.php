@@ -59,77 +59,77 @@ if ($answers === false) {
     </header>
 
     <main>
-            <h2 id="question-h2">Question</h2>
-            <div class="question-container">
+        <h2 id="question-h2">Question</h2>
+        <div class="question-container">
+            <form action="answer.php" method="GET">
+                <input type="hidden" value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
+                <div class="question-name"><?= htmlspecialchars((string) $question['name'], ENT_QUOTES, 'UTF-8') ?>
+                </div>
+                <div class="question-time"><?= htmlspecialchars((string) $question['date'], ENT_QUOTES, 'UTF-8') ?>
+                </div>
+                <div class="question-text">
+                    <?= nl2br(htmlspecialchars((string) $question['question'], ENT_QUOTES, 'UTF-8')) ?>
+                </div>
+            </form>
+            <div class="question-container-btn">
                 <form action="answer.php" method="GET">
-                    <input type="hidden" value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
-                    <div class="question-name"><?= htmlspecialchars((string) $question['name'], ENT_QUOTES, 'UTF-8') ?>
-                    </div>
-                    <div class="question-time"><?= htmlspecialchars((string) $question['date'], ENT_QUOTES, 'UTF-8') ?>
-                    </div>
-                    <div class="question-text">
-                        <?= nl2br(htmlspecialchars((string) $question['question'], ENT_QUOTES, 'UTF-8')) ?>
-                    </div>
+                    <input type="hidden" name="questionId"
+                        value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
+                    <input type="hidden" name="page" value="answer">
+                    <input type="submit" value="回答" name="answer" id="answer-btn">
                 </form>
-                <div class="question-container-btn">
-                    <form action="answer.php" method="GET">
+                <?php if (isLoggedIn() && (int) $question['userId'] === (int) $_SESSION['user']['id'] && empty($answers)): ?>
+                    <form action="questionEdit.php" method="GET">
                         <input type="hidden" name="questionId"
                             value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
-                        <input type="hidden" name="page" value="answer">
-                        <input type="submit" value="回答" name="answer" id="answer-btn">
+                        <input type="submit" value="編集" id="edit-btn">
                     </form>
-                    <?php if (isLoggedIn() && (int) $question['userId'] === (int) $_SESSION['user']['id'] && empty($answers)): ?>
-                        <form action="questionEdit.php" method="GET">
-                            <input type="hidden" name="questionId"
-                                value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
-                            <input type="submit" value="編集" id="edit-btn">
-                        </form>
-                    <?php endif; ?>
-                </div>
+                <?php endif; ?>
             </div>
+        </div>
 
-            <div class="answer-container">
-                <h2 id="answer-h2">Answer</h2>
-                <?php if (!empty($answers)): ?>
-                    <?php foreach ($answers as $ans): ?>
-                        <?php
-                        $ans['name'] = $ans['answererName'] ?? '';
-                        ?>
-                        <div class="question-container">
-                            <div class="question-name"><?= htmlspecialchars((string) $ans['name'], ENT_QUOTES, 'UTF-8') ?></div>
-                            <div class="question-time"><?= htmlspecialchars((string) $ans['date'], ENT_QUOTES, 'UTF-8') ?></div>
-                            <div class="question-text">
-                                <?= nl2br(htmlspecialchars((string) $ans['answer'], ENT_QUOTES, 'UTF-8')) ?>
-                            </div>
+        <div class="answer-container">
+            <h2 id="answer-h2">Answer</h2>
+            <?php if (!empty($answers)): ?>
+                <?php foreach ($answers as $ans): ?>
+                    <?php
+                    $ans['name'] = $ans['answererName'] ?? '';
+                    ?>
+                    <div class="question-container">
+                        <div class="question-name"><?= htmlspecialchars((string) $ans['name'], ENT_QUOTES, 'UTF-8') ?></div>
+                        <div class="question-time"><?= htmlspecialchars((string) $ans['date'], ENT_QUOTES, 'UTF-8') ?></div>
+                        <div class="question-text">
+                            <?= nl2br(htmlspecialchars((string) $ans['answer'], ENT_QUOTES, 'UTF-8')) ?>
+                        </div>
 
-                            <div class="question-container-btn">
-                                <?php if (isLoggedIn() && (int) $ans['userId'] === (int) $_SESSION['user']['id']): ?>
-                                    <form action="answerEdit.php" method="GET">
-                                        <input type="hidden" name="answerId"
-                                            value="<?= htmlspecialchars((string) $ans['id'], ENT_QUOTES, 'UTF-8') ?>">
-                                        <input type="hidden" name="questionId"
-                                            value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
-                                        <input type="submit" value="編集" id="edit-btn">
-                                    </form>
+                        <div class="question-container-btn">
+                            <?php if (isLoggedIn() && (int) $ans['userId'] === (int) $_SESSION['user']['id']): ?>
+                                <form action="answerEdit.php" method="GET">
+                                    <input type="hidden" name="answerId"
+                                        value="<?= htmlspecialchars((string) $ans['id'], ENT_QUOTES, 'UTF-8') ?>">
+                                    <input type="hidden" name="questionId"
+                                        value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
+                                    <input type="submit" value="編集" id="edit-btn">
+                                </form>
 
-                                <?php endif; ?>
-                                <?php if (isLoggedIn() && (int) $ans['userId'] === (int) $_SESSION['user']['id']): ?>
-                                    <form
-                                        action="detail.php?questionId=<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>"
-                                        method="POST">
-                                        <input type="hidden"
-                                            value="<?= htmlspecialchars((string) $ans['id'], ENT_QUOTES, 'UTF-8') ?>"
-                                            name="answerId">
-                                        <input type="submit" value="削除" name="delete" id="delete-btn">
-                                    </form>
-                                <?php endif; ?>
-                            </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <p>まだ回答はありません。</p>
-                    <?php endif; ?>
-                </div>
+                            <?php endif; ?>
+                            <?php if (isLoggedIn() && (int) $ans['userId'] === (int) $_SESSION['user']['id']): ?>
+                                <form
+                                    action="detail.php?questionId=<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>"
+                                    method="POST">
+                                    <input type="hidden" value="<?= htmlspecialchars((string) $ans['id'], ENT_QUOTES, 'UTF-8') ?>"
+                                        name="answerId">
+                                    <input type="submit" value="削除" name="delete" id="delete-btn">
+                                </form>
+                            <?php endif; ?>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p>まだ回答はありません。</p>
+                <?php endif; ?>
             </div>
+        </div>
+        </div>
     </main>
     <footer>
         <form action="questions.php" method="GET">
