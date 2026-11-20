@@ -8,6 +8,22 @@ if ($questionId === '' || !ctype_digit((string) $questionId)) {
     exit;
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
+    requireLogin(); // ログイン必須
+    $answerId = $_POST['answerId'] ?? '';
+
+    if ($answerId !== '' && ctype_digit((string) $answerId)) {
+        $targetAnswer = getAnswerById((int) $answerId);
+
+        if ($targetAnswer && (int) $targetAnswer['userId'] === (int) $_SESSION['user']['id']) {
+            deleteAnswer((int) $answerId);
+        }
+    }
+
+    header('Location: detail.php?questionId=' . urlencode($questionId));
+    exit;
+}
+
 $question = getQuestionById((int) $questionId);
 if ($question === false) {
     header('Location: questions.php');
