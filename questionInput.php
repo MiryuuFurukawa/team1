@@ -47,16 +47,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['question'])) {
     <main>
         <form action="questionInput.php" method="POST">
             <div class="edit-form">
-                <h2>質問を投稿する</h2>
+                <h2 id="question-h2">質問を投稿する</h2>
                 <textarea name="question" rows="5"
-                cols="40"><?php echo isset($_POST['question']) ? htmlspecialchars($_POST['question'], ENT_QUOTES, 'UTF-8') : ''; ?></textarea>
+                    cols="40"><?php echo isset($_POST['question']) ? htmlspecialchars($_POST['question'], ENT_QUOTES, 'UTF-8') : ''; ?></textarea>
             </div>
 
-        <?php if (!empty($err)): ?>
-            <p id="error"><?php echo htmlspecialchars($err, ENT_QUOTES, 'UTF-8'); ?></p>
-        <?php endif; ?>
+            <?php if (!empty($err)): ?>
+                <p id="error"><?php echo htmlspecialchars($err, ENT_QUOTES, 'UTF-8'); ?></p>
+            <?php endif; ?>
 
-            <input type="submit" value="登録"><br>
+            <input type="submit" value="登録" id="entry-btn">
         </form>
     </main>
 

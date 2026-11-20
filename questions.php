@@ -31,8 +31,11 @@ unset($_SESSION['err']);
     <header>
         <h1><a href="questions.php">アイデア倉庫</a></h1>
         <div class="header-btn">
+            <form action="questions.php" method="GET">
+                <input type="submit" class="current-btn" value="質問一覧">
+            </form>
             <form action="questionInput.php" method="GET">
-                <input type="submit" class="question-btn" value="質問">
+                <input type="submit" class="other-btn" value="質問する">
             </form>
             <?php if (isLoggedIn()): ?>
                 <form action="index.php" method="POST" id="logout-btn">
@@ -49,7 +52,7 @@ unset($_SESSION['err']);
                     <form><input type="hidden" name="questionId" value="<?= htmlspecialchars($questions[$n]['id'], ENT_QUOTES, 'UTF-8') ?>"></form>
                     <div class="question-name"><?= htmlspecialchars($questions[$n]['name'], ENT_QUOTES, 'UTF-8') ?></div>
                     <div class="question-time"><?= htmlspecialchars($questions[$n]['date'], ENT_QUOTES, 'UTF-8') ?></div>
-                    <div class="question-text"><?= htmlspecialchars($questions[$n]['question'], ENT_QUOTES, 'UTF-8') ?></div>
+                    <div class="question-text"><?= nl2br(htmlspecialchars($questions[$n]['question'], ENT_QUOTES, 'UTF-8')) ?></div>
 
                     <div class="question-container-btn">
                         <form action="detail.php" method="GET">
