@@ -33,6 +33,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <header>
         <h1><a href="questions.php">アイデア倉庫</a></h1>
+        <div class="header-btn">
+            <form action="questions.php" method="GET">
+                <input type="submit" id="current-btn" value="質問一覧">
+            </form>
+            <form action="questionInput.php" method="GET">
+                <input type="submit" id="other-btn" value="質問する">
+            </form>
+            <?php if (isLoggedIn()): ?>
+                <form action="index.php" method="POST" id="logout-btn">
+                    <input type="submit" name="logout" value="ログアウト">
+                </form>
+            <?php endif; ?>
+            <?php if (isLoggedIn()): ?>
+                <form action="index.php" method="POST" id="login-btn">
+                    <input type="submit" name="login" value="ログイン">
+                </form>
+            <?php endif; ?>
+        </div>
     </header>
 
     <main>
@@ -56,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="userPw">パスワード　</label>
                     <input type="password" id="userPw" name="userPw">
                 </div>
-                <div class="login-btn">
+                <div id="login-btn">
                     <input type="submit" value="ログイン">
                 </div>
             </form>

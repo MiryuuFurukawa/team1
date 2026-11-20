@@ -49,13 +49,24 @@ if ($answers === false) {
 <body>
     <header>
         <h1><a href="questions.php">アイデア倉庫</a></h1>
-        <?php if (isLoggedIn()): ?>
-            <div class="header-btn">
+        <div class="header-btn">
+            <form action="questions.php" method="GET">
+                <input type="submit" id="other-btn" value="質問一覧">
+            </form>
+            <form action="questionInput.php" method="GET">
+                <input type="submit" id="other-btn" value="質問する">
+            </form>
+            <?php if (isLoggedIn()): ?>
                 <form action="index.php" method="POST" id="logout-btn">
-                    <input type="submit" value="ログアウト" name="logout">
+                    <input type="submit" name="logout" value="ログアウト">
                 </form>
-            </div>
-        <?php endif; ?>
+            <?php endif; ?>
+            <?php if (isLoggedIn()): ?>
+                <form action="index.php" method="POST" id="logout-btn">
+                    <input type="submit" name="login" value="ログイン">
+                </form>
+            <?php endif; ?>
+        </div>
     </header>
 
     <main>

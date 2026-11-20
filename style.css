@@ -78,7 +78,7 @@ input[type="submit"] {
 }
 
 /* ヘッダー */
-header {
+/* header {
     background-color: #003B90;
     height: 180px;
     display: flex;
@@ -90,7 +90,22 @@ header {
 header h1 {
     margin: 0;
     align-self: center;
+} */
+header {
+    background-color: #003B90;
+    height: 170px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0px 10%;
 }
+
+header h1 {
+    margin: 0;
+    padding-top: 40px;
+}
+
 
 header h1 a:link,
 header h1 a:visited,
@@ -104,12 +119,13 @@ header h1 a:active {
     display: flex;
     align-items: end;
     gap: 15px;
+    align-self: flex-end;
 }
 
-.header-btn input{
+#current-btn{
     font-size: 0.9rem;
     background-color: #F3F4F6;
-    color: #FFF;
+    color: #003B90;
     border: none;
     padding: 12px 15px;
     border-radius: 6px 6px 0 0;
@@ -117,21 +133,26 @@ header h1 a:active {
     cursor: pointer;
 }
 
-.header-btn .other-btn {
-    background-color: #F3F4F6;
-    color: #E1C954;
+#other-btn{
+    font-size: 0.9rem;
+    background-color: #E1C954;
+    color: #003B90;
+    border: none;
+    padding: 12px 15px;
+    border-radius: 6px 6px 0 0;
+    width: 120px;
+    cursor: pointer;
 }
 
 #logout-btn input{
     font-size: 0.9rem;
     color: #003B90;
-    background-color: #E1C954;
+    background-color: #EE1111;
     border: none;
     width: 120px;
     cursor: pointer;
     padding: 12px 15px;
     border-radius: 6px 6px 0 0;
-
 }
 
 /* メイン画面 */
