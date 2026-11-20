@@ -9,7 +9,7 @@ if ($questionId === '' || !ctype_digit((string) $questionId)) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
-    requireLogin(); // ログイン必須
+    requireLogin();
     $answerId = $_POST['answerId'] ?? '';
 
     if ($answerId !== '' && ctype_digit((string) $answerId)) {
