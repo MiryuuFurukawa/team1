@@ -15,7 +15,6 @@ if ($question === false) {
     exit;
 }
 
-// 定義書の $question['name'] に合わせる[cite: 2]
 $question['name'] = $question['userName'];
 
 $err = '';

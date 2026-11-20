@@ -8,12 +8,10 @@ $page = $_GET['page'] ?? ($_POST['page'] ?? '');
 $questionId = $_GET['questionId'] ?? ($_POST['questionId'] ?? '');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // ログアウトボタンが押された場合の処理を追加
     if (isset($_POST['logout'])) {
         logoutProcess();
     }
 
-    // 通常のログイン処理
     $userId = $_POST['userId'] ?? '';
     $userPw = $_POST['userPw'] ?? '';
     $err = loginProcess($userId, $userPw, $page, $questionId);
