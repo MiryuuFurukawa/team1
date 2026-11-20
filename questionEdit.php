@@ -80,13 +80,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="submit" id="other-btn" value="質問する">
             </form>
             <?php if (isLoggedIn()): ?>
-                <form action="index.php" method="POST" id="logout-btn">
-                    <input type="submit" name="logout" value="ログアウト">
+                <form action="index.php" method="POST" >
+                    <input type="submit" id="logout-btn" name="logout" value="ログアウト" >
                 </form>
             <?php endif; ?>
-            <?php if (isLoggedIn()): ?>
-                <form action="index.php" method="POST" id="logout-btn">
-                    <input type="submit" name="login" value="ログイン">
+            <?php if (!isLoggedIn()): ?>
+                <form action="index.php" method="POST">
+                    <input type="submit"  id="other-btn" name="login" value="ログイン">
                 </form>
             <?php endif; ?>
         </div>
