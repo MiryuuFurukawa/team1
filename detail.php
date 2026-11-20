@@ -129,7 +129,6 @@ if ($answers === false) {
                 <?php endif; ?>
             </div>
         </div>
-        </div>
     </main>
     <footer>
         <form action="questions.php" method="GET">
