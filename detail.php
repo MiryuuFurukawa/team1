@@ -57,7 +57,7 @@ if ($answers === false) {
 
                 <input type="submit" value="回答" name="answer">
             </form>
-            <?php if (isLoggedIn() && (int) $question['userId'] === (int) $_SESSION['user']['id']): ?>
+            <?php if (isLoggedIn() && (int) $question['userId'] === (int) $_SESSION['user']['id'] && empty($answers)): ?>
                 <form action="questionEdit.php" method="GET">
                     <input type="hidden" name="questionId"
                         value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
