@@ -38,7 +38,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-
     $question = getQuestionById((int) $questionId);
     if ($question === false || (int) $question['userId'] !== (int) $_SESSION['user']['id']) {
         header('Location: questions.php');
@@ -47,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (trim($questionText) === '') {
         $error = '質問内容を入力してください。';
-    } elseif (mb_strlen($questionText) > 256) {
+    } elseif (mb_strlen($questionText, 'UTF-8') > 256) {
         $error = '質問内容は256文字以内で入力してください。';
     } else {
         if (updateQuestion((int) $questionId, $questionText)) {
@@ -80,38 +79,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="submit" id="other-btn" value="質問する">
             </form>
             <?php if (isLoggedIn()): ?>
-                <form action="index.php" method="POST" >
-                    <input type="submit" id="logout-btn" name="logout" value="ログアウト" >
+                <form action="index.php" method="POST">
+                    <input type="submit" id="logout-btn" name="logout" value="ログアウト">
                 </form>
             <?php endif; ?>
             <?php if (!isLoggedIn()): ?>
                 <form action="index.php" method="POST">
-                    <input type="submit"  id="other-btn" name="login" value="ログイン">
+                    <input type="submit" id="other-btn" name="login" value="ログイン">
                 </form>
             <?php endif; ?>
         </div>
     </header>
 
     <main>
-            <?php if (!empty($error)): ?>
-                <p style="color: red;"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p>
-            <?php endif; ?>
+        <?php if (!empty($error)): ?>
+            <p style="color: red;"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p>
+        <?php endif; ?>
 
-            <form action="questionEdit.php" method="POST">
-                <div class="edit-form">
-                    <h2>質問を編集する</h2>
-                    <textarea name="question"><?= htmlspecialchars($questionText, ENT_QUOTES, 'UTF-8') ?></textarea>
-                </div>
-                <input type="hidden" name="questionId"
-                    value="<?= htmlspecialchars((string) $questionId, ENT_QUOTES, 'UTF-8') ?>">
-                <input type="submit" value="編集する" id="entry-btn">
-            </form>
+        <form action="questionEdit.php" method="POST">
+            <div class="edit-form">
+                <h2>質問を編集する</h2>
+                <textarea name="question"
+                    maxlength="256"><?= htmlspecialchars($questionText, ENT_QUOTES, 'UTF-8') ?></textarea>
+            </div>
+            <input type="hidden" name="questionId"
+                value="<?= htmlspecialchars((string) $questionId, ENT_QUOTES, 'UTF-8') ?>">
+            <input type="submit" value="編集する" id="entry-btn">
+        </form>
     </main>
 
     <footer>
-        <form action="questions.php" method="GET">
+        <form action="detail.php" method="GET">
             <input type="hidden" name="questionId"
-            value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
+                value="<?= htmlspecialchars((string) $questionId, ENT_QUOTES, 'UTF-8') ?>">
             <button type="submit" class="return-btn">戻る</button>
         </form>
         <div>@アイデア倉庫</div>

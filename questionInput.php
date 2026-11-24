@@ -10,6 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['question'])) {
 
     if ($questionText === '') {
         $err = '質問内容を入力してください。';
+    } elseif (mb_strlen($questionText, 'UTF-8') > 256) {
+        $err = '質問内容は256文字以内で入力してください。';
     } else {
         $userId = $_SESSION['user']['id'];
 
@@ -43,13 +45,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['question'])) {
                 <input type="submit" id="current-btn" value="質問する">
             </form>
             <?php if (isLoggedIn()): ?>
-                <form action="index.php" method="POST" >
-                    <input type="submit" id="logout-btn" name="logout" value="ログアウト" >
+                <form action="index.php" method="POST">
+                    <input type="submit" id="logout-btn" name="logout" value="ログアウト">
                 </form>
             <?php endif; ?>
             <?php if (!isLoggedIn()): ?>
                 <form action="index.php" method="POST">
-                    <input type="submit"  id="other-btn" name="login" value="ログイン">
+                    <input type="submit" id="other-btn" name="login" value="ログイン">
                 </form>
             <?php endif; ?>
         </div>
@@ -59,8 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['question'])) {
         <form action="questionInput.php" method="POST">
             <div class="edit-form">
                 <h2 id="question-h2">質問を投稿する</h2>
-                <textarea name="question" rows="5"
-                    cols="40"><?php echo isset($_POST['question']) ? htmlspecialchars($_POST['question'], ENT_QUOTES, 'UTF-8') : ''; ?></textarea>
+                <textarea name="question" rows="5" cols="40"
+                    maxlength="256"><?php echo isset($_POST['question']) ? htmlspecialchars($_POST['question'], ENT_QUOTES, 'UTF-8') : ''; ?></textarea>
             </div>
 
             <?php if (!empty($err)): ?>
