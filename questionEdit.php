@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <form action="questionEdit.php" method="POST">
             <div class="edit-form">
-                <h2>質問を編集する</h2>
+                <h2 id="question-h2">質問を編集する</h2>
                 <textarea name="question"
                     maxlength="256"><?= htmlspecialchars($questionText, ENT_QUOTES, 'UTF-8') ?></textarea>
             </div>
