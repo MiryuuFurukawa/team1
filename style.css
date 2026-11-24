@@ -168,6 +168,11 @@ h2 {
     margin: 5px 0 10px 0;
 }
 
+/* 検索ボタン */
+.search-form {
+    margin: 0 0 20px 0;
+}
+
 /* ログイン画面・新登録画面 */
 .index-main {
     width: 300px;

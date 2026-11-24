@@ -68,7 +68,7 @@ $offset = ($page - 1) * $num;
     </header>
 
     <main>
-        <form action="questions.php" method="GET">
+        <form action="questions.php" method="GET" class="search-form">
             <input type="text" name="keyword" value="<?= htmlspecialchars($keyword, ENT_QUOTES, 'UTF-8') ?>"
                 maxlength="20">
             <input type="submit" value="検索">
