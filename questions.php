@@ -78,7 +78,6 @@ unset($_SESSION['err']);
             <?php endforeach; ?>
         <?php endif; ?>
     </main>
-
     <footer>
         <div>@アイデア倉庫</div>
     </footer>
