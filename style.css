@@ -144,7 +144,7 @@ header h1 a:active {
     cursor: pointer;
 }
 
-#logout-btn input{
+#logout-btn{
     font-size: 0.9rem;
     color: #003B90;
     background-color: #EE1111;

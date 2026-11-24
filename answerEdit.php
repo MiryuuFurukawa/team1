@@ -80,44 +80,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <header>
         <h1><a href="questions.php">アイデア倉庫</a></h1>
-        <?php if (isLoggedIn()): ?>
-            <div class="header-btn">
+        <div class="header-btn">
+            <form action="questions.php" method="GET">
+                <input type="submit" id="other-btn" value="質問一覧">
+            </form>
+            <form action="questionInput.php" method="GET">
+                <input type="submit" id="other-btn" value="質問する">
+            </form>
+            <?php if (isLoggedIn()): ?>
                 <form action="index.php" method="POST">
-                    <input type="submit" name="logout" value="ログアウト">
+                    <input type="submit" id="logout-btn" name="logout" value="ログアウト">
                 </form>
-            </div>
-        <?php endif; ?>
+            <?php endif; ?>
+            <?php if (!isLoggedIn()): ?>
+                <form action="index.php" method="POST">
+                    <input type="submit" id="other-btn" name="login" value="ログイン">
+                </form>
+            <?php endif; ?>
+        </div>
     </header>
 
     <main>
-        <div class="question-container">
-            <?php if (!empty($error)): ?>
-                <p style="color: red;"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p>
-            <?php endif; ?>
+        <?php if (!empty($error)): ?>
+            <p style="color: red;"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p>
+        <?php endif; ?>
 
-            <form action="answerEdit.php" method="POST">
-                <div class="edit-form">
-                    <div><label>回答を編集する</label></div>
-                    <textarea name="answer"><?= htmlspecialchars($answerText, ENT_QUOTES, 'UTF-8') ?></textarea>
-                </div>
-                <input type="hidden" name="answerId"
-                    value="<?= htmlspecialchars((string) $answerId, ENT_QUOTES, 'UTF-8') ?>">
-                <input type="hidden" name="questionId"
-                    value="<?= htmlspecialchars((string) $questionId, ENT_QUOTES, 'UTF-8') ?>">
-
-                <div class="question-container-btn">
-                    <input type="submit" value="編集する">
-                </div>
-            </form>
-        </div>
-
-        <form action="detail.php" method="GET">
+        <form action="answerEdit.php" method="POST">
+            <div class="edit-form">
+                <h2>回答を編集する</h2>
+                <textarea name="answer"><?= htmlspecialchars($answerText, ENT_QUOTES, 'UTF-8') ?></textarea>
+            </div>
+            <input type="hidden" name="answerId"
+                value="<?= htmlspecialchars((string) $answerId, ENT_QUOTES, 'UTF-8') ?>">
             <input type="hidden" name="questionId"
                 value="<?= htmlspecialchars((string) $questionId, ENT_QUOTES, 'UTF-8') ?>">
-            <input type="submit" value="戻る">
+
+            <input type="submit" value="編集する" id="entry-btn">
         </form>
     </main>
+
     <footer>
+        <form action="questions.php" method="GET">
+            <input type="hidden" name="questionId"
+                value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
+            <button type="submit" class="return-btn">戻る</button>
+        </form>
         <div>@アイデア倉庫</div>
     </footer>
 </body>
