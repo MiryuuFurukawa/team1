@@ -92,10 +92,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </header>
 
     <main>
-        <?php if (!empty($error)): ?>
-            <p style="color: red;"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p>
-        <?php endif; ?>
-
         <form action="questionEdit.php" method="POST">
             <div class="edit-form">
                 <h2 id="question-h2">質問を編集する</h2>
@@ -104,6 +100,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <input type="hidden" name="questionId"
                 value="<?= htmlspecialchars((string) $questionId, ENT_QUOTES, 'UTF-8') ?>">
+        <?php if (!empty($error)): ?>
+            <span style="color: red;"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></span>
+        <?php endif; ?>
             <input type="submit" value="編集する" id="entry-btn">
         </form>
     </main>

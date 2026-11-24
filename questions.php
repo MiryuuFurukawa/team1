@@ -1,6 +1,9 @@
 <?php
 require_once 'function.php';
 
+//ページに表示させる記事の数
+$num = 5;
+
 startSessionIfNeeded();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['questionId'])) {
@@ -16,6 +19,12 @@ $loginUser = $_SESSION['user'] ?? null;
 
 $err = $_SESSION['err'] ?? '';
 unset($_SESSION['err']);
+
+// 現在のページ番号
+$page = max(1, (int)($_GET['page'] ?? 1));
+
+// OFFSETを計算
+$offset = ($page - 1) * $num;
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -77,6 +86,25 @@ unset($_SESSION['err']);
                 </div>
             <?php endforeach; ?>
         <?php endif; ?>
+<?php
+    try {
+    $db = Connect();
+    $stmt = $db->prepare("SELECT COUNT(*) FROM question");
+    $stmt->execute();
+    } catch (PDOException $e){
+    exit("エラー：" . $e->getMessage());
+}
+
+$comments = $stmt->fetchColumn();
+$max_page = ceil($comments / $num);
+if ($max_page >= 1){
+    echo '<nav class="page-nav"><ul class="page-contaiter">';
+    for ($i = 1; $i <= $max_page; $i++){
+        echo '<li><a href="questions.php?page='.$i.'" class="page-link">'.$i.'</a></li>';
+    }
+        echo'</ul></nav>';
+}
+?>
     </main>
     <footer>
         <div>@アイデア倉庫</div>
