@@ -2,20 +2,18 @@
 require_once 'function.php';
 startSessionIfNeeded();
 
-$err = '';
-$userId = '';
-$page = $_GET['page'] ?? ($_POST['page'] ?? '');
-$questionId = $_GET['questionId'] ?? ($_POST['questionId'] ?? '');
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['logout'])) {
-        logoutProcess();
-    }
-
-    $userId = $_POST['userId'] ?? '';
-    $userPw = $_POST['userPw'] ?? '';
-    $err = loginProcess($userId, $userPw, $page, $questionId);
+if (isLoggedIn()) {
+    $_SESSION = [];
+    session_destroy();
+    startSessionIfNeeded();
 }
+
+$err = $_SESSION['login_err'] ?? '';
+unset($_SESSION['login_err']);
+
+$userId = '';
+$page = $_GET['page'] ?? '';
+$questionId = $_GET['questionId'] ?? '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -48,18 +46,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p style="color:red;"><?= htmlspecialchars($err, ENT_QUOTES, 'UTF-8') ?></p>
         <?php endif; ?>
         <div class="index-main">
-            <form action="index.php" method="post">
+            <form action="login_exec.php" method="post">
                 <input type="hidden" name="page" value="<?= htmlspecialchars($page, ENT_QUOTES, 'UTF-8') ?>">
                 <input type="hidden" name="questionId"
                     value="<?= htmlspecialchars($questionId, ENT_QUOTES, 'UTF-8') ?>">
 
                 <div>
-                    <label for="userId">ユーザーID　</label>
+                    <label for="userId">ユーザーID </label>
                     <input type="text" id="userId" name="userId"
                         value="<?= htmlspecialchars($userId, ENT_QUOTES, 'UTF-8') ?>">
                 </div>
                 <div>
-                    <label for="userPw">パスワード　</label>
+                    <label for="userPw">パスワード </label>
                     <input type="password" id="userPw" name="userPw">
                 </div>
                 <div id="login-btn">
