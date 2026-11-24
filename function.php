@@ -360,3 +360,26 @@ function updateAnswer($answerId, $answer)
     $stmt->bindValue(':answerId', $answerId, PDO::PARAM_INT);
     return $stmt->execute();
 }
+
+function getQuestionsByKeyword($keyword = '')
+{
+    $db = Connect();
+    $sql = "SELECT question.*, user.name AS name
+        FROM question 
+        JOIN user ON question.userId = user.id 
+        WHERE question.deleteFlg = 0";
+    if ($keyword !== '') {
+        $sql .= " AND question.question LIKE :keyword";
+    }
+    $sql .= " ORDER BY question.date DESC";
+    $stmt = $db->prepare($sql);
+    if ($keyword !== '') {
+        $stmt->bindValue(':keyword', '%' . $keyword . '%', PDO::PARAM_STR);
+    }
+    $stmt->execute();
+    $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if (empty($questions)) {
+        return false;
+    }
+    return $questions;
+}

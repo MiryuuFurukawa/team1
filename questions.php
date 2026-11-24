@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['questionId'])) {
 }
 
 $loginUser = $_SESSION['user'] ?? null;
-
+$keyword = $_GET['keyword'] ?? '';
 $err = $_SESSION['err'] ?? '';
 unset($_SESSION['err']);
 ?>
@@ -38,26 +38,36 @@ unset($_SESSION['err']);
                 <input type="submit" id="other-btn" value="質問する">
             </form>
             <?php if (isLoggedIn()): ?>
-                <form action="index.php" method="POST" >
-                    <input type="submit" id="logout-btn" name="logout" value="ログアウト" >
+                <form action="index.php" method="POST">
+                    <input type="submit" id="logout-btn" name="logout" value="ログアウト">
                 </form>
             <?php endif; ?>
             <?php if (!isLoggedIn()): ?>
                 <form action="index.php" method="POST">
-                    <input type="submit"  id="other-btn" name="login" value="ログイン">
+                    <input type="submit" id="other-btn" name="login" value="ログイン">
                 </form>
             <?php endif; ?>
         </div>
     </header>
 
     <main>
-        <?php if ($questions = getQuestion()): ?>
+        <form action="questions.php" method="GET">
+            <input type="text" name="keyword" value="<?= htmlspecialchars($keyword, ENT_QUOTES, 'UTF-8') ?>">
+            <input type="submit" value="検索">
+            <?php if ($keyword !== ''): ?>
+                <a href="questions.php">検索解除</a>
+            <?php endif; ?>
+        </form>
+
+        <?php if ($questions = getQuestionsByKeyword($keyword)): ?>
             <?php foreach ($questions as $n => $q): ?>
                 <div class="question-container">
-                    <form><input type="hidden" name="questionId" value="<?= htmlspecialchars($questions[$n]['id'], ENT_QUOTES, 'UTF-8') ?>"></form>
+                    <form><input type="hidden" name="questionId"
+                            value="<?= htmlspecialchars($questions[$n]['id'], ENT_QUOTES, 'UTF-8') ?>"></form>
                     <div class="question-name"><?= htmlspecialchars($questions[$n]['name'], ENT_QUOTES, 'UTF-8') ?></div>
                     <div class="question-time"><?= htmlspecialchars($questions[$n]['date'], ENT_QUOTES, 'UTF-8') ?></div>
-                    <div class="question-text"><?= nl2br(htmlspecialchars($questions[$n]['question'], ENT_QUOTES, 'UTF-8')) ?></div>
+                    <div class="question-text"><?= nl2br(htmlspecialchars($questions[$n]['question'], ENT_QUOTES, 'UTF-8')) ?>
+                    </div>
 
                     <div class="question-container-btn">
                         <form action="detail.php" method="GET">
@@ -76,6 +86,8 @@ unset($_SESSION['err']);
                     </div>
                 </div>
             <?php endforeach; ?>
+        <?php else: ?>
+            <p>該当する質問は見つかりませんでした。</p>
         <?php endif; ?>
     </main>
     <footer>
