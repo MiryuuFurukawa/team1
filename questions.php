@@ -52,7 +52,8 @@ unset($_SESSION['err']);
 
     <main>
         <form action="questions.php" method="GET">
-            <input type="text" name="keyword" value="<?= htmlspecialchars($keyword, ENT_QUOTES, 'UTF-8') ?>">
+            <input type="text" name="keyword" value="<?= htmlspecialchars($keyword, ENT_QUOTES, 'UTF-8') ?>"
+                maxlength="20">
             <input type="submit" value="検索">
             <?php if ($keyword !== ''): ?>
                 <a href="questions.php">検索解除</a>
