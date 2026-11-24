@@ -14,6 +14,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['questionId'])) {
 
 $loginUser = $_SESSION['user'] ?? null;
 $keyword = $_GET['keyword'] ?? '';
+$errorMsg = '';
+
+if (isset($_GET['keyword'])) {
+    if (trim($keyword) === '') {
+        $errorMsg = '検索欄に文字を入れてください';
+    }
+}
+$searchKeyword = ($errorMsg !== '') ? '' : $keyword;
 $err = $_SESSION['err'] ?? '';
 unset($_SESSION['err']);
 ?>
@@ -60,7 +68,11 @@ unset($_SESSION['err']);
             <?php endif; ?>
         </form>
 
-        <?php if ($questions = getQuestionsByKeyword($keyword)): ?>
+        <?php if ($errorMsg !== ''): ?>
+            <p><?= htmlspecialchars($errorMsg, ENT_QUOTES, 'UTF-8') ?></p>
+        <?php endif; ?>
+
+        <?php if ($questions = getQuestionsByKeyword($searchKeyword)): ?>
             <?php foreach ($questions as $n => $q): ?>
                 <div class="question-container">
                     <form><input type="hidden" name="questionId"
