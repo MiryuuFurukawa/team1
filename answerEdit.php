@@ -1,6 +1,22 @@
 <?php
 require_once 'function.php';
 
+$questionId = $_GET['questionId'] ?? $_POST['questionId'] ?? '';
+requireLogin('answer', (string) $questionId);
+
+if ($questionId === '' || !ctype_digit((string) $questionId)) {
+    header('Location: questions.php');
+    exit;
+}
+
+$question = getQuestionById((int) $questionId);
+if ($question === false) {
+    header('Location: questions.php');
+    exit;
+}
+// 定義書の $question['name'] に合わせる[cite: 2]
+$question['name'] = $question['userName'];
+
 requireLogin();
 
 $error = '';
@@ -101,14 +117,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </header>
 
     <main>
+    <h2 id="question-h2">Question</h2>
+    <div class="question-container">
+        <div class="question-name"><?= htmlspecialchars((string) $question['name'], ENT_QUOTES, 'UTF-8') ?></div>
+        <div class="question-time"><?= htmlspecialchars((string) $question['date'], ENT_QUOTES, 'UTF-8') ?></div>
+        <div class="question-text"><?= nl2br(htmlspecialchars((string) $question['question'], ENT_QUOTES, 'UTF-8')) ?></div>
+    </div>
+
         <?php if (!empty($error)): ?>
             <p style="color: red;"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p>
         <?php endif; ?>
 
-        <form action="answerEdit.php" method="POST">
+        <form action="answerEdit.php" method="POST" class="answer-container">
             <div class="edit-form">
-                <h2>回答を編集する</h2>
-                <textarea name="answer"><?= htmlspecialchars($answerText, ENT_QUOTES, 'UTF-8') ?></textarea>
+                <h2 id="answer-h2"><label for="answer">Answer Edit</label></h2>
+                <textarea name="answer" id="answer"><?= htmlspecialchars($answerText, ENT_QUOTES, 'UTF-8') ?></textarea>
             </div>
             <input type="hidden" name="answerId"
                 value="<?= htmlspecialchars((string) $answerId, ENT_QUOTES, 'UTF-8') ?>">

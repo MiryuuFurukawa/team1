@@ -60,6 +60,7 @@ input[type="password"] {
     padding: 10px;
     border: 1px solid #CCC;
     border-radius: 5px;
+    resize: none;
 }
 
 /* ボタン */
@@ -77,20 +78,11 @@ input[type="submit"] {
     letter-spacing: 0.25em;
 }
 
-/* ヘッダー */
-/* header {
-    background-color: #003B90;
-    height: 180px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    padding: 0 10%;
+input[type="textarea"]{
+    resize: none;
 }
 
-header h1 {
-    margin: 0;
-    align-self: center;
-} */
+/* ヘッダー */
 header {
     background-color: #003B90;
     height: 170px;
@@ -109,9 +101,12 @@ header h1 {
 
 header h1 a:link,
 header h1 a:visited,
-header h1 a:hover,
 header h1 a:active {
     color: #FFF;
+}
+
+header h1 a:hover {
+    color: #E1C954;
 }
 
 /* ヘッダーのボタン */
@@ -155,6 +150,12 @@ header h1 a:active {
     border-radius: 6px 6px 0 0;
 }
 
+#other-btn:hover,
+#logout-btn:hover,
+#login-btn:hover {
+    opacity: 0.7;
+}
+
 /* メイン画面 */
 main {
     margin: 40px auto;
@@ -185,7 +186,6 @@ h2 {
 #login-btn input[type="submit"] {
     font-family: sans-serif;
     font-size: 0.9rem;
-
     width: 120px;
     height: 40px;
 }
@@ -261,6 +261,15 @@ h2 {
 #answer-h2 {
     color: #E1C954;
 }
+
+#answer{
+    color: #333;
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border-radius: 5px;
+    resize: none;
+}
 /* 質問・回答・編集入力用テキストエリア */
 
 .edit-form label {
@@ -274,9 +283,10 @@ h2 {
 .edit-form textarea {
     color: #333;
     width: 100%;
-    height: 100px;
+    height: 200px;
     padding: 10px;
     border-radius: 5px;
+    resize: none;
 }
 
 #entry-btn {

@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
         <div class="edit-form">
             <h2 id="answer-h2"><label for="answer">Answer</label></h2>
-            <textarea id="answer"name="answer"><?= htmlspecialchars($answer, ENT_QUOTES, 'UTF-8') ?></textarea>
+            <textarea id="answer" name="answer"><?= htmlspecialchars($answer, ENT_QUOTES, 'UTF-8') ?></textarea>
         </div>
 
         <?php if ($err !== ''): ?>

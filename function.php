@@ -284,7 +284,7 @@ function logoutProcess(): void
     startSessionIfNeeded();
     $_SESSION = [];
     session_destroy();
-    header('Location: questions.php');
+    header('Location: index.php');
     exit;
 }
 
