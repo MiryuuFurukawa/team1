@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (trim($answerText) === '') {
         $error = '回答内容を入力してください。';
-    } elseif (mb_strlen($answerText) > 256) {
+    } elseif (mb_strlen($answerText, 'UTF-8') > 256) {
         $error = '回答内容は256文字以内で入力してください。';
     } else {
         if (updateAnswer((int) $answerId, $answerText)) {
@@ -131,7 +131,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <form action="answerEdit.php" method="POST" class="answer-container">
             <div class="edit-form">
                 <h2 id="answer-h2"><label for="answer">Answer Edit</label></h2>
-                <textarea name="answer" id="answer"><?= htmlspecialchars($answerText, ENT_QUOTES, 'UTF-8') ?></textarea>
+                <textarea name="answer" id="answer"
+                    maxlength="256"><?= htmlspecialchars($answerText, ENT_QUOTES, 'UTF-8') ?></textarea>
             </div>
             <input type="hidden" name="answerId"
                 value="<?= htmlspecialchars((string) $answerId, ENT_QUOTES, 'UTF-8') ?>">
@@ -143,9 +144,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </main>
 
     <footer>
-        <form action="questions.php" method="GET">
+        <form action="detail.php" method="GET">
             <input type="hidden" name="questionId"
-                value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
+                value="<?= htmlspecialchars((string) $questionId, ENT_QUOTES, 'UTF-8') ?>">
             <button type="submit" class="return-btn">戻る</button>
         </form>
         <div>@アイデア倉庫</div>
