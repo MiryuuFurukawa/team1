@@ -96,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </main>
 
     <footer>
-        <form action="questions.php" method="GET">
+        <form action="detail.php" method="GET">
             <input type="hidden" name="questionId"
                 value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
             <button type="submit" class="return-btn">戻る</button>

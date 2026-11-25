@@ -168,6 +168,11 @@ h2 {
     margin: 5px 0 10px 0;
 }
 
+/* 検索ボタン */
+.search-form {
+    margin: 0 0 20px 0;
+}
+
 /* ログイン画面・新登録画面 */
 .index-main {
     width: 300px;
@@ -365,6 +370,53 @@ footer {
     flex-shrink: 0;
     padding: 15px 0;
 }
+
+/* ページング処理 */
+.page-nav {
+  display: flex;
+  justify-content: center;
+}
+
+.page-contaiter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.page-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 12px;
+  color: #333;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.page-link:hover {
+  background-color: #f3f4f6;
+  border-color: #bbb;
+}
+
+/* 現在のページ */
+.page-link[aria-current="page"] {
+  color: #fff;
+  background-color: #2563eb;
+  border-color: #2563eb;
+  font-weight: bold;
+  pointer-events: none;
+}
+
+
+
 
 /* 戻るボタン */
 .return-btn {

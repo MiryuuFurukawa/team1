@@ -124,10 +124,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="question-text"><?= nl2br(htmlspecialchars((string) $question['question'], ENT_QUOTES, 'UTF-8')) ?></div>
     </div>
 
-        <?php if (!empty($error)): ?>
-            <p style="color: red;"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p>
-        <?php endif; ?>
-
         <form action="answerEdit.php" method="POST" class="answer-container">
             <div class="edit-form">
                 <h2 id="answer-h2"><label for="answer">Answer Edit</label></h2>
@@ -138,7 +134,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 value="<?= htmlspecialchars((string) $answerId, ENT_QUOTES, 'UTF-8') ?>">
             <input type="hidden" name="questionId"
                 value="<?= htmlspecialchars((string) $questionId, ENT_QUOTES, 'UTF-8') ?>">
-
+        <?php if (!empty($error)): ?>
+            <span style="color: red;"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></span>
+        <?php endif; ?>
             <input type="submit" value="編集する" id="entry-btn">
         </form>
     </main>
