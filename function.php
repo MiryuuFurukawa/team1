@@ -384,18 +384,21 @@ function getQuestionsByKeyword($keyword = '')
     return $questions;
 }
 
-// ページング専用：指定件数と開始位置で質問を取得する
-function getQuestionsByPage($limit = 5, $offset = 0)
+function getQuestionsByPage($keyword = '', $limit = 5, $offset = 0)
 {
     $db = Connect();
     $sql = "SELECT question.*, user.name AS name
         FROM question 
         JOIN user ON question.userId = user.id 
-        WHERE question.deleteFlg = 0 
-        ORDER BY question.date DESC 
-        LIMIT :limit OFFSET :offset";
-
+        WHERE question.deleteFlg = 0";
+    if ($keyword !== '') {
+        $sql .= " AND question.question LIKE :keyword";
+    }
+    $sql .= " ORDER BY question.date DESC LIMIT :limit OFFSET :offset";
     $stmt = $db->prepare($sql);
+    if ($keyword !== '') {
+        $stmt->bindValue(':keyword', '%' . $keyword . '%', PDO::PARAM_STR);
+    }
     $stmt->bindValue(':limit', (int) $limit, PDO::PARAM_INT);
     $stmt->bindValue(':offset', (int) $offset, PDO::PARAM_INT);
 
@@ -407,12 +410,19 @@ function getQuestionsByPage($limit = 5, $offset = 0)
     return $questions;
 }
 
-// ページングのリンクを出力する
-function renderPagination($num)
+
+function renderPagination($num, $keyword = '')
 {
     try {
         $db = Connect();
-        $stmt = $db->prepare("SELECT COUNT(*) FROM question WHERE deleteFlg = 0");
+        $sql = "SELECT COUNT(*) FROM question WHERE deleteFlg = 0";
+        if ($keyword !== '') {
+            $sql .= " AND question.question LIKE :keyword";
+        }
+        $stmt = $db->prepare($sql);
+        if ($keyword !== '') {
+            $stmt->bindValue(':keyword', '%' . $keyword . '%', PDO::PARAM_STR);
+        }
         $stmt->execute();
         $comments = $stmt->fetchColumn();
     } catch (PDOException $e) {
@@ -424,7 +434,8 @@ function renderPagination($num)
     if ($max_page >= 1) {
         echo '<nav class="page-nav"><ul class="page-contaiter">';
         for ($i = 1; $i <= $max_page; $i++) {
-            echo '<li><a href="questions.php?page=' . $i . '" class="page-link">' . $i . '</a></li>';
+            $queryParam = ($keyword !== '') ? '&keyword=' . urlencode($keyword) : '';
+            echo '<li><a href="questions.php?page=' . $i . $queryParam . '" class="page-link">' . $i . '</a></li>';
         }
         echo '</ul></nav>';
     }

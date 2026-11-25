@@ -1,7 +1,6 @@
 <?php
 require_once 'function.php';
 
-//ページに表示させる記事の数
 $num = 5;
 
 startSessionIfNeeded();
@@ -16,6 +15,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['questionId'])) {
 }
 
 $loginUser = $_SESSION['user'] ?? null;
+
+$keyword = $_GET['keyword'] ?? '';
+$errorMsg = '';
+if (isset($_GET['keyword'])) {
+    if (trim($keyword) === '') {
+        $errorMsg = '検索欄に文字を入れてください';
+    }
+}
+$searchKeyword = ($errorMsg !== '') ? '' : $keyword;
+
 $err = $_SESSION['err'] ?? '';
 unset($_SESSION['err']);
 
@@ -60,15 +69,19 @@ $offset = ($page - 1) * $num;
 
     <main>
         <form action="questions.php" method="GET" class="search-form">
-            <input type="text" name="keyword"
-                value="<?= htmlspecialchars($_GET['keyword'] ?? '', ENT_QUOTES, 'UTF-8') ?>" maxlength="20">
+            <input type="text" name="keyword" value="<?= htmlspecialchars($keyword, ENT_QUOTES, 'UTF-8') ?>"
+                maxlength="20">
             <input type="submit" value="検索">
-            <?php if (isset($_GET['keyword']) && $_GET['keyword'] !== ''): ?>
+            <?php if ($keyword !== ''): ?>
                 <a href="questions.php">検索解除</a>
             <?php endif; ?>
         </form>
 
-        <?php if ($questions = getQuestionsByPage($num, $offset)): ?>
+        <?php if ($errorMsg !== ''): ?>
+            <p><?= htmlspecialchars($errorMsg, ENT_QUOTES, 'UTF-8') ?></p>
+        <?php endif; ?>
+
+        <?php if ($questions = getQuestionsByPage($searchKeyword, $num, $offset)): ?>
             <?php foreach ($questions as $n => $q): ?>
                 <div class="question-container">
                     <form><input type="hidden" name="questionId"
@@ -99,7 +112,7 @@ $offset = ($page - 1) * $num;
             <p>該当する質問は見つかりませんでした。</p>
         <?php endif; ?>
 
-        <?php renderPagination($num); ?>
+        <?php renderPagination($num, $searchKeyword); ?>
     </main>
     <footer>
         <div>@アイデア倉庫</div>
