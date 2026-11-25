@@ -169,8 +169,36 @@ h2 {
 }
 
 /* 検索ボタン */
+.search-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
 .search-form {
-    margin: 0 0 20px 0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.search-form input[type="search"] {
+    font-size : 16px;
+    font-family: sans-serif;
+    color: #333;
+    width: auto;
+    height: 2rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.search-form input[type="submit"] {
+    width: 60px;
+}
+
+.search-form span {
+    color: #EE1111;
 }
 
 /* ログイン画面・新登録画面 */
