@@ -23,7 +23,7 @@ $answer = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $answer = trim($_POST['answer'] ?? '');
 
-    if ($answer === '') {
+    if (isOnlyWhitespace($_POST['answer'] ?? '')) {
         $err = '回答を入力してください。';
     } elseif (mb_strlen($answer, 'UTF-8') > 256) {
         $err = '回答内容は256文字以内で入力してください。';
