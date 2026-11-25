@@ -392,12 +392,13 @@ function getQuestionsByPage($keyword = '', $limit = 5, $offset = 0)
         JOIN user ON question.userId = user.id 
         WHERE question.deleteFlg = 0";
     if ($keyword !== '') {
-        $sql .= " AND question.question LIKE :keyword";
+        $sql .= " AND (question.question LIKE :keyword1 OR user.name LIKE :keyword2)";
     }
     $sql .= " ORDER BY question.date DESC LIMIT :limit OFFSET :offset";
     $stmt = $db->prepare($sql);
     if ($keyword !== '') {
-        $stmt->bindValue(':keyword', '%' . $keyword . '%', PDO::PARAM_STR);
+        $stmt->bindValue(':keyword1', '%' . $keyword . '%', PDO::PARAM_STR);
+        $stmt->bindValue(':keyword2', '%' . $keyword . '%', PDO::PARAM_STR);
     }
     $stmt->bindValue(':limit', (int) $limit, PDO::PARAM_INT);
     $stmt->bindValue(':offset', (int) $offset, PDO::PARAM_INT);
@@ -415,13 +416,16 @@ function renderPagination($num, $keyword = '')
 {
     try {
         $db = Connect();
-        $sql = "SELECT COUNT(*) FROM question WHERE deleteFlg = 0";
+        $sql = "SELECT COUNT(*) FROM question 
+                JOIN user ON question.userId = user.id 
+                WHERE question.deleteFlg = 0";
         if ($keyword !== '') {
-            $sql .= " AND question.question LIKE :keyword";
+            $sql .= " AND (question.question LIKE :keyword1 OR user.name LIKE :keyword2)";
         }
         $stmt = $db->prepare($sql);
         if ($keyword !== '') {
-            $stmt->bindValue(':keyword', '%' . $keyword . '%', PDO::PARAM_STR);
+            $stmt->bindValue(':keyword1', '%' . $keyword . '%', PDO::PARAM_STR);
+            $stmt->bindValue(':keyword2', '%' . $keyword . '%', PDO::PARAM_STR);
         }
         $stmt->execute();
         $comments = $stmt->fetchColumn();
