@@ -383,3 +383,64 @@ function getQuestionsByKeyword($keyword = '')
     }
     return $questions;
 }
+
+function getQuestionsByPage($keyword = '', $limit = 5, $offset = 0)
+{
+    $db = Connect();
+    $sql = "SELECT question.*, user.name AS name
+        FROM question 
+        JOIN user ON question.userId = user.id 
+        WHERE question.deleteFlg = 0";
+    if ($keyword !== '') {
+        $sql .= " AND (question.question LIKE :keyword1 OR user.name LIKE :keyword2)";
+    }
+    $sql .= " ORDER BY question.date DESC LIMIT :limit OFFSET :offset";
+    $stmt = $db->prepare($sql);
+    if ($keyword !== '') {
+        $stmt->bindValue(':keyword1', '%' . $keyword . '%', PDO::PARAM_STR);
+        $stmt->bindValue(':keyword2', '%' . $keyword . '%', PDO::PARAM_STR);
+    }
+    $stmt->bindValue(':limit', (int) $limit, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', (int) $offset, PDO::PARAM_INT);
+
+    $stmt->execute();
+    $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if (empty($questions)) {
+        return false;
+    }
+    return $questions;
+}
+
+
+function renderPagination($num, $keyword = '')
+{
+    try {
+        $db = Connect();
+        $sql = "SELECT COUNT(*) FROM question 
+                JOIN user ON question.userId = user.id 
+                WHERE question.deleteFlg = 0";
+        if ($keyword !== '') {
+            $sql .= " AND (question.question LIKE :keyword1 OR user.name LIKE :keyword2)";
+        }
+        $stmt = $db->prepare($sql);
+        if ($keyword !== '') {
+            $stmt->bindValue(':keyword1', '%' . $keyword . '%', PDO::PARAM_STR);
+            $stmt->bindValue(':keyword2', '%' . $keyword . '%', PDO::PARAM_STR);
+        }
+        $stmt->execute();
+        $comments = $stmt->fetchColumn();
+    } catch (PDOException $e) {
+        exit("エラー：" . $e->getMessage());
+    }
+
+    $max_page = ceil($comments / $num);
+
+    if ($max_page >= 1) {
+        echo '<nav class="page-nav"><ul class="page-contaiter">';
+        for ($i = 1; $i <= $max_page; $i++) {
+            $queryParam = ($keyword !== '') ? '&keyword=' . urlencode($keyword) : '';
+            echo '<li><a href="questions.php?page=' . $i . $queryParam . '" class="page-link">' . $i . '</a></li>';
+        }
+        echo '</ul></nav>';
+    }
+}
