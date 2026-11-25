@@ -444,3 +444,9 @@ function renderPagination($num, $keyword = '')
         echo '</ul></nav>';
     }
 }
+
+function isOnlyWhitespace(string $text): bool
+{
+    $noSpaceText = preg_replace('/[[:space:]]| /u', '', $text);
+    return $noSpaceText === '';
+}

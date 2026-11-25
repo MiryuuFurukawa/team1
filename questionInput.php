@@ -8,7 +8,7 @@ $err = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['question'])) {
     $questionText = trim($_POST['question']);
 
-    if ($questionText === '') {
+    if (isOnlyWhitespace($_POST['question'])) {
         $err = '質問内容を入力してください。';
     } elseif (mb_strlen($questionText, 'UTF-8') > 256) {
         $err = '質問内容は256文字以内で入力してください。';
