@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    if (trim($questionText) === '') {
+    if (isOnlyWhitespace($questionText)) {
         $error = '質問内容を入力してください。';
     } elseif (mb_strlen($questionText, 'UTF-8') > 256) {
         $error = '質問内容は256文字以内で入力してください。';
