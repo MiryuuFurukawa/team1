@@ -42,6 +42,10 @@ $offset = ($page - 1) * $num;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>質問一覧画面</title>
     <link rel="stylesheet" href="style.css">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.2/font/bootstrap-icons.min.css">
 </head>
 
 <body>
@@ -68,18 +72,25 @@ $offset = ($page - 1) * $num;
     </header>
 
     <main>
-        <form action="questions.php" method="GET" class="search-form">
-            <input type="text" name="keyword" value="<?= htmlspecialchars($keyword, ENT_QUOTES, 'UTF-8') ?>"
-                maxlength="20">
-            <input type="submit" value="検索">
-            <?php if ($keyword !== ''): ?>
+            <div class="search-container">
+                <div class="search-form">
+                    <i class="bi bi-search" aria-hidden="true"></i>
+                    <form action="questions.php" method="GET">
+                        <input type="search" name="keyword"
+                            value="<?= htmlspecialchars($keyword, ENT_QUOTES, 'UTF-8') ?>" maxlength="20">
+                        <input type="submit" value="検索">
+                        <!--<?php if ($keyword !== ''): ?>
                 <a href="questions.php">検索解除</a>
-            <?php endif; ?>
-        </form>
+            <?php endif; ?> -->
+                    </form>
+                </div>
+                <div class="search-form">
+                    <?php if ($errorMsg !== ''): ?>
+                        <span><?= htmlspecialchars($errorMsg, ENT_QUOTES, 'UTF-8') ?></span>
+                    <?php endif; ?>
+                </div>
+            </div>
 
-        <?php if ($errorMsg !== ''): ?>
-            <p><?= htmlspecialchars($errorMsg, ENT_QUOTES, 'UTF-8') ?></p>
-        <?php endif; ?>
 
         <?php if ($questions = getQuestionsByPage($searchKeyword, $num, $offset)): ?>
             <?php foreach ($questions as $n => $q): ?>
@@ -87,7 +98,7 @@ $offset = ($page - 1) * $num;
                     <form><input type="hidden" name="questionId"
                             value="<?= htmlspecialchars($questions[$n]['id'], ENT_QUOTES, 'UTF-8') ?>"></form>
                     <div class="question-name"><?= htmlspecialchars($questions[$n]['name'], ENT_QUOTES, 'UTF-8') ?></div>
-                    <div class="question-time"><?= htmlspecialchars($questions[$n]['date'], ENT_QUOTES, 'UTF-8') ?></div>
+                    <div class="question-time"><?= date('Y年m月d日 H:i', strtotime($questions[$n]['date'])) ?></div>
                     <div class="question-text"><?= nl2br(htmlspecialchars($questions[$n]['question'], ENT_QUOTES, 'UTF-8')) ?>
                     </div>
 
