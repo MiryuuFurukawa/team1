@@ -16,20 +16,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['questionId'])) {
 }
 
 $loginUser = $_SESSION['user'] ?? null;
-$keyword = $_GET['keyword'] ?? '';
-$errorMsg = '';
-
-if (isset($_GET['keyword'])) {
-    if (trim($keyword) === '') {
-        $errorMsg = '検索欄に文字を入れてください';
-    }
-}
-$searchKeyword = ($errorMsg !== '') ? '' : $keyword;
 $err = $_SESSION['err'] ?? '';
 unset($_SESSION['err']);
 
 // 現在のページ番号
-$page = max(1, (int)($_GET['page'] ?? 1));
+$page = max(1, (int) ($_GET['page'] ?? 1));
 
 // OFFSETを計算
 $offset = ($page - 1) * $num;
@@ -69,19 +60,15 @@ $offset = ($page - 1) * $num;
 
     <main>
         <form action="questions.php" method="GET" class="search-form">
-            <input type="text" name="keyword" value="<?= htmlspecialchars($keyword, ENT_QUOTES, 'UTF-8') ?>"
-                maxlength="20">
+            <input type="text" name="keyword"
+                value="<?= htmlspecialchars($_GET['keyword'] ?? '', ENT_QUOTES, 'UTF-8') ?>" maxlength="20">
             <input type="submit" value="検索">
-            <?php if ($keyword !== ''): ?>
+            <?php if (isset($_GET['keyword']) && $_GET['keyword'] !== ''): ?>
                 <a href="questions.php">検索解除</a>
             <?php endif; ?>
         </form>
 
-        <?php if ($errorMsg !== ''): ?>
-            <p><?= htmlspecialchars($errorMsg, ENT_QUOTES, 'UTF-8') ?></p>
-        <?php endif; ?>
-
-        <?php if ($questions = getQuestionsByKeyword($searchKeyword)): ?>
+        <?php if ($questions = getQuestionsByPage($num, $offset)): ?>
             <?php foreach ($questions as $n => $q): ?>
                 <div class="question-container">
                     <form><input type="hidden" name="questionId"
@@ -111,25 +98,8 @@ $offset = ($page - 1) * $num;
         <?php else: ?>
             <p>該当する質問は見つかりませんでした。</p>
         <?php endif; ?>
-<?php
-    try {
-    $db = Connect();
-    $stmt = $db->prepare("SELECT COUNT(*) FROM question");
-    $stmt->execute();
-    } catch (PDOException $e){
-    exit("エラー：" . $e->getMessage());
-}
 
-$comments = $stmt->fetchColumn();
-$max_page = ceil($comments / $num);
-if ($max_page >= 1){
-    echo '<nav class="page-nav"><ul class="page-contaiter">';
-    for ($i = 1; $i <= $max_page; $i++){
-        echo '<li><a href="questions.php?page='.$i.'" class="page-link">'.$i.'</a></li>';
-    }
-        echo'</ul></nav>';
-}
-?>
+        <?php renderPagination($num); ?>
     </main>
     <footer>
         <div>@アイデア倉庫</div>

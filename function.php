@@ -383,3 +383,49 @@ function getQuestionsByKeyword($keyword = '')
     }
     return $questions;
 }
+
+// ページング専用：指定件数と開始位置で質問を取得する
+function getQuestionsByPage($limit = 5, $offset = 0)
+{
+    $db = Connect();
+    $sql = "SELECT question.*, user.name AS name
+        FROM question 
+        JOIN user ON question.userId = user.id 
+        WHERE question.deleteFlg = 0 
+        ORDER BY question.date DESC 
+        LIMIT :limit OFFSET :offset";
+
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':limit', (int) $limit, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', (int) $offset, PDO::PARAM_INT);
+
+    $stmt->execute();
+    $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if (empty($questions)) {
+        return false;
+    }
+    return $questions;
+}
+
+// ページングのリンクを出力する
+function renderPagination($num)
+{
+    try {
+        $db = Connect();
+        $stmt = $db->prepare("SELECT COUNT(*) FROM question WHERE deleteFlg = 0");
+        $stmt->execute();
+        $comments = $stmt->fetchColumn();
+    } catch (PDOException $e) {
+        exit("エラー：" . $e->getMessage());
+    }
+
+    $max_page = ceil($comments / $num);
+
+    if ($max_page >= 1) {
+        echo '<nav class="page-nav"><ul class="page-contaiter">';
+        for ($i = 1; $i <= $max_page; $i++) {
+            echo '<li><a href="questions.php?page=' . $i . '" class="page-link">' . $i . '</a></li>';
+        }
+        echo '</ul></nav>';
+    }
+}
