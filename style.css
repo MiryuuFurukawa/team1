@@ -213,6 +213,7 @@ h2 {
 .search-form input[type="submit"] {
     width: 60px;
     height: 35px;
+    margin-left: 3px;
     padding: 0;
     border-radius: 5px;
 }

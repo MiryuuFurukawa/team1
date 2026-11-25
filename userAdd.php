@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $userPw = $_POST['userPw'] ?? '';
 
     if ($viewName === '' || $userId === '' || $userPw === '') {
-        $error = '入力してください。';
+        $error = 'すべての項目を入力してください。';
     } else if (mb_strlen($userId) < 8) {
         $error = 'ユーザーIDは8文字以上で入力してください。';
     } else if (mb_strlen($userPw) < 6) {
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>利用者登録画面</title>
+    <title>新規登録画面</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h1><a href="questions.php">アイデア倉庫</a></h1>
         <div class="header-btn">
             <form action="questions.php" method="GET">
-                <input type="submit" id="current-btn" value="質問一覧">
+                <input type="submit" id="other-btn" value="質問一覧">
             </form>
             <form action="questionInput.php" method="GET">
                 <input type="submit" id="other-btn" value="質問する">
@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <main>
         <!-- 表示名、ユーザーID、パスワードを登録 -->
-        <h2>利用者登録</h2>
+        <h2>新規登録</h2>
         <?php if ($error !== ''): ?>
                 <p style="color: red;"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p>
             <?php endif; ?>

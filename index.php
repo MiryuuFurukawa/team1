@@ -37,7 +37,7 @@ $questionId = $_GET['questionId'] ?? ($_POST['questionId'] ?? '');
         <h1><a href="questions.php">アイデア倉庫</a></h1>
         <div class="header-btn">
             <form action="questions.php" method="GET">
-                <input type="submit" id="current-btn" value="質問一覧">
+                <input type="submit" id="other-btn" value="質問一覧">
             </form>
             <form action="questionInput.php" method="GET">
                 <input type="submit" id="other-btn" value="質問する">
