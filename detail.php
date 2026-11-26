@@ -15,6 +15,8 @@ if (
 }
 
 $questionId = $_GET['questionId'] ?? '';
+$page = $_GET['page'] ?? '1';
+$keyword = $_GET['keyword'] ?? '';
 
 if ($questionId === '' || !ctype_digit((string) $questionId)) {
     header('Location: questions.php');
@@ -33,7 +35,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
         }
     }
 
-    header('Location: detail.php?questionId=' . urlencode($questionId));
+    $redirectUrl = 'detail.php?questionId=' . urlencode($questionId);
+    if ($page !== '1') {
+        $redirectUrl .= '&page=' . urlencode($page);
+    }
+    if ($keyword !== '') {
+        $redirectUrl .= '&keyword=' . urlencode($keyword);
+    }
+    header('Location: ' . $redirectUrl);
     exit;
 }
 
@@ -156,6 +165,10 @@ if ($answers === false) {
     </main>
     <footer>
         <form action="questions.php" method="GET">
+            <input type="hidden" name="page" value="<?= htmlspecialchars((string) $page, ENT_QUOTES, 'UTF-8') ?>">
+            <?php if ($keyword !== ''): ?>
+                <input type="hidden" name="keyword" value="<?= htmlspecialchars((string) $keyword, ENT_QUOTES, 'UTF-8') ?>">
+            <?php endif; ?>
             <button type="submit" class="return-btn">戻る</button>
         </form>
         <div>@アイデア倉庫</div>
