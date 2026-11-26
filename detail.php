@@ -8,7 +8,8 @@ if (
     (strpos($referer, 'questions.php') === false &&
         strpos($referer, 'detail.php') === false &&
         strpos($referer, 'answer.php') === false &&
-        strpos($referer, 'questionEdit.php') === false)
+        strpos($referer, 'questionEdit.php') === false &&
+        strpos($referer, 'answerEdit.php') === false)
 ) {
     header('Location: questions.php');
     exit;

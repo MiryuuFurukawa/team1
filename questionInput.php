@@ -5,9 +5,14 @@ startSessionIfNeeded();
 $referer = $_SERVER['HTTP_REFERER'] ?? '';
 if (
     $referer === '' ||
-    (strpos($referer, 'questions.php') === false &&
-        strpos($referer, 'index.php') === false &&
-        strpos($referer, 'questionInput.php') === false)
+    (strpos($referer, 'index.php') === false &&
+        strpos($referer, 'questions.php') === false &&
+        strpos($referer, 'questionInput.php') === false &&
+        strpos($referer, 'detail.php') === false &&
+        strpos($referer, 'answer.php') === false &&
+        strpos($referer, 'answerEdit.php') === false &&
+        strpos($referer, 'questionEdit.php') === false &&
+        strpos($referer, 'userAdd.php') === false)
 ) {
     header('Location: index.php');
     exit;
@@ -28,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['question'])) {
         $userId = $_SESSION['user']['id'];
 
         if (addQuestion($userId, $questionText)) {
-            header('Location: index.php');
+            header('Location: questions.php');
             exit;
         } else {
             $err = '質問の登録に失敗しました。';
