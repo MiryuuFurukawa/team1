@@ -98,27 +98,24 @@ header h1 {
     padding-top: 40px;
 }
 
-
 header h1 a:link,
 header h1 a:visited,
 header h1 a:active {
     color: #FFF;
 }
 
-header h1 a:hover {
-    color: #E1C954;
-}
-
 /* Bootstrap icon用 */
 .bi {
-    color: #003B90;
+    font-size: 12px;
+    color: #FFF;
+    margin-left: 3px;
 }
 
 
 /* ヘッダーのボタン */
 .header-btn {
     display: flex;
-    align-items: end;
+    align-items: flex-end;
     gap: 15px;
     align-self: flex-end;
 }
@@ -136,9 +133,10 @@ header h1 a:hover {
 
 #other-btn{
     font-size: 0.9rem;
-    background-color: #E1C954;
-    color: #003B90;
-    border: none;
+    background-color: #003B90;
+    color: #F3F4F6;
+    border: 1px solid;
+    border-bottom: none;
     padding: 12px 15px;
     border-radius: 6px 6px 0 0;
     width: 120px;
@@ -156,8 +154,7 @@ header h1 a:hover {
     border-radius: 6px 6px 0 0;
 }
 
-#other-btn:hover,
-#logout-btn:hover,
+/* ボタンオンマウスで半透明にする */
 #login-btn:hover,
 .userAdd:hover,
 #detail-btn:hover,
@@ -165,9 +162,28 @@ header h1 a:hover {
 #entry-btn:hover,
 #answer-btn:hover,
 #edit-btn:hover,
-.search-form input[type="submit"]:hover
- {
+.search-form button[type="submit"]:hover {
     opacity: 0.7;
+}
+
+/* オンマウスで色変える */
+#other-btn:hover {
+    background-color: #004099;
+}
+
+#logout-btn:hover {
+    background-color: #FF0000;
+}
+
+#other-btn,
+#logout-btn {
+    height: 45px;
+    transition: height 0.3s ease, background-color 0.3s ease;
+}
+
+#other-btn:hover,
+#logout-btn:hover {
+    height: 50px;
 }
 
 /* メイン画面 */
@@ -210,12 +226,19 @@ h2 {
     border-radius: 5px;
 }
 
-.search-form input[type="submit"] {
-    width: 60px;
-    height: 35px;
+.search-form button[type="submit"] {
+    color: #FFF;
+    text-align: center;
+    font-weight: 600;
     margin-left: 3px;
     padding: 0;
+    border: none;
+    cursor: pointer;
+    background-color: #003B90;
     border-radius: 5px;
+    letter-spacing: 0.25em;
+    width: 75px;
+    height: 35px;
 }
 
 .search-form span {
@@ -410,14 +433,13 @@ h2 {
 
 /* フッター */
 footer {
-    font-size: 0.8rem;
     position: relative;
     color: #FFF;
     background-color: #003B90;
     text-align: center;
     height: 50px;
     flex-shrink: 0;
-    padding: 15px 0;
+    padding: 13px 0;
 }
 
 /* ページング処理 */
@@ -463,9 +485,6 @@ footer {
   font-weight: bold;
   pointer-events: none;
 }
-
-
-
 
 /* 戻るボタン */
 .return-btn {

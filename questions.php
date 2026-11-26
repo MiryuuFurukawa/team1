@@ -74,11 +74,10 @@ $offset = ($page - 1) * $num;
     <main>
             <div class="search-container">
                 <div class="search-form">
-                    <i class="bi bi-search" aria-hidden="true"></i>
                     <form action="questions.php" method="GET">
                         <input type="search" name="keyword"
                             value="<?= htmlspecialchars($keyword, ENT_QUOTES, 'UTF-8') ?>" maxlength="20">
-                        <input type="submit" value="検索">
+                        <button type="submit"><i class="bi bi-search" aria-hidden="true"></i>検索</button>
                         <!--<?php if ($keyword !== ''): ?>
                 <a href="questions.php">検索解除</a>
             <?php endif; ?> -->
