@@ -1,8 +1,20 @@
 <?php
-// function.php をつなげる
 require_once 'function.php';
-// セッションスタート
 startSessionIfNeeded();
+
+$referer = $_SERVER['HTTP_REFERER'] ?? '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    if ($referer === '' || strpos($referer, 'index.php') === false) {
+        header('Location: index.php');
+        exit;
+    }
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if ($referer === '' || strpos($referer, 'userAdd.php') === false) {
+        header('Location: index.php');
+        exit;
+    }
+}
 
 $error = "";
 $viewName = "";
@@ -15,13 +27,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($viewName === '' || $userId === '' || $userPw === '') {
         $error = '入力してください。';
+    } else if (isOnlyWhitespace($viewName)) {
+        $error = '表示名を入力してください。';
     } else if (mb_strlen($userId) < 8) {
         $error = 'ユーザーIDは8文字以上で入力してください。';
     } else if (mb_strlen($userPw) < 6) {
         $error = 'パスワードは6文字以上で入力してください。';
-    } else if(preg_match('/[^\x21-\x7E]/',$userId) || preg_match('/[^\x21-\x7E]/',$userPw)){
+    } else if (preg_match('/[^\x21-\x7E]/', $userId) || preg_match('/[^\x21-\x7E]/', $userPw)) {
         $error = 'ユーザーIDとパスワードは半角英数字で入力してください。';
-    } else if (isUserIdExists($userId)) { // ← function.php の関数を使用
+    } else if (isUserIdExists($userId)) {
         $error = 'このユーザーIDはすでに使用されています。';
     } else if (!addUser($viewName, $userId, $userPw)) {
         $error = '登録できませんでした。';
@@ -31,7 +45,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-<!-- ここからHTML -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -54,36 +67,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="submit" id="other-btn" value="質問する">
             </form>
             <?php if (isLoggedIn()): ?>
-                <form action="index.php" method="POST" >
-                    <input type="submit" id="logout-btn" name="logout" value="ログアウト" >
+                <form action="index.php" method="POST">
+                    <input type="submit" id="logout-btn" name="logout" value="ログアウト">
                 </form>
             <?php endif; ?>
             <?php if (!isLoggedIn()): ?>
                 <form action="index.php" method="POST">
-                    <input type="submit"  id="other-btn" name="login" value="ログイン">
+                    <input type="submit" id="other-btn" name="login" value="ログイン">
                 </form>
             <?php endif; ?>
         </div>
     </header>
 
     <main>
-        <!-- 表示名、ユーザーID、パスワードを登録 -->
         <h2>利用者登録</h2>
         <?php if ($error !== ''): ?>
-                <p style="color: red;"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p>
-            <?php endif; ?>
+            <p style="color: red;"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p>
+        <?php endif; ?>
 
         <form action="userAdd.php" method="post" class="index-main">
-            <div><label for="viewName">表示名　　　</label>
+            <div><label for="viewName">表示名 </label>
                 <input type="text" name="viewName" value="<?= htmlspecialchars($viewName, ENT_QUOTES, 'UTF-8') ?>">
-        <form action="userAdd.php" method="post">
-
+            </div>
             <div>
-                <label for="userId">ユーザーID　</label>
+                <label for="userId">ユーザーID </label>
                 <input type="text" name="userId" value="<?= htmlspecialchars($userId, ENT_QUOTES, 'UTF-8') ?>">
             </div>
             <div>
-                <label for="userPw">パスワード　</label>
+                <label for="userPw">パスワード </label>
                 <input type="password" name="userPw">
             </div>
             <div>

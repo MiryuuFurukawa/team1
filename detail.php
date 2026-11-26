@@ -1,7 +1,22 @@
 <?php
 require_once 'function.php';
+startSessionIfNeeded();
+
+$referer = $_SERVER['HTTP_REFERER'] ?? '';
+if (
+    $referer === '' ||
+    (strpos($referer, 'questions.php') === false &&
+        strpos($referer, 'detail.php') === false &&
+        strpos($referer, 'answer.php') === false &&
+        strpos($referer, 'questionEdit.php') === false)
+) {
+    header('Location: questions.php');
+    exit;
+}
 
 $questionId = $_GET['questionId'] ?? '';
+$page = $_GET['page'] ?? '1';
+$keyword = $_GET['keyword'] ?? '';
 
 if ($questionId === '' || !ctype_digit((string) $questionId)) {
     header('Location: questions.php');
@@ -20,7 +35,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
         }
     }
 
-    header('Location: detail.php?questionId=' . urlencode($questionId));
+    $redirectUrl = 'detail.php?questionId=' . urlencode($questionId);
+    if ($page !== '1') {
+        $redirectUrl .= '&page=' . urlencode($page);
+    }
+    if ($keyword !== '') {
+        $redirectUrl .= '&keyword=' . urlencode($keyword);
+    }
+    header('Location: ' . $redirectUrl);
     exit;
 }
 
@@ -57,13 +79,13 @@ if ($answers === false) {
                 <input type="submit" id="other-btn" value="質問する">
             </form>
             <?php if (isLoggedIn()): ?>
-                <form action="index.php" method="POST" >
-                    <input type="submit" id="logout-btn" name="logout" value="ログアウト" >
+                <form action="index.php" method="POST">
+                    <input type="submit" id="logout-btn" name="logout" value="ログアウト">
                 </form>
             <?php endif; ?>
             <?php if (!isLoggedIn()): ?>
                 <form action="index.php" method="POST">
-                    <input type="submit"  id="other-btn" name="login" value="ログイン">
+                    <input type="submit" id="other-btn" name="login" value="ログイン">
                 </form>
             <?php endif; ?>
         </div>
@@ -143,6 +165,10 @@ if ($answers === false) {
     </main>
     <footer>
         <form action="questions.php" method="GET">
+            <input type="hidden" name="page" value="<?= htmlspecialchars((string) $page, ENT_QUOTES, 'UTF-8') ?>">
+            <?php if ($keyword !== ''): ?>
+                <input type="hidden" name="keyword" value="<?= htmlspecialchars((string) $keyword, ENT_QUOTES, 'UTF-8') ?>">
+            <?php endif; ?>
             <button type="submit" class="return-btn">戻る</button>
         </form>
         <div>@アイデア倉庫</div>
