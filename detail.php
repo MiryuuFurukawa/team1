@@ -1,5 +1,18 @@
 <?php
 require_once 'function.php';
+startSessionIfNeeded();
+
+$referer = $_SERVER['HTTP_REFERER'] ?? '';
+if (
+    $referer === '' ||
+    (strpos($referer, 'questions.php') === false &&
+        strpos($referer, 'detail.php') === false &&
+        strpos($referer, 'answer.php') === false &&
+        strpos($referer, 'questionEdit.php') === false)
+) {
+    header('Location: questions.php');
+    exit;
+}
 
 $questionId = $_GET['questionId'] ?? '';
 
@@ -57,13 +70,13 @@ if ($answers === false) {
                 <input type="submit" id="other-btn" value="質問する">
             </form>
             <?php if (isLoggedIn()): ?>
-                <form action="index.php" method="POST" >
-                    <input type="submit" id="logout-btn" name="logout" value="ログアウト" >
+                <form action="index.php" method="POST">
+                    <input type="submit" id="logout-btn" name="logout" value="ログアウト">
                 </form>
             <?php endif; ?>
             <?php if (!isLoggedIn()): ?>
                 <form action="index.php" method="POST">
-                    <input type="submit"  id="other-btn" name="login" value="ログイン">
+                    <input type="submit" id="other-btn" name="login" value="ログイン">
                 </form>
             <?php endif; ?>
         </div>

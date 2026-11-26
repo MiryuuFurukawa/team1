@@ -1,5 +1,16 @@
 <?php
 require_once 'function.php';
+startSessionIfNeeded();
+
+$referer = $_SERVER['HTTP_REFERER'] ?? '';
+if (
+    $referer === '' ||
+    (strpos($referer, 'detail.php') === false &&
+        strpos($referer, 'questionEdit.php') === false)
+) {
+    header('Location: index.php');
+    exit;
+}
 
 requireLogin();
 

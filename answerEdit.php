@@ -1,21 +1,17 @@
 <?php
 require_once 'function.php';
+startSessionIfNeeded();
 
-$questionId = $_GET['questionId'] ?? $_POST['questionId'] ?? '';
-requireLogin('answer', (string) $questionId);
-
-if ($questionId === '' || !ctype_digit((string) $questionId)) {
-    header('Location: questions.php');
+$referer = $_SERVER['HTTP_REFERER'] ?? '';
+if (
+    $referer === '' ||
+    (strpos($referer, 'detail.php') === false &&
+        strpos($referer, 'answerEdit.php') === false)
+) {
+    header('Location: index.php');
     exit;
 }
 
-$question = getQuestionById((int) $questionId);
-if ($question === false) {
-    header('Location: questions.php');
-    exit;
-}
-// 定義書の $question['name'] に合わせる[cite: 2]
-$question['name'] = $question['userName'];
 
 requireLogin();
 
@@ -28,12 +24,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $answerId = $_GET['answerId'] ?? '';
     $questionId = $_GET['questionId'] ?? '';
 
-
     if ($answerId === '' || !ctype_digit((string) $answerId)) {
         header('Location: questions.php');
         exit;
     }
-
 
     $answer = getAnswerById((int) $answerId);
     if ($answer === false) {
@@ -82,6 +76,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+
+// 画面表示用に質問情報を取得
+$targetQid = $questionId !== '' ? $questionId : ($answer['questionId'] ?? '');
+$question = $targetQid !== '' ? getQuestionById((int) $targetQid) : false;
+if ($question === false) {
+    header('Location: questions.php');
+    exit;
+}
+$question['name'] = $question['userName'] ?? '';
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -122,9 +125,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="question-name"><?= htmlspecialchars((string) $question['name'], ENT_QUOTES, 'UTF-8') ?></div>
             <div class="question-time"><?= htmlspecialchars((string) $question['date'], ENT_QUOTES, 'UTF-8') ?></div>
             <div class="question-text">
-                
-
-                            <?= nl2br(htmlspecialchars((string) $question['question'], ENT_QUOTES, 'UTF-8')) ?></div>
+                <?= nl2br(htmlspecialchars((string) $question['question'], ENT_QUOTES, 'UTF-8')) ?>
+            </div>
         </div>
 
         <form action="answerEdit.php" method="POST" class="answer-container">
@@ -136,9 +138,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="hidden" name="answerId"
                 value="<?= htmlspecialchars((string) $answerId, ENT_QUOTES, 'UTF-8') ?>">
             <input type="hidden" name="questionId"
-                    value="<?= htmlspecialchars((string) $questionId, ENT_QUOTES, 'UTF-8') ?>">
-        <?php if (!empty($error)): ?>
-                        <span style="color: red;"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></span>
+                value="<?= htmlspecialchars((string) $targetQid, ENT_QUOTES, 'UTF-8') ?>">
+            <?php if (!empty($error)): ?>
+                <span style="color: red;"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></span>
             <?php endif; ?>
             <input type="submit" value="編集する" id="entry-btn">
         </form>
@@ -147,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <footer>
         <form action="detail.php" method="GET">
             <input type="hidden" name="questionId"
-                value="<?= htmlspecialchars((string) $questionId, ENT_QUOTES, 'UTF-8') ?>">
+                value="<?= htmlspecialchars((string) $targetQid, ENT_QUOTES, 'UTF-8') ?>">
             <button type="submit" class="return-btn">戻る</button>
         </form>
         <div>@アイデア倉庫</div>
