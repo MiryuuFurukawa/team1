@@ -1,6 +1,10 @@
 <?php
 require_once 'function.php';
 
+$num = 5;
+
+startSessionIfNeeded();
+
 $questionId = $_GET['questionId'] ?? '';
 
 if ($questionId === '' || !ctype_digit((string) $questionId)) {
@@ -24,6 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
     exit;
 }
 
+$loginUser = $_SESSION['user'] ?? null;
+
 $question = getQuestionById((int) $questionId);
 if ($question === false) {
     header('Location: questions.php');
@@ -35,6 +41,11 @@ $answers = getAnswersByQuestionId((int) $questionId);
 if ($answers === false) {
     $answers = [];
 }
+
+// 現在のページ番号とOFFSETを計算（回答一覧用）
+$page = max(1, (int) ($_GET['page'] ?? 1));
+$offset = ($page - 1) * $num;
+$pagedAnswers = array_slice($answers, $offset, $num);
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -51,19 +62,18 @@ if ($answers === false) {
         <h1><a href="questions.php">アイデア倉庫</a></h1>
         <div class="header-btn">
             <form action="questions.php" method="GET">
-                <input type="submit" id="other-btn" value="質問一覧">
+                <input type="submit" class="other-btn" value="質問一覧">
             </form>
             <form action="questionInput.php" method="GET">
-                <input type="submit" id="other-btn" value="質問する">
+                <input type="submit" class="other-btn" value="質問する">
             </form>
             <?php if (isLoggedIn()): ?>
-                <form action="index.php" method="POST" >
-                    <input type="submit" id="logout-btn" name="logout" value="ログアウト" >
-                </form>
-            <?php endif; ?>
-            <?php if (!isLoggedIn()): ?>
                 <form action="index.php" method="POST">
-                    <input type="submit"  id="other-btn" name="login" value="ログイン">
+                    <input type="submit" id="logout-btn" name="logout" value="ログアウト">
+                </form>
+            <?php else: ?>
+                <form action="index.php" method="POST">
+                    <input type="submit" class="other-btn" name="login" value="ログイン">
                 </form>
             <?php endif; ?>
         </div>
@@ -72,28 +82,25 @@ if ($answers === false) {
     <main>
         <h2 id="question-h2">Question</h2>
         <div class="question-container">
-            <form action="answer.php" method="GET">
-                <input type="hidden" value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
-                <div class="question-name"><?= htmlspecialchars((string) $question['name'], ENT_QUOTES, 'UTF-8') ?>
-                </div>
-                <div class="question-time"><?= htmlspecialchars((string) $question['date'], ENT_QUOTES, 'UTF-8') ?>
-                </div>
-                <div class="question-text">
-                    <?= nl2br(htmlspecialchars((string) $question['question'], ENT_QUOTES, 'UTF-8')) ?>
-                </div>
-            </form>
+            <div class="question-name"><?= htmlspecialchars((string) $question['name'], ENT_QUOTES, 'UTF-8') ?></div>
+            <div class="question-time"><?= htmlspecialchars((string) $question['date'], ENT_QUOTES, 'UTF-8') ?></div>
+            <div class="question-text">
+                <?= nl2br(htmlspecialchars((string) $question['question'], ENT_QUOTES, 'UTF-8')) ?>
+            </div>
+
             <div class="question-container-btn">
                 <form action="answer.php" method="GET">
                     <input type="hidden" name="questionId"
                         value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
                     <input type="hidden" name="page" value="answer">
-                    <input type="submit" value="回答" name="answer" id="answer-btn">
+                    <input type="submit" value="回答" name="answer" class="answer-btn">
                 </form>
-                <?php if (isLoggedIn() && (int) $question['userId'] === (int) $_SESSION['user']['id'] && empty($answers)): ?>
+
+                <?php if ($loginUser && (int) $question['userId'] === (int) $loginUser['id'] && empty($answers)): ?>
                     <form action="questionEdit.php" method="GET">
                         <input type="hidden" name="questionId"
                             value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
-                        <input type="submit" value="編集" id="edit-btn">
+                        <input type="submit" value="編集" class="edit-btn">
                     </form>
                 <?php endif; ?>
             </div>
@@ -101,11 +108,9 @@ if ($answers === false) {
 
         <div class="answer-container">
             <h2 id="answer-h2">Answer</h2>
-            <?php if (!empty($answers)): ?>
-                <?php foreach ($answers as $ans): ?>
-                    <?php
-                    $ans['name'] = $ans['answererName'] ?? '';
-                    ?>
+            <?php if (!empty($pagedAnswers)): ?>
+                <?php foreach ($pagedAnswers as $ans): ?>
+                    <?php $ans['name'] = $ans['answererName'] ?? ''; ?>
                     <div class="question-container">
                         <div class="question-name"><?= htmlspecialchars((string) $ans['name'], ENT_QUOTES, 'UTF-8') ?></div>
                         <div class="question-time"><?= htmlspecialchars((string) $ans['date'], ENT_QUOTES, 'UTF-8') ?></div>
@@ -113,34 +118,36 @@ if ($answers === false) {
                             <?= nl2br(htmlspecialchars((string) $ans['answer'], ENT_QUOTES, 'UTF-8')) ?>
                         </div>
 
-                        <div class="question-container-btn">
-                            <?php if (isLoggedIn() && (int) $ans['userId'] === (int) $_SESSION['user']['id']): ?>
+                        <?php if ($loginUser && (int) $ans['userId'] === (int) $loginUser['id']): ?>
+                            <div class="question-container-btn">
                                 <form action="answerEdit.php" method="GET">
                                     <input type="hidden" name="answerId"
                                         value="<?= htmlspecialchars((string) $ans['id'], ENT_QUOTES, 'UTF-8') ?>">
                                     <input type="hidden" name="questionId"
                                         value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
-                                    <input type="submit" value="編集" id="edit-btn">
+                                    <input type="submit" value="編集" class="edit-btn">
                                 </form>
-                            <?php endif; ?>
 
-                            <?php if (isLoggedIn() && (int) $ans['userId'] === (int) $_SESSION['user']['id']): ?>
                                 <form
                                     action="detail.php?questionId=<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>"
                                     method="POST">
-                                    <input type="hidden" value="<?= htmlspecialchars((string) $ans['id'], ENT_QUOTES, 'UTF-8') ?>"
+                                    <input type="hidden"
+                                        value="<?= htmlspecialchars((string) $ans['id'], ENT_QUOTES, 'UTF-8') ?>"
                                         name="answerId">
-                                    <input type="submit" value="削除" name="delete" id="delete-btn">
+                                    <input type="submit" value="削除" name="delete" class="delete-btn">
                                 </form>
-                            <?php endif; ?>
-                        </div>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
             <?php else: ?>
                 <p>まだ回答はありません。</p>
             <?php endif; ?>
         </div>
+
+        <?php renderAnswerPagination((int) $questionId, (int) $num, (int) $page); ?>
     </main>
+
     <footer>
         <form action="questions.php" method="GET">
             <button type="submit" class="return-btn">戻る</button>

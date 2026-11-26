@@ -445,6 +445,34 @@ function renderPagination($num, $keyword = '')
     }
 }
 
+function renderAnswerPagination(int $questionId, int $num, int $currentPage = 1): void
+{
+    try {
+        $db = Connect();
+        $stmt = $db->prepare('
+            SELECT COUNT(*)
+            FROM answer
+            WHERE questionId = :questionId AND deleteFlg = 0
+        ');
+        $stmt->bindValue(':questionId', $questionId, PDO::PARAM_INT);
+        $stmt->execute();
+        $totalAnswers = (int) $stmt->fetchColumn();
+    } catch (PDOException $e) {
+        exit('エラー：' . $e->getMessage());
+    }
+
+    $maxPage = max(1, (int) ceil($totalAnswers / $num));
+
+    if ($maxPage >= 1) {
+        echo '<nav class="page-nav"><ul class="page-contaiter">';
+        for ($i = 1; $i <= $maxPage; $i++) {
+            $activeClass = ($i === $currentPage) ? ' active' : '';
+            echo '<li><a href="detail.php?questionId=' . $questionId . '&amp;page=' . $i . '" class="page-link' . $activeClass . '">' . $i . '</a></li>';
+        }
+        echo '</ul></nav>';
+    }
+}
+
 function isOnlyWhitespace(string $text): bool
 {
     $noSpaceText = preg_replace('/[[:space:]]| /u', '', $text);
