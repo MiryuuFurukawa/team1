@@ -126,6 +126,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                             <?= nl2br(htmlspecialchars((string) $question['question'], ENT_QUOTES, 'UTF-8')) ?></div>
         </div>
+        <h2 id="question-h2">Question</h2>
+        <div class="question-container">
+            <div class="question-name"><?= htmlspecialchars((string) $question['name'], ENT_QUOTES, 'UTF-8') ?></div>
+            <div class="question-time"><?= htmlspecialchars((string) $question['date'], ENT_QUOTES, 'UTF-8') ?></div>
+            <div class="question-text">
+                
+
+                            <?= nl2br(htmlspecialchars((string) $question['question'], ENT_QUOTES, 'UTF-8')) ?></div>
+        </div>
 
         <form action="answerEdit.php" method="POST" class="answer-container">
             <div class="edit-form">
@@ -136,6 +145,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="hidden" name="answerId"
                 value="<?= htmlspecialchars((string) $answerId, ENT_QUOTES, 'UTF-8') ?>">
             <input type="hidden" name="questionId"
+                    value="<?= htmlspecialchars((string) $questionId, ENT_QUOTES, 'UTF-8') ?>">
                     value="<?= htmlspecialchars((string) $questionId, ENT_QUOTES, 'UTF-8') ?>">
         <?php if (!empty($error)): ?>
             <span style="color: red;"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></span>
