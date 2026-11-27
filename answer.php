@@ -1,5 +1,17 @@
 <?php
 require_once 'function.php';
+startSessionIfNeeded();
+
+$referer = $_SERVER['HTTP_REFERER'] ?? '';
+if (
+    $referer === '' ||
+    (strpos($referer, 'index.php') === false &&
+        strpos($referer, 'detail.php') === false &&
+        strpos($referer, 'answer.php') === false)
+) {
+    header('Location: index.php');
+    exit;
+}
 
 $questionId = $_GET['questionId'] ?? $_POST['questionId'] ?? '';
 requireLogin('answer', (string) $questionId);
@@ -23,7 +35,7 @@ $answer = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $answer = trim($_POST['answer'] ?? '');
 
-    if ($answer === '') {
+    if (isOnlyWhitespace($_POST['answer'] ?? '')) {
         $err = '回答を入力してください。';
     } elseif (mb_strlen($answer, 'UTF-8') > 256) {
         $err = '回答内容は256文字以内で入力してください。';
@@ -73,8 +85,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="question-name"><?= htmlspecialchars((string) $question['name'], ENT_QUOTES, 'UTF-8') ?></div>
             <div class="question-time"><?= htmlspecialchars((string) $question['date'], ENT_QUOTES, 'UTF-8') ?></div>
             <div class="question-text">
-
-
                 <?= nl2br(htmlspecialchars((string) $question['question'], ENT_QUOTES, 'UTF-8')) ?>
             </div>
         </div>
@@ -91,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php if ($err !== ''): ?>
                 <span id="error"><?= htmlspecialchars($err, ENT_QUOTES, 'UTF-8') ?></span>
             <?php endif; ?>
-            <input type="submit" value="登録" id="entry-btn">
+            <input type="submit" value="回答" id="answer-btn2">
         </form>
     </main>
 

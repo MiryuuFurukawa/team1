@@ -1,5 +1,16 @@
 <?php
 require_once 'function.php';
+startSessionIfNeeded();
+
+$referer = $_SERVER['HTTP_REFERER'] ?? '';
+if (
+    $referer === '' ||
+    (strpos($referer, 'detail.php') === false &&
+        strpos($referer, 'questionEdit.php') === false)
+) {
+    header('Location: index.php');
+    exit;
+}
 
 requireLogin();
 
@@ -44,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    if (trim($questionText) === '') {
+    if (isOnlyWhitespace($questionText)) {
         $error = '質問内容を入力してください。';
     } elseif (mb_strlen($questionText, 'UTF-8') > 256) {
         $error = '質問内容は256文字以内で入力してください。';
@@ -100,10 +111,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <input type="hidden" name="questionId"
                 value="<?= htmlspecialchars((string) $questionId, ENT_QUOTES, 'UTF-8') ?>">
-        <?php if (!empty($error)): ?>
-            <span style="color: red;"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></span>
-        <?php endif; ?>
-            <input type="submit" value="編集する" id="entry-btn">
+            <?php if (!empty($error)): ?>
+                <span style="color: red;">
+                    <?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?>
+                </span>
+            <?php endif; ?>
+            <input type="submit" value="編集" id="entry-btn">
         </form>
     </main>
 
