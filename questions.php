@@ -96,7 +96,7 @@ $offset = ($page - 1) * $num;
                     <form><input type="hidden" name="questionId"
                             value="<?= htmlspecialchars($questions[$n]['id'], ENT_QUOTES, 'UTF-8') ?>"></form>
                     <div class="question-name"><?= htmlspecialchars($questions[$n]['name'], ENT_QUOTES, 'UTF-8') ?></div>
-                    <div class="question-time"><?= date('Y年m月d日 H:i', strtotime($questions[$n]['date'])) ?></div>
+                    <div class="question-time"><?= date('Y年m月d日 H時i分', strtotime($questions[$n]['date'])) ?></div>
                     <div class="question-text"><?= nl2br(htmlspecialchars($questions[$n]['question'], ENT_QUOTES, 'UTF-8')) ?>
                     </div>
 

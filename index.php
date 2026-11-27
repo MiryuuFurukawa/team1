@@ -62,13 +62,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="hidden" name="questionId"
                     value="<?= htmlspecialchars($questionId, ENT_QUOTES, 'UTF-8') ?>">
 
-                <div>
-                    <label for="userId">ユーザーID　</label>
+                <div class="input-group">
+                    <label for="userId" class="soroeru">ユーザーID</label>
                     <input type="text" id="userId" name="userId"
                         value="<?= htmlspecialchars($userId, ENT_QUOTES, 'UTF-8') ?>">
                 </div>
-                <div>
-                    <label for="userPw">パスワード　</label>
+                <div class="input-group">
+                    <label for="userPw" class="soroeru">パスワード</label>
                     <input type="password" id="userPw" name="userPw">
                 </div>
                 <div id="login-btn">

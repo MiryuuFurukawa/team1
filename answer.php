@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php if ($err !== ''): ?>
                 <span id="error"><?= htmlspecialchars($err, ENT_QUOTES, 'UTF-8') ?></span>
             <?php endif; ?>
-            <input type="submit" value="登録" id="entry-btn">
+            <input type="submit" value="回答" id="answer-btn2">
         </form>
     </main>
 
