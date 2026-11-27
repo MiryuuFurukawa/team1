@@ -7,18 +7,18 @@ $userId = '';
 $page = $_GET['page'] ?? ($_POST['page'] ?? '');
 $questionId = $_GET['questionId'] ?? ($_POST['questionId'] ?? '');
 
- if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // ログアウトボタンが押された場合の処理を追加
     if (isset($_POST['logout'])) {
         logoutProcess();
     }
-    if(isset($_POST['userId']) || isset($_POST['userPw'])){
-    // 通常のログイン処理
-    $userId = $_POST['userId'] ?? '';
-    $userPw = $_POST['userPw'] ?? '';
-    $err = loginProcess($userId, $userPw, $page, $questionId);
+    if (isset($_POST['userId']) || isset($_POST['userPw'])) {
+        // 通常のログイン処理
+        $userId = $_POST['userId'] ?? '';
+        $userPw = $_POST['userPw'] ?? '';
+        $err = loginProcess($userId, $userPw, $page, $questionId);
+    }
 }
- }
 
 ?>
 <!DOCTYPE html>
@@ -37,11 +37,16 @@ $questionId = $_GET['questionId'] ?? ($_POST['questionId'] ?? '');
         <h1><a href="questions.php">アイデア倉庫</a></h1>
         <div class="header-btn">
             <form action="questions.php" method="GET">
-                <input type="submit" id="current-btn" value="質問一覧">
+                <input type="submit" id="other-btn" value="質問一覧">
             </form>
             <form action="questionInput.php" method="GET">
                 <input type="submit" id="other-btn" value="質問する">
             </form>
+            <?php if (!isLoggedIn()): ?>
+                <form action="index.php" method="POST">
+                    <input type="submit" id="current-btn" name="login" value="ログイン">
+                </form>
+            <?php endif; ?>
         </div>
     </header>
 
@@ -57,13 +62,13 @@ $questionId = $_GET['questionId'] ?? ($_POST['questionId'] ?? '');
                 <input type="hidden" name="questionId"
                     value="<?= htmlspecialchars($questionId, ENT_QUOTES, 'UTF-8') ?>">
 
-                <div>
-                    <label for="userId">ユーザーID　</label>
+                <div class="input-group">
+                    <label for="userId" class="soroeru">ユーザーID</label>
                     <input type="text" id="userId" name="userId"
                         value="<?= htmlspecialchars($userId, ENT_QUOTES, 'UTF-8') ?>">
                 </div>
-                <div>
-                    <label for="userPw">パスワード　</label>
+                <div class="input-group">
+                    <label for="userPw" class="soroeru">パスワード</label>
                     <input type="password" id="userPw" name="userPw">
                 </div>
                 <div id="login-btn">
