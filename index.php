@@ -18,6 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+$successMsg = $_SESSION['flash_success'] ?? '';
+unset($_SESSION['flash_success']);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,7 +53,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <main>
         <h2>ログイン</h2>
-
+        <?php if ($successMsg !== ''): ?>
+            <p style="color:#63C2BC;"><?= htmlspecialchars($successMsg, ENT_QUOTES, 'UTF-8') ?></p>
+        <?php endif; ?>
         <?php if ($err !== ''): ?>
             <p style="color:red;"><?= htmlspecialchars($err, ENT_QUOTES, 'UTF-8') ?></p>
         <?php endif; ?>
@@ -70,8 +75,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input type="password" id="userPw" name="userPw">
                 </div>
                 <div class="pw-change">
-                <a href="passwordChange.php">パスワード変更</a>
-            </div>
+                    <a href="passwordChange.php">パスワード変更</a>
+                </div>
                 <div id="login-btn">
                     <input type="submit" value="ログイン">
                 </div>

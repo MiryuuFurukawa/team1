@@ -45,7 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($error === '' && passwordChange($userId, $new_userPw)) {
-        $success = header('Location: index.php');
+        $_SESSION['flash_success'] = 'パスワードを変更しました！新しいパスワードでログインしてください。';
+        header('Location: index.php');
+        exit;
     } else if ($error === '') {
         $error = 'パスワードの変更に失敗しました。';
     }
