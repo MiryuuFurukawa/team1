@@ -317,6 +317,9 @@ function loginProcess(string $userId, string $userPw, string $page = '', string 
     if ($page === 'questionInput') {
         header('Location: questionInput.php');
         exit;
+    } elseif ($page === 'detail' && $questionId !== '') {
+        header('Location: detail.php?questionId=' . urlencode($questionId));
+        exit;
     } elseif ($page === 'answer' && $questionId !== '') {
         header('Location: answer.php?questionId=' . urlencode($questionId));
         exit;
@@ -433,16 +436,50 @@ function renderPagination($num, $keyword = '')
         exit("エラー：" . $e->getMessage());
     }
 
-    $max_page = ceil($comments / $num);
+    $max_page = (int) ceil($comments / $num);
 
-    if ($max_page >= 1) {
-        echo '<nav class="page-nav"><ul class="page-contaiter">';
-        for ($i = 1; $i <= $max_page; $i++) {
-            $queryParam = ($keyword !== '') ? '&keyword=' . urlencode($keyword) : '';
-            echo '<li><a href="questions.php?page=' . $i . $queryParam . '" class="page-link">' . $i . '</a></li>';
-        }
-        echo '</ul></nav>';
+    // 1ページ以下の場合はページネーションを表示しない
+    if ($max_page <= 1) {
+        return;
     }
+
+    $page = max(1, (int) ($_GET['page'] ?? 1));
+    $range = 4; // 現在ページの前後4ページを表示
+
+    // 表示するページ番号のベースを集める
+    $pages = [];
+    for ($i = 1; $i <= $max_page; $i++) {
+        if ($i === 1 || $i === $max_page || ($i >= $page - $range && $i <= $page + $range)) {
+            $pages[] = $i;
+        }
+    }
+
+    // 間に抜けがある部分はすべて「...」に置き換える
+    $displayPages = [];
+    $last = 0;
+    foreach ($pages as $p) {
+        if ($last !== 0) {
+            if ($p - $last > 1) {
+                $displayPages[] = '...';
+            }
+        }
+        $displayPages[] = $p;
+        $last = $p;
+    }
+
+    $keywordParam = ($keyword !== '') ? '&keyword=' . urlencode($keyword) : '';
+
+    echo '<nav class="page-nav"><ul class="page-contaiter">';
+    foreach ($displayPages as $p) {
+        if ($p === '...') {
+            echo '<li class="page-ellipsis">...</li>';
+        } elseif ($p === $page) {
+            echo '<li><span class="page-link current">' . $p . '</span></li>';
+        } else {
+            echo '<li><a href="questions.php?page=' . $p . $keywordParam . '" class="page-link">' . $p . '</a></li>';
+        }
+    }
+    echo '</ul></nav>';
 }
 
 function isOnlyWhitespace(string $text): bool

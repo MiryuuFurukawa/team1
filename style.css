@@ -168,7 +168,7 @@ header h1 a:active {
 
 /* オンマウスで色変える */
 #other-btn:hover {
-    background-color: #004099;
+    background-color: #004AB3;
 }
 
 #logout-btn:hover {
@@ -459,7 +459,7 @@ h2 {
 }
 
 .pw-change a {
-    text-decoration-line: underline #004099 solid 1px;
+    text-decoration-line: underline #004AB3 solid 1px;
     text-underline-offset: auto;
 }
 
@@ -528,6 +528,15 @@ footer {
     border-color: #bbb;
 }
 
+.current {
+    background-color: #003B90;
+    color: #F3F4F6;
+}
+.current:hover {
+    background-color: #003B90;
+    color: #F3F4F6;
+}
+
 /* 現在のページ */
 .page-link[aria-current="page"] {
     color: #fff;
@@ -540,18 +549,24 @@ footer {
 /* 戻るボタン */
 .return-btn {
     position: absolute;
-    right: 10%;
+    left: 10%;
     top: 0;
 
     font-size: 0.8rem;
-    background-color: #F3F4F6;
-    color: #003B90;
+    background-color: #003B90;
+    color: #F3F4F6;
     font-weight: 600;
-    border: none;
+    border: 1px #F3F4F6 solid;
     margin: 0;
     padding: 3px 15px;
     border-radius: 0 0 6px 6px;
     width: 80px;
     height: 30px;
     cursor: pointer;
+    transition: height 0.4s ease, background-color 0.4s ease;
+}
+
+.return-btn:hover {
+    height: 35px;
+    background-color: #004AB3;
 }
