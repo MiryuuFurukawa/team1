@@ -17,8 +17,11 @@ if (
     exit;
 }
 
+$num = 5;
+
 $questionId = $_GET['questionId'] ?? '';
-$page = $_GET['page'] ?? '1';
+// 一覧から引き継いだページ番号を q_page で受け取る（なければ '1'）
+$questionPage = $_GET['q_page'] ?? '1';
 $keyword = $_GET['keyword'] ?? '';
 
 if ($questionId === '' || !ctype_digit((string) $questionId)) {
@@ -38,9 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
         }
     }
 
-    $redirectUrl = 'detail.php?questionId=' . urlencode($questionId);
-    if ($page !== '1') {
-        $redirectUrl .= '&page=' . urlencode($page);
+    $redirectUrl = 'detail.php?questionId=' . urlencode($questionId) . '&q_page=' . urlencode($questionPage);
+    if (isset($_GET['page']) && $_GET['page'] !== '1') {
+        $redirectUrl .= '&page=' . urlencode($_GET['page']);
     }
     if ($keyword !== '') {
         $redirectUrl .= '&keyword=' . urlencode($keyword);
@@ -48,6 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
     header('Location: ' . $redirectUrl);
     exit;
 }
+
+$loginUser = $_SESSION['user'] ?? null;
 
 $question = getQuestionById((int) $questionId);
 if ($question === false) {
@@ -60,6 +65,11 @@ $answers = getAnswersByQuestionId((int) $questionId);
 if ($answers === false) {
     $answers = [];
 }
+
+// 現在のページ番号（回答一覧用）とOFFSETを計算
+$page = max(1, (int) ($_GET['page'] ?? 1));
+$offset = ($page - 1) * $num;
+$pagedAnswers = array_slice($answers, $offset, $num);
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -85,15 +95,14 @@ if ($answers === false) {
                 <form action="index.php" method="POST">
                     <input type="submit" id="logout-btn" name="logout" value="ログアウト">
                 </form>
-            <?php endif; ?>
-            <?php if (!isLoggedIn()): ?>
+            <?php else: ?>
                 <form action="index.php" method="POST">
                     <input type="hidden" name="page" value="detail">
                     <input type="hidden" name="questionId"
                         value="<?= htmlspecialchars((string) $questionId, ENT_QUOTES, 'UTF-8') ?>">
-                    <?php if ($page !== '1'): ?>
+                    <?php if ($questionPage !== '1'): ?>
                         <input type="hidden" name="page_no"
-                            value="<?= htmlspecialchars((string) $page, ENT_QUOTES, 'UTF-8') ?>">
+                            value="<?= htmlspecialchars((string) $questionPage, ENT_QUOTES, 'UTF-8') ?>">
                     <?php endif; ?>
                     <?php if ($keyword !== ''): ?>
                         <input type="hidden" name="keyword"
@@ -123,11 +132,12 @@ if ($answers === false) {
                     <input type="hidden" name="page" value="answer">
                     <input type="submit" value="回答" name="answer" id="answer-btn">
                 </form>
-                <?php if (isLoggedIn() && (int) $question['userId'] === (int) $_SESSION['user']['id'] && empty($answers)): ?>
+
+                <?php if ($loginUser && (int) $question['userId'] === (int) $loginUser['id'] && empty($answers)): ?>
                     <form action="questionEdit.php" method="GET">
                         <input type="hidden" name="questionId"
                             value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
-                        <input type="submit" value="編集" id="edit-btn">
+                        <input type="submit" value="編集" class="edit-btn">
                     </form>
                 <?php endif; ?>
             </div>
@@ -135,11 +145,9 @@ if ($answers === false) {
 
         <div class="answer-container">
             <h2 id="answer-h2">Answer</h2>
-            <?php if (!empty($answers)): ?>
-                <?php foreach ($answers as $ans): ?>
-                    <?php
-                    $ans['name'] = $ans['answererName'] ?? '';
-                    ?>
+            <?php if (!empty($pagedAnswers)): ?>
+                <?php foreach ($pagedAnswers as $ans): ?>
+                    <?php $ans['name'] = $ans['answererName'] ?? ''; ?>
                     <div class="question-container">
                         <div class="question-name"><?= htmlspecialchars((string) $ans['name'], ENT_QUOTES, 'UTF-8') ?></div>
                         <div class="question-time">
@@ -149,37 +157,39 @@ if ($answers === false) {
                             <?= nl2br(htmlspecialchars((string) $ans['answer'], ENT_QUOTES, 'UTF-8')) ?>
                         </div>
 
-                        <div class="question-container-btn">
-                            <?php if (isLoggedIn() && (int) $ans['userId'] === (int) $_SESSION['user']['id']): ?>
+                        <?php if ($loginUser && (int) $ans['userId'] === (int) $loginUser['id']): ?>
+                            <div class="question-container-btn">
                                 <form action="answerEdit.php" method="GET">
                                     <input type="hidden" name="answerId"
                                         value="<?= htmlspecialchars((string) $ans['id'], ENT_QUOTES, 'UTF-8') ?>">
                                     <input type="hidden" name="questionId"
                                         value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
-                                    <input type="submit" value="編集" id="edit-btn">
+                                    <input type="submit" value="編集" class="edit-btn">
                                 </form>
-                            <?php endif; ?>
 
-                            <?php if (isLoggedIn() && (int) $ans['userId'] === (int) $_SESSION['user']['id']): ?>
                                 <form
                                     action="detail.php?questionId=<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>"
                                     method="POST">
                                     <input type="hidden" value="<?= htmlspecialchars((string) $ans['id'], ENT_QUOTES, 'UTF-8') ?>"
                                         name="answerId">
-                                    <input type="submit" value="削除" name="delete" id="delete-btn">
+                                    <input type="submit" value="削除" name="delete" class="delete-btn">
                                 </form>
-                            <?php endif; ?>
-                        </div>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
             <?php else: ?>
                 <p>まだ回答はありません。</p>
             <?php endif; ?>
         </div>
+
+        <?php renderAnswerPagination((int) $questionId, (int) $num, (int) $page); ?>
     </main>
+
     <footer>
         <form action="questions.php" method="GET">
-            <input type="hidden" name="page" value="<?= htmlspecialchars((string) $page, ENT_QUOTES, 'UTF-8') ?>">
+            <input type="hidden" name="page"
+                value="<?= htmlspecialchars((string) $questionPage, ENT_QUOTES, 'UTF-8') ?>">
             <?php if ($keyword !== ''): ?>
                 <input type="hidden" name="keyword" value="<?= htmlspecialchars((string) $keyword, ENT_QUOTES, 'UTF-8') ?>">
             <?php endif; ?>
