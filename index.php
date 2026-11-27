@@ -69,6 +69,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="userPw" class="soroeru">パスワード</label>
                     <input type="password" id="userPw" name="userPw">
                 </div>
+                <div class="pw-change">
+                <a href="passwordChange.php">パスワード変更</a>
+            </div>
                 <div id="login-btn">
                     <input type="submit" value="ログイン">
                 </div>
@@ -77,6 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="userAdd">
                 <a href="userAdd.php">新規登録</a>
             </div>
+
         </div>
     </main>
     <footer>
