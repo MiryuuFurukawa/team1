@@ -1,8 +1,7 @@
 <?php
 
-// function.php をつなげる
 require_once 'function.php';
-// セッションスタート
+
 startSessionIfNeeded();
 
 $error = '';
@@ -30,10 +29,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ) {
         $error = 'パスワードは6文字以上で入力してください。';
     } else if (
-        preg_match('/[^\x21-\x7E]/', $userId) ||
-        preg_match('/[^\x21-\x7E]/', $userPw) ||
-        preg_match('/[^\x21-\x7E]/', $new_userPw) ||
-        preg_match('/[^\x21-\x7E]/', $confirm_userPw)
+        preg_match('/[^a-zA-Z0-9]/', $userId) ||
+        preg_match('/[^a-zA-Z0-9]/', $userPw) ||
+        preg_match('/[^a-zA-Z0-9]/', $new_userPw) ||
+        preg_match('/[^a-zA-Z0-9]/', $confirm_userPw)
     ) {
         $error = 'ユーザーIDとパスワードは半角英数字で入力してください。';
     } else if ($new_userPw !== $confirm_userPw) {
@@ -42,8 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'ユーザーIDまたは現在のパスワードが一致しません。。';
     }
 
-
-    // パスワードを登録するfunction passwordchange
     if ($error === '' && passwordChange($userId, $new_userPw)) {
         $success = header('Location: index.php');
     } else if ($error === '') {
@@ -51,7 +48,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// 新しいパスワードをDBに登録する
 function passwordchange($userId, $new_userPw, )
 {
     $result = false;
@@ -77,7 +73,6 @@ function passwordchange($userId, $new_userPw, )
 
 ?>
 
-<!-- ↓ここからHTML -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -88,13 +83,11 @@ function passwordchange($userId, $new_userPw, )
 </head>
 
 <body>
-    <!-- ↓ヘッダー -->
     <header>
         <h1><a href="questions.php">アイデア倉庫</a></h1>
         <div class="header-btn">
         </div>
     </header>
-    <!-- ↓ここからメイン -->
     <main>
         <h2>パスワードの変更</h2>
         <link rel="stylesheet" href="style.css">
@@ -124,7 +117,6 @@ function passwordchange($userId, $new_userPw, )
 
         </form>
     </main>
-    <!-- ↑ここまでメイン -->
     <footer>
         <div>@アイデア倉庫</div>
     </footer>
