@@ -124,7 +124,8 @@ function passwordchange($userId, $new_userPw, )
                 <input type="password" id="new_userPw" name="new_userPw">
             </div>
             <div class="input-group2">
-                <label for="confirm_userPw" class="confirm_userPw">新しいパスワード<br><span class="kakunin">(確認用)</span></label>
+                <label for="confirm_userPw" class="confirm_userPw">新しいパスワード<br><span
+                        class="kakunin">(確認用)</span></label>
                 <input type="password" id="confirm_userPw" name="confirm_userPw">
             </div>
             <div>
