@@ -452,27 +452,61 @@ h2 {
 }
 
 /* パスワード変更ページ */
+.pw_arrange{
+    width : 350px;
+}
+
 .pw-change {
+    font-size: 0.8rem;
     text-align: right;
     margin: 0;
     padding: 0;
 }
 
 .pw-change a {
-    text-decoration-line: underline #004AB3 solid 1px;
-    text-underline-offset: auto;
+    text-decoration: underline #004AB3 solid 1px;
+    text-underline-offset: 3px;
+}
+
+.pw-change a:hover {
+    text-decoration: none;
+}
+
+.soroeru {
+    display: block;
+    width: 100px;
+    flex-shrink: 0;
+    text-align: right;
 }
 
 .userId,
 .userPw,
 .new_userPw,
-.comfirm_userPw,
-.soroeru
- {
+.confirm_userPw {
     display: block;
-    width: 100px;
+    width: 150px;
     flex-shrink: 0;
     text-align: right;
+}
+
+.input-group2 input[type="text"],
+.input-group2 input[type="password"] {
+    width: 200px;
+    margin: 0;
+}
+
+.input-group2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 7px;
+}
+
+.confirm_userPw {
+    line-height: 1.1;
+}
+.kakunin {
+    font-size: 0.8rem;
 }
 
 /* エラー */
