@@ -4,6 +4,20 @@ require_once 'function.php';
 
 startSessionIfNeeded();
 
+$referer = $_SERVER['HTTP_REFERER'] ?? '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    if ($referer === '' || (strpos($referer, 'index.php') === false && strpos($referer, 'passwordChange.php') === false)) {
+        header('Location: index.php');
+        exit;
+    }
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if ($referer === '' || strpos($referer, 'passwordChange.php') === false) {
+        header('Location: index.php');
+        exit;
+    }
+}
+
 $error = '';
 $success = '';
 
