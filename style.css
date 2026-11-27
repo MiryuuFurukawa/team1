@@ -591,6 +591,7 @@ footer {
     color: #F3F4F6;
     font-weight: 600;
     border: 1px #F3F4F6 solid;
+    border-top: none;
     margin: 0;
     padding: 3px 15px;
     border-radius: 0 0 6px 6px;
