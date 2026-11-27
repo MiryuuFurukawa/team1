@@ -1,5 +1,17 @@
 <?php
 require_once 'function.php';
+startSessionIfNeeded();
+
+$referer = $_SERVER['HTTP_REFERER'] ?? '';
+if (
+    $referer === '' ||
+    (strpos($referer, 'index.php') === false &&
+        strpos($referer, 'detail.php') === false &&
+        strpos($referer, 'answer.php') === false)
+) {
+    header('Location: index.php');
+    exit;
+}
 
 $questionId = $_GET['questionId'] ?? $_POST['questionId'] ?? '';
 requireLogin('answer', (string) $questionId);
@@ -73,8 +85,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="question-name"><?= htmlspecialchars((string) $question['name'], ENT_QUOTES, 'UTF-8') ?></div>
             <div class="question-time"><?= htmlspecialchars((string) $question['date'], ENT_QUOTES, 'UTF-8') ?></div>
             <div class="question-text">
-
-
                 <?= nl2br(htmlspecialchars((string) $question['question'], ENT_QUOTES, 'UTF-8')) ?>
             </div>
         </div>

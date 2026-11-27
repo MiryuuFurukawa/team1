@@ -1,5 +1,17 @@
 <?php
 require_once 'function.php';
+startSessionIfNeeded();
+
+$referer = $_SERVER['HTTP_REFERER'] ?? '';
+if (
+    $referer === '' ||
+    (strpos($referer, 'questions.php') === false &&
+        strpos($referer, 'index.php') === false &&
+        strpos($referer, 'questionInput.php') === false)
+) {
+    header('Location: index.php');
+    exit;
+}
 
 requireLogin('questionInput');
 
@@ -16,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['question'])) {
         $userId = $_SESSION['user']['id'];
 
         if (addQuestion($userId, $questionText)) {
-            header('Location: questions.php');
+            header('Location: index.php');
             exit;
         } else {
             $err = '質問の登録に失敗しました。';

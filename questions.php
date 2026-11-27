@@ -28,10 +28,8 @@ $searchKeyword = ($errorMsg !== '') ? '' : $keyword;
 $err = $_SESSION['err'] ?? '';
 unset($_SESSION['err']);
 
-// 現在のページ番号
 $page = max(1, (int) ($_GET['page'] ?? 1));
 
-// OFFSETを計算
 $offset = ($page - 1) * $num;
 ?>
 <!DOCTYPE html>
@@ -104,6 +102,11 @@ $offset = ($page - 1) * $num;
                         <form action="detail.php" method="GET">
                             <input type="hidden" name="questionId"
                                 value="<?= htmlspecialchars($questions[$n]['id'], ENT_QUOTES, 'UTF-8') ?>">
+                            <input type="hidden" name="page"
+                                value="<?= htmlspecialchars((string) $page, ENT_QUOTES, 'UTF-8') ?>">
+                            <?php if ($keyword !== ''): ?>
+                                <input type="hidden" name="keyword" value="<?= htmlspecialchars($keyword, ENT_QUOTES, 'UTF-8') ?>">
+                            <?php endif; ?>
                             <input type="submit" id="detail-btn" value="詳細">
                         </form>
 
