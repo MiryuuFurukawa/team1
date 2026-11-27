@@ -1,11 +1,29 @@
 <?php
 require_once 'function.php';
+startSessionIfNeeded();
+
+$referer = $_SERVER['HTTP_REFERER'] ?? '';
+if (
+    $referer === '' ||
+    (strpos($referer, 'questions.php') === false &&
+        strpos($referer, 'detail.php') === false &&
+        strpos($referer, 'answer.php') === false &&
+        strpos($referer, 'questionEdit.php') === false &&
+        strpos($referer, 'answerEdit.php') === false &&
+        strpos($referer, 'index.php') === false
+    )
+) {
+    header('Location: questions.php');
+    exit;
+}
 
 $num = 5;
 
 startSessionIfNeeded();
 
 $questionId = $_GET['questionId'] ?? '';
+$page = $_GET['page'] ?? '1';
+$keyword = $_GET['keyword'] ?? '';
 
 if ($questionId === '' || !ctype_digit((string) $questionId)) {
     header('Location: questions.php');
@@ -24,7 +42,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
         }
     }
 
-    header('Location: detail.php?questionId=' . urlencode($questionId));
+    $redirectUrl = 'detail.php?questionId=' . urlencode($questionId);
+    if ($page !== '1') {
+        $redirectUrl .= '&page=' . urlencode($page);
+    }
+    if ($keyword !== '') {
+        $redirectUrl .= '&keyword=' . urlencode($keyword);
+    }
+    header('Location: ' . $redirectUrl);
     exit;
 }
 
@@ -73,7 +98,18 @@ $pagedAnswers = array_slice($answers, $offset, $num);
                 </form>
             <?php else: ?>
                 <form action="index.php" method="POST">
-                    <input type="submit" class="other-btn" name="login" value="ログイン">
+                    <input type="hidden" name="page" value="detail">
+                    <input type="hidden" name="questionId"
+                        value="<?= htmlspecialchars((string) $questionId, ENT_QUOTES, 'UTF-8') ?>">
+                    <?php if ($page !== '1'): ?>
+                        <input type="hidden" name="page_no"
+                            value="<?= htmlspecialchars((string) $page, ENT_QUOTES, 'UTF-8') ?>">
+                    <?php endif; ?>
+                    <?php if ($keyword !== ''): ?>
+                        <input type="hidden" name="keyword"
+                            value="<?= htmlspecialchars((string) $keyword, ENT_QUOTES, 'UTF-8') ?>">
+                    <?php endif; ?>
+                    <input type="submit" id="other-btn" name="login" value="ログイン">
                 </form>
             <?php endif; ?>
         </div>
@@ -82,12 +118,13 @@ $pagedAnswers = array_slice($answers, $offset, $num);
     <main>
         <h2 id="question-h2">Question</h2>
         <div class="question-container">
-            <div class="question-name"><?= htmlspecialchars((string) $question['name'], ENT_QUOTES, 'UTF-8') ?></div>
-            <div class="question-time"><?= htmlspecialchars((string) $question['date'], ENT_QUOTES, 'UTF-8') ?></div>
+            <div class="question-name"><?= htmlspecialchars((string) $question['name'], ENT_QUOTES, 'UTF-8') ?>
+            </div>
+            <div class="question-time"><?= htmlspecialchars((string) $question['date'], ENT_QUOTES, 'UTF-8') ?>
+            </div>
             <div class="question-text">
                 <?= nl2br(htmlspecialchars((string) $question['question'], ENT_QUOTES, 'UTF-8')) ?>
             </div>
-
             <div class="question-container-btn">
                 <form action="answer.php" method="GET">
                     <input type="hidden" name="questionId"
@@ -150,6 +187,10 @@ $pagedAnswers = array_slice($answers, $offset, $num);
 
     <footer>
         <form action="questions.php" method="GET">
+            <input type="hidden" name="page" value="<?= htmlspecialchars((string) $page, ENT_QUOTES, 'UTF-8') ?>">
+            <?php if ($keyword !== ''): ?>
+                <input type="hidden" name="keyword" value="<?= htmlspecialchars((string) $keyword, ENT_QUOTES, 'UTF-8') ?>">
+            <?php endif; ?>
             <button type="submit" class="return-btn">戻る</button>
         </form>
         <div>@アイデア倉庫</div>

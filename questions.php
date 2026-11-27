@@ -28,10 +28,8 @@ $searchKeyword = ($errorMsg !== '') ? '' : $keyword;
 $err = $_SESSION['err'] ?? '';
 unset($_SESSION['err']);
 
-// 現在のページ番号
 $page = max(1, (int) ($_GET['page'] ?? 1));
 
-// OFFSETを計算
 $offset = ($page - 1) * $num;
 ?>
 <!DOCTYPE html>
@@ -42,44 +40,53 @@ $offset = ($page - 1) * $num;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>質問一覧画面</title>
     <link rel="stylesheet" href="style.css">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.2/font/bootstrap-icons.min.css">
 </head>
 
 <body>
-    <header>
-        <h1><a href="questions.php">アイデア倉庫</a></h1>
-        <div class="header-btn">
-            <form action="questions.php" method="GET">
-                <input type="submit" id="current-btn" value="質問一覧">
-            </form>
-            <form action="questionInput.php" method="GET">
-                <input type="submit" id="other-btn" value="質問する">
-            </form>
-            <?php if (isLoggedIn()): ?>
-                <form action="index.php" method="POST">
-                    <input type="submit" id="logout-btn" name="logout" value="ログアウト">
+        <header class="header" id="js-header">
+            <h1><a href="questions.php">アイデア倉庫</a></h1>
+            <div class="header-btn">
+                <form action="questions.php" method="GET">
+                    <input type="submit" id="current-btn" value="質問一覧">
                 </form>
-            <?php endif; ?>
-            <?php if (!isLoggedIn()): ?>
-                <form action="index.php" method="POST">
-                    <input type="submit" id="other-btn" name="login" value="ログイン">
+                <form action="questionInput.php" method="GET">
+                    <input type="submit" id="other-btn" value="質問する">
                 </form>
-            <?php endif; ?>
-        </div>
-    </header>
+                <?php if (isLoggedIn()): ?>
+                    <form action="index.php" method="POST">
+                        <input type="submit" id="logout-btn" name="logout" value="ログアウト">
+                    </form>
+                <?php endif; ?>
+                <?php if (!isLoggedIn()): ?>
+                    <form action="index.php" method="POST">
+                        <input type="submit" id="other-btn" name="login" value="ログイン">
+                    </form>
+                <?php endif; ?>
+            </div>
+        </header>
 
     <main>
-        <form action="questions.php" method="GET" class="search-form">
-            <input type="text" name="keyword" value="<?= htmlspecialchars($keyword, ENT_QUOTES, 'UTF-8') ?>"
-                maxlength="20">
-            <input type="submit" value="検索">
-            <?php if ($keyword !== ''): ?>
+        <div class="search-container">
+            <div class="search-form">
+                <form action="questions.php" method="GET">
+                    <input type="search" name="keyword" value="<?= htmlspecialchars($keyword, ENT_QUOTES, 'UTF-8') ?>"
+                        maxlength="20">
+                    <button type="submit"><i class="bi bi-search" aria-hidden="true"></i>検索</button>
+                    <!--<?php if ($keyword !== ''): ?>
                 <a href="questions.php">検索解除</a>
-            <?php endif; ?>
-        </form>
+            <?php endif; ?> -->
+                </form>
+            </div>
+            <div class="search-form">
+                <?php if ($errorMsg !== ''): ?>
+                    <span><?= htmlspecialchars($errorMsg, ENT_QUOTES, 'UTF-8') ?></span>
+                <?php endif; ?>
+            </div>
+        </div>
 
-        <?php if ($errorMsg !== ''): ?>
-            <p><?= htmlspecialchars($errorMsg, ENT_QUOTES, 'UTF-8') ?></p>
-        <?php endif; ?>
 
         <?php if ($questions = getQuestionsByPage($searchKeyword, $num, $offset)): ?>
             <?php foreach ($questions as $n => $q): ?>
@@ -87,7 +94,7 @@ $offset = ($page - 1) * $num;
                     <form><input type="hidden" name="questionId"
                             value="<?= htmlspecialchars($questions[$n]['id'], ENT_QUOTES, 'UTF-8') ?>"></form>
                     <div class="question-name"><?= htmlspecialchars($questions[$n]['name'], ENT_QUOTES, 'UTF-8') ?></div>
-                    <div class="question-time"><?= htmlspecialchars($questions[$n]['date'], ENT_QUOTES, 'UTF-8') ?></div>
+                    <div class="question-time"><?= date('Y年m月d日 H時i分', strtotime($questions[$n]['date'])) ?></div>
                     <div class="question-text"><?= nl2br(htmlspecialchars($questions[$n]['question'], ENT_QUOTES, 'UTF-8')) ?>
                     </div>
 
@@ -95,6 +102,11 @@ $offset = ($page - 1) * $num;
                         <form action="detail.php" method="GET">
                             <input type="hidden" name="questionId"
                                 value="<?= htmlspecialchars($questions[$n]['id'], ENT_QUOTES, 'UTF-8') ?>">
+                            <input type="hidden" name="page"
+                                value="<?= htmlspecialchars((string) $page, ENT_QUOTES, 'UTF-8') ?>">
+                            <?php if ($keyword !== ''): ?>
+                                <input type="hidden" name="keyword" value="<?= htmlspecialchars($keyword, ENT_QUOTES, 'UTF-8') ?>">
+                            <?php endif; ?>
                             <input type="submit" id="detail-btn" value="詳細">
                         </form>
 

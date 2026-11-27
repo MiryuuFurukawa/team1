@@ -1,5 +1,22 @@
 <?php
 require_once 'function.php';
+startSessionIfNeeded();
+
+$referer = $_SERVER['HTTP_REFERER'] ?? '';
+if (
+    $referer === '' ||
+    (strpos($referer, 'index.php') === false &&
+        strpos($referer, 'questions.php') === false &&
+        strpos($referer, 'questionInput.php') === false &&
+        strpos($referer, 'detail.php') === false &&
+        strpos($referer, 'answer.php') === false &&
+        strpos($referer, 'answerEdit.php') === false &&
+        strpos($referer, 'questionEdit.php') === false &&
+        strpos($referer, 'userAdd.php') === false)
+) {
+    header('Location: index.php');
+    exit;
+}
 
 requireLogin('questionInput');
 
@@ -69,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['question'])) {
                 <span id="error"><?php echo htmlspecialchars($err, ENT_QUOTES, 'UTF-8'); ?></span>
             <?php endif; ?>
 
-            <input type="submit" value="登録" id="entry-btn">
+            <input type="submit" value="投稿" id="entry-btn">
         </form>
     </main>
 
