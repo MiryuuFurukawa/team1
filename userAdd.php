@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'ユーザーIDは8文字以上で入力してください。';
     } else if (mb_strlen($userPw) < 6) {
         $error = 'パスワードは6文字以上で入力してください。';
-    } else if (preg_match('/[^\x21-\x7E]/', $userId) || preg_match('/[^\x21-\x7E]/', $userPw)) {
+    } else if (preg_match('/[^a-zA-Z0-9]/', $userId) || preg_match('/[^a-zA-Z0-9]/', $userPw)) {
         $error = 'ユーザーIDとパスワードは半角英数字で入力してください。';
     } else if (isUserIdExists($userId)) {
         $error = 'このユーザーIDはすでに使用されています。';
