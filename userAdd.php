@@ -29,9 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'すべての項目を入力してください。';
     } else if (isOnlyWhitespace($viewName)) {
         $error = '表示名を入力してください。';
-    } else if (mb_strlen($userId) < 8 && mb_strlen($userId) > 10) {
+    } else if (mb_strlen($userId) < 8 || mb_strlen($userId) > 10) {
         $error = 'ユーザーIDは8～10文字で入力してください。';
-    } else if (mb_strlen($userPw) < 6 && mb_strlen($userPw) > 10) {
+    } else if (mb_strlen($userPw) < 6 || mb_strlen($userPw) > 10) {
         $error = 'パスワードは6～10文字で入力してください。';
     } else if (preg_match('/[^a-zA-Z0-9]/', $userId) || preg_match('/[^a-zA-Z0-9]/', $userPw)) {
         $error = 'ユーザーIDとパスワードは半角英数字で入力してください。';
@@ -40,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else if (!addUser($viewName, $userId, $userPw)) {
         $error = '登録できませんでした。';
     } else {
+        $_SESSION['flash_success'] = '新規登録が完了しました！ログインしてください。';
         header('Location: index.php');
         exit;
     }

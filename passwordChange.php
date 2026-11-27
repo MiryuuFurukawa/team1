@@ -37,11 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else if (mb_strlen($userId) < 8) {
         $error = 'ユーザーIDは8文字以上で入力してください。';
     } else if (
-        mb_strlen($userPw) < 6 ||
         mb_strlen($new_userPw) < 6 ||
-        mb_strlen($confirm_userPw) < 6
+        mb_strlen($confirm_userPw) < 6 ||
+        mb_strlen($new_userPw) > 10 ||
+        mb_strlen($confirm_userPw) > 10
     ) {
-        $error = 'パスワードは6文字以上で入力してください。';
+        $error = 'パスワードは6～10文字で入力してください。';
     } else if (
         preg_match('/[^a-zA-Z0-9]/', $userId) ||
         preg_match('/[^a-zA-Z0-9]/', $userPw) ||
@@ -52,11 +53,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else if ($new_userPw !== $confirm_userPw) {
         $error = '新しいパスワードと確認用が一致しません。';
     } else if (!isUser($userId, $userPw)) {
-        $error = 'ユーザーIDまたは現在のパスワードが一致しません。。';
+        $error = 'ユーザーIDまたは現在のパスワードが一致しません。';
+    } else if ($new_userPw == $userPw) {
+        $error = '現在のパスワードと同じパスワードは使用できません。';
     }
 
     if ($error === '' && passwordChange($userId, $new_userPw)) {
-        $success = header('Location: index.php');
+        $_SESSION['flash_success'] = 'パスワードを変更しました！新しいパスワードでログインしてください。';
+        header('Location: index.php');
+        exit;
     } else if ($error === '') {
         $error = 'パスワードの変更に失敗しました。';
     }
@@ -100,6 +105,22 @@ function passwordchange($userId, $new_userPw, )
     <header>
         <h1><a href="questions.php">アイデア倉庫</a></h1>
         <div class="header-btn">
+            <form action="questions.php" method="GET">
+                <input type="submit" id="other-btn" value="質問一覧">
+            </form>
+            <form action="questionInput.php" method="GET">
+                <input type="submit" id="other-btn" value="質問する">
+            </form>
+            <?php if (isLoggedIn()): ?>
+                <form action="index.php" method="POST">
+                    <input type="submit" id="logout-btn" name="logout" value="ログアウト">
+                </form>
+            <?php endif; ?>
+            <?php if (!isLoggedIn()): ?>
+                <form action="index.php" method="POST">
+                    <input type="submit" id="other-btn" name="login" value="ログイン">
+                </form>
+            <?php endif; ?>
         </div>
     </header>
     <main>
@@ -109,32 +130,35 @@ function passwordchange($userId, $new_userPw, )
             <p style="color:red;"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p>
         <?php endif; ?>
         <form action="passwordChange.php" method="post" class="pw_arrange">
-            <div>
+            <div class="input-group2">
                 <label for="userId" class="userId">ユーザーID</label>
                 <input type="text" id="userId" name="userId">
             </div>
-            <div>
-                <label for="userPw" class="userPw">パスワード</label>
+            <div class="input-group2">
+                <label for="userPw" class="userPw">現在のパスワード</label>
                 <input type="password" id="userPw" name="userPw">
             </div>
-            <div>
+            <div class="input-group2">
                 <label for="new_userPw" class="new_userPw">新しいパスワード</label>
                 <input type="password" id="new_userPw" name="new_userPw">
             </div>
-            <div>
-                <label for="confirm_userPw" class="confirm_userPw">新しいパスワード（確認用）</label>
+            <div class="input-group2">
+                <label for="confirm_userPw" class="confirm_userPw">新しいパスワード<br><span
+                        class="kakunin">(確認用)</span></label>
                 <input type="password" id="confirm_userPw" name="confirm_userPw">
             </div>
             <div>
-                <input type="submit" value="変更">
+                <input type="submit" id="login-btn" value="変更">
             </div>
 
         </form>
     </main>
     <footer>
+        <form action="index.php" method="get">
+            <button type="submit" class="return-btn">戻る</button>
+        </form>
         <div>@アイデア倉庫</div>
     </footer>
-
 </body>
 
 </html>

@@ -119,7 +119,8 @@ $pagedAnswers = array_slice($answers, $offset, $num);
         <div class="question-container">
             <div class="question-name"><?= htmlspecialchars((string) $question['name'], ENT_QUOTES, 'UTF-8') ?>
             </div>
-            <div class="question-time"><?= htmlspecialchars((string) $question['date'], ENT_QUOTES, 'UTF-8') ?>
+            <div class="question-time">
+                <?= date('Y年m月d日 H時i分', strtotime($question['date'])) ?>
             </div>
             <div class="question-text">
                 <?= nl2br(htmlspecialchars((string) $question['question'], ENT_QUOTES, 'UTF-8')) ?>
@@ -136,7 +137,7 @@ $pagedAnswers = array_slice($answers, $offset, $num);
                     <form action="questionEdit.php" method="GET">
                         <input type="hidden" name="questionId"
                             value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
-                        <input type="submit" value="編集" class="edit-btn">
+                        <input type="submit" value="編集" id="edit-btn">
                     </form>
                 <?php endif; ?>
             </div>
@@ -149,7 +150,9 @@ $pagedAnswers = array_slice($answers, $offset, $num);
                     <?php $ans['name'] = $ans['answererName'] ?? ''; ?>
                     <div class="question-container">
                         <div class="question-name"><?= htmlspecialchars((string) $ans['name'], ENT_QUOTES, 'UTF-8') ?></div>
-                        <div class="question-time"><?= htmlspecialchars((string) $ans['date'], ENT_QUOTES, 'UTF-8') ?></div>
+                        <div class="question-time">
+                            <?= date('Y年m月d日 H時i分', strtotime($ans['date'])) ?>
+                        </div>
                         <div class="question-text">
                             <?= nl2br(htmlspecialchars((string) $ans['answer'], ENT_QUOTES, 'UTF-8')) ?>
                         </div>
@@ -161,7 +164,7 @@ $pagedAnswers = array_slice($answers, $offset, $num);
                                         value="<?= htmlspecialchars((string) $ans['id'], ENT_QUOTES, 'UTF-8') ?>">
                                     <input type="hidden" name="questionId"
                                         value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
-                                    <input type="submit" value="編集" class="edit-btn">
+                                    <input type="submit" value="編集" id="edit-btn">
                                 </form>
 
                                 <form
@@ -169,7 +172,7 @@ $pagedAnswers = array_slice($answers, $offset, $num);
                                     method="POST">
                                     <input type="hidden" value="<?= htmlspecialchars((string) $ans['id'], ENT_QUOTES, 'UTF-8') ?>"
                                         name="answerId">
-                                    <input type="submit" value="削除" name="delete" class="delete-btn">
+                                    <input type="submit" value="削除" name="delete" id="delete-btn">
                                 </form>
                             </div>
                         <?php endif; ?>
