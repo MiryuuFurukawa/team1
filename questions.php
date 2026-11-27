@@ -46,27 +46,27 @@ $offset = ($page - 1) * $num;
 </head>
 
 <body>
-        <header class="header" id="js-header">
-            <h1><a href="questions.php">アイデア倉庫</a></h1>
-            <div class="header-btn">
-                <form action="questions.php" method="GET">
-                    <input type="submit" id="current-btn" value="質問一覧">
+    <header class="header" id="js-header">
+        <h1><a href="questions.php">アイデア倉庫</a></h1>
+        <div class="header-btn">
+            <form action="questions.php" method="GET">
+                <input type="submit" id="current-btn" value="質問一覧">
+            </form>
+            <form action="questionInput.php" method="GET">
+                <input type="submit" id="other-btn" value="質問する">
+            </form>
+            <?php if (isLoggedIn()): ?>
+                <form action="index.php" method="POST">
+                    <input type="submit" id="logout-btn" name="logout" value="ログアウト">
                 </form>
-                <form action="questionInput.php" method="GET">
-                    <input type="submit" id="other-btn" value="質問する">
+            <?php endif; ?>
+            <?php if (!isLoggedIn()): ?>
+                <form action="index.php" method="POST">
+                    <input type="submit" id="other-btn" name="login" value="ログイン">
                 </form>
-                <?php if (isLoggedIn()): ?>
-                    <form action="index.php" method="POST">
-                        <input type="submit" id="logout-btn" name="logout" value="ログアウト">
-                    </form>
-                <?php endif; ?>
-                <?php if (!isLoggedIn()): ?>
-                    <form action="index.php" method="POST">
-                        <input type="submit" id="other-btn" name="login" value="ログイン">
-                    </form>
-                <?php endif; ?>
-            </div>
-        </header>
+            <?php endif; ?>
+        </div>
+    </header>
 
     <main>
         <div class="search-container">
@@ -75,9 +75,6 @@ $offset = ($page - 1) * $num;
                     <input type="search" name="keyword" value="<?= htmlspecialchars($keyword, ENT_QUOTES, 'UTF-8') ?>"
                         maxlength="20">
                     <button type="submit"><i class="bi bi-search" aria-hidden="true"></i>検索</button>
-                    <!--<?php if ($keyword !== ''): ?>
-                <a href="questions.php">検索解除</a>
-            <?php endif; ?> -->
                 </form>
             </div>
             <div class="search-form">
@@ -86,7 +83,6 @@ $offset = ($page - 1) * $num;
                 <?php endif; ?>
             </div>
         </div>
-
 
         <?php if ($questions = getQuestionsByPage($searchKeyword, $num, $offset)): ?>
             <?php foreach ($questions as $n => $q): ?>
@@ -102,7 +98,8 @@ $offset = ($page - 1) * $num;
                         <form action="detail.php" method="GET">
                             <input type="hidden" name="questionId"
                                 value="<?= htmlspecialchars($questions[$n]['id'], ENT_QUOTES, 'UTF-8') ?>">
-                            <input type="hidden" name="page"
+                            <!-- 一覧のページ番号を q_page として detail.php に渡す -->
+                            <input type="hidden" name="q_page"
                                 value="<?= htmlspecialchars((string) $page, ENT_QUOTES, 'UTF-8') ?>">
                             <?php if ($keyword !== ''): ?>
                                 <input type="hidden" name="keyword" value="<?= htmlspecialchars($keyword, ENT_QUOTES, 'UTF-8') ?>">

@@ -482,6 +482,7 @@ function renderPagination($num, $keyword = '')
     echo '</ul></nav>';
 }
 
+// 回答一覧用のページネーション関数
 function renderAnswerPagination(int $questionId, int $num, int $currentPage = 1): void
 {
     try {
@@ -498,16 +499,47 @@ function renderAnswerPagination(int $questionId, int $num, int $currentPage = 1)
         exit('エラー：' . $e->getMessage());
     }
 
-    $maxPage = max(1, (int) ceil($totalAnswers / $num));
+    $max_page = max(1, (int) ceil($totalAnswers / $num));
 
-    if ($maxPage >= 1) {
-        echo '<nav class="page-nav"><ul class="page-contaiter">';
-        for ($i = 1; $i <= $maxPage; $i++) {
-            $activeClass = ($i === $currentPage) ? ' active' : '';
-            echo '<li><a href="detail.php?questionId=' . $questionId . '&amp;page=' . $i . '" class="page-link' . $activeClass . '">' . $i . '</a></li>';
-        }
-        echo '</ul></nav>';
+    if ($max_page <= 1) {
+        return;
     }
+
+    $range = 4;
+    $pages = [];
+    for ($i = 1; $i <= $max_page; $i++) {
+        if ($i === 1 || $i === $max_page || ($i >= $currentPage - $range && $i <= $currentPage + $range)) {
+            $pages[] = $i;
+        }
+    }
+
+    $displayPages = [];
+    $last = 0;
+    foreach ($pages as $p) {
+        if ($last !== 0) {
+            if ($p - $last > 1) {
+                $displayPages[] = '...';
+            }
+        }
+        $displayPages[] = $p;
+        $last = $p;
+    }
+
+    // クエリパラメータに q_page（一覧のページ番号）があれば引き継ぐ
+    $qPageParam = isset($_GET['q_page']) ? '&amp;q_page=' . urlencode($_GET['q_page']) : '';
+    $keywordParam = isset($_GET['keyword']) && $_GET['keyword'] !== '' ? '&amp;keyword=' . urlencode($_GET['keyword']) : '';
+
+    echo '<nav class="page-nav"><ul class="page-contaiter">';
+    foreach ($displayPages as $p) {
+        if ($p === '...') {
+            echo '<li class="page-ellipsis">...</li>';
+        } elseif ($p === $currentPage) {
+            echo '<li><span class="page-link current">' . $p . '</span></li>';
+        } else {
+            echo '<li><a href="detail.php?questionId=' . $questionId . '&amp;page=' . $p . $qPageParam . $keywordParam . '" class="page-link">' . $p . '</a></li>';
+        }
+    }
+    echo '</ul></nav>';
 }
 
 function isOnlyWhitespace(string $text): bool

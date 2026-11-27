@@ -19,10 +19,9 @@ if (
 
 $num = 5;
 
-startSessionIfNeeded();
-
 $questionId = $_GET['questionId'] ?? '';
-$page = $_GET['page'] ?? '1';
+// 一覧から引き継いだページ番号を q_page で受け取る（なければ '1'）
+$questionPage = $_GET['q_page'] ?? '1';
 $keyword = $_GET['keyword'] ?? '';
 
 if ($questionId === '' || !ctype_digit((string) $questionId)) {
@@ -42,9 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
         }
     }
 
-    $redirectUrl = 'detail.php?questionId=' . urlencode($questionId);
-    if ($page !== '1') {
-        $redirectUrl .= '&page=' . urlencode($page);
+    $redirectUrl = 'detail.php?questionId=' . urlencode($questionId) . '&q_page=' . urlencode($questionPage);
+    if (isset($_GET['page']) && $_GET['page'] !== '1') {
+        $redirectUrl .= '&page=' . urlencode($_GET['page']);
     }
     if ($keyword !== '') {
         $redirectUrl .= '&keyword=' . urlencode($keyword);
@@ -67,7 +66,7 @@ if ($answers === false) {
     $answers = [];
 }
 
-// 現在のページ番号とOFFSETを計算（回答一覧用）
+// 現在のページ番号（回答一覧用）とOFFSETを計算
 $page = max(1, (int) ($_GET['page'] ?? 1));
 $offset = ($page - 1) * $num;
 $pagedAnswers = array_slice($answers, $offset, $num);
@@ -87,10 +86,10 @@ $pagedAnswers = array_slice($answers, $offset, $num);
         <h1><a href="questions.php">アイデア倉庫</a></h1>
         <div class="header-btn">
             <form action="questions.php" method="GET">
-                <input type="submit" class="other-btn" value="質問一覧">
+                <input type="submit" id="other-btn" value="質問一覧">
             </form>
             <form action="questionInput.php" method="GET">
-                <input type="submit" class="other-btn" value="質問する">
+                <input type="submit" id="other-btn" value="質問する">
             </form>
             <?php if (isLoggedIn()): ?>
                 <form action="index.php" method="POST">
@@ -101,9 +100,9 @@ $pagedAnswers = array_slice($answers, $offset, $num);
                     <input type="hidden" name="page" value="detail">
                     <input type="hidden" name="questionId"
                         value="<?= htmlspecialchars((string) $questionId, ENT_QUOTES, 'UTF-8') ?>">
-                    <?php if ($page !== '1'): ?>
+                    <?php if ($questionPage !== '1'): ?>
                         <input type="hidden" name="page_no"
-                            value="<?= htmlspecialchars((string) $page, ENT_QUOTES, 'UTF-8') ?>">
+                            value="<?= htmlspecialchars((string) $questionPage, ENT_QUOTES, 'UTF-8') ?>">
                     <?php endif; ?>
                     <?php if ($keyword !== ''): ?>
                         <input type="hidden" name="keyword"
@@ -168,8 +167,7 @@ $pagedAnswers = array_slice($answers, $offset, $num);
                                 <form
                                     action="detail.php?questionId=<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>"
                                     method="POST">
-                                    <input type="hidden"
-                                        value="<?= htmlspecialchars((string) $ans['id'], ENT_QUOTES, 'UTF-8') ?>"
+                                    <input type="hidden" value="<?= htmlspecialchars((string) $ans['id'], ENT_QUOTES, 'UTF-8') ?>"
                                         name="answerId">
                                     <input type="submit" value="削除" name="delete" class="delete-btn">
                                 </form>
@@ -187,7 +185,8 @@ $pagedAnswers = array_slice($answers, $offset, $num);
 
     <footer>
         <form action="questions.php" method="GET">
-            <input type="hidden" name="page" value="<?= htmlspecialchars((string) $page, ENT_QUOTES, 'UTF-8') ?>">
+            <input type="hidden" name="page"
+                value="<?= htmlspecialchars((string) $questionPage, ENT_QUOTES, 'UTF-8') ?>">
             <?php if ($keyword !== ''): ?>
                 <input type="hidden" name="keyword" value="<?= htmlspecialchars((string) $keyword, ENT_QUOTES, 'UTF-8') ?>">
             <?php endif; ?>
