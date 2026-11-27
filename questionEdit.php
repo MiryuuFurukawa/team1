@@ -112,9 +112,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="hidden" name="questionId"
                 value="<?= htmlspecialchars((string) $questionId, ENT_QUOTES, 'UTF-8') ?>">
             <?php if (!empty($error)): ?>
-                <span style="color: red;"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></span>
+                <span style="color: red;">
+                    <?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?>
+                </span>
             <?php endif; ?>
-            <input type="submit" value="編集する" id="entry-btn">
+            <input type="submit" value="編集" id="entry-btn">
         </form>
     </main>
 

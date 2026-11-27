@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['question'])) {
                 <span id="error"><?php echo htmlspecialchars($err, ENT_QUOTES, 'UTF-8'); ?></span>
             <?php endif; ?>
 
-            <input type="submit" value="登録" id="entry-btn">
+            <input type="submit" value="投稿" id="entry-btn">
         </form>
     </main>
 

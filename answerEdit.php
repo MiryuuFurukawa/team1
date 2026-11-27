@@ -142,7 +142,7 @@ $question['name'] = $question['userName'] ?? '';
             <?php if (!empty($error)): ?>
                 <span style="color: red;"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></span>
             <?php endif; ?>
-            <input type="submit" value="編集する" id="entry-btn">
+            <input type="submit" value="編集" id="answer-btn2">
         </form>
     </main>
 
