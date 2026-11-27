@@ -454,14 +454,12 @@ function renderPagination($num, $keyword = '')
         }
     }
 
-    // 間に抜けがある部分に「...」を挟むための配列を生成
+    // 間に抜けがある部分はすべて「...」に置き換える
     $displayPages = [];
     $last = 0;
     foreach ($pages as $p) {
         if ($last !== 0) {
-            if ($p - $last === 2) {
-                $displayPages[] = $last + 1;
-            } elseif ($p - $last > 2) {
+            if ($p - $last > 1) {
                 $displayPages[] = '...';
             }
         }
@@ -471,7 +469,6 @@ function renderPagination($num, $keyword = '')
 
     $keywordParam = ($keyword !== '') ? '&keyword=' . urlencode($keyword) : '';
 
-    // HTMLの出力（インラインスタイルを排除し、CSSクラスのみを指定）
     echo '<nav class="page-nav"><ul class="page-contaiter">';
     foreach ($displayPages as $p) {
         if ($p === '...') {
