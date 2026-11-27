@@ -129,7 +129,7 @@ $pagedAnswers = array_slice($answers, $offset, $num);
                     <input type="hidden" name="questionId"
                         value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
                     <input type="hidden" name="page" value="answer">
-                    <input type="submit" value="回答" name="answer" class="answer-btn">
+                    <input type="submit" value="回答" name="answer" id="answer-btn">
                 </form>
 
                 <?php if ($loginUser && (int) $question['userId'] === (int) $loginUser['id'] && empty($answers)): ?>
