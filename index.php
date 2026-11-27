@@ -7,18 +7,18 @@ $userId = '';
 $page = $_GET['page'] ?? ($_POST['page'] ?? '');
 $questionId = $_GET['questionId'] ?? ($_POST['questionId'] ?? '');
 
- if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // ログアウトボタンが押された場合の処理を追加
     if (isset($_POST['logout'])) {
         logoutProcess();
     }
-    if(isset($_POST['userId']) || isset($_POST['userPw'])){
-    // 通常のログイン処理
-    $userId = $_POST['userId'] ?? '';
-    $userPw = $_POST['userPw'] ?? '';
-    $err = loginProcess($userId, $userPw, $page, $questionId);
+    if (isset($_POST['userId']) || isset($_POST['userPw'])) {
+        // 通常のログイン処理
+        $userId = $_POST['userId'] ?? '';
+        $userPw = $_POST['userPw'] ?? '';
+        $err = loginProcess($userId, $userPw, $page, $questionId);
+    }
 }
- }
 
 ?>
 <!DOCTYPE html>
@@ -42,6 +42,11 @@ $questionId = $_GET['questionId'] ?? ($_POST['questionId'] ?? '');
             <form action="questionInput.php" method="GET">
                 <input type="submit" id="other-btn" value="質問する">
             </form>
+            <?php if (!isLoggedIn()): ?>
+                <form action="index.php" method="POST">
+                    <input type="submit" id="current-btn" name="login" value="ログイン">
+                </form>
+            <?php endif; ?>
         </div>
     </header>
 

@@ -15,10 +15,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($viewName === '' || $userId === '' || $userPw === '') {
         $error = 'すべての項目を入力してください。';
-    } else if (mb_strlen($userId) < 8) {
-        $error = 'ユーザーIDは8文字以上で入力してください。';
-    } else if (mb_strlen($userPw) < 6) {
-        $error = 'パスワードは6文字以上で入力してください。';
+    } else if (mb_strlen($userId) < 8 && mb_strlen($userId) > 10) {
+        $error = 'ユーザーIDは8～10文字で入力してください。';
+    } else if (mb_strlen($userPw) < 6 && mb_strlen($userPw) > 10) {
+        $error = 'パスワードは6～10文字で入力してください。';
     } else if(preg_match('/[^\x21-\x7E]/',$userId) || preg_match('/[^\x21-\x7E]/',$userPw)){
         $error = 'ユーザーIDとパスワードは半角英数字で入力してください。';
     } else if (isUserIdExists($userId)) { // ← function.php の関数を使用
@@ -74,16 +74,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endif; ?>
 
         <form action="userAdd.php" method="post" class="index-main">
-            <div><label for="viewName">表示名　　　</label>
+            <div class="input-group"><label class="soroeru" for="viewName">表示名</label>
                 <input type="text" name="viewName" value="<?= htmlspecialchars($viewName, ENT_QUOTES, 'UTF-8') ?>">
-        <form action="userAdd.php" method="post">
-
-            <div>
-                <label for="userId">ユーザーID　</label>
+            </div>
+            <div class="input-group">
+                <label class="soroeru" for="userId">ユーザーID</label>
                 <input type="text" name="userId" value="<?= htmlspecialchars($userId, ENT_QUOTES, 'UTF-8') ?>">
             </div>
-            <div>
-                <label for="userPw">パスワード　</label>
+            <div class="input-group">
+                <label class="soroeru" for="userPw">パスワード</label>
                 <input type="password" name="userPw">
             </div>
             <div>
