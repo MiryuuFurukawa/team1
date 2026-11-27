@@ -137,7 +137,7 @@ $pagedAnswers = array_slice($answers, $offset, $num);
                     <form action="questionEdit.php" method="GET">
                         <input type="hidden" name="questionId"
                             value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
-                        <input type="submit" value="編集" class="edit-btn">
+                        <input type="submit" value="編集" id="edit-btn">
                     </form>
                 <?php endif; ?>
             </div>
@@ -164,7 +164,7 @@ $pagedAnswers = array_slice($answers, $offset, $num);
                                         value="<?= htmlspecialchars((string) $ans['id'], ENT_QUOTES, 'UTF-8') ?>">
                                     <input type="hidden" name="questionId"
                                         value="<?= htmlspecialchars((string) $question['id'], ENT_QUOTES, 'UTF-8') ?>">
-                                    <input type="submit" value="編集" class="edit-btn">
+                                    <input type="submit" value="編集" id="edit-btn">
                                 </form>
 
                                 <form
@@ -172,7 +172,7 @@ $pagedAnswers = array_slice($answers, $offset, $num);
                                     method="POST">
                                     <input type="hidden" value="<?= htmlspecialchars((string) $ans['id'], ENT_QUOTES, 'UTF-8') ?>"
                                         name="answerId">
-                                    <input type="submit" value="削除" name="delete" class="delete-btn">
+                                    <input type="submit" value="削除" name="delete" id="delete-btn">
                                 </form>
                             </div>
                         <?php endif; ?>
