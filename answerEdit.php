@@ -123,7 +123,9 @@ $question['name'] = $question['userName'] ?? '';
         <h2 id="question-h2">Question</h2>
         <div class="question-container">
             <div class="question-name"><?= htmlspecialchars((string) $question['name'], ENT_QUOTES, 'UTF-8') ?></div>
-            <div class="question-time"><?= htmlspecialchars((string) $question['date'], ENT_QUOTES, 'UTF-8') ?></div>
+            <div class="question-time">
+                <?= date('Y年m月d日 H時i分', strtotime($question['date'])) ?>
+            </div>
             <div class="question-text">
                 <?= nl2br(htmlspecialchars((string) $question['question'], ENT_QUOTES, 'UTF-8')) ?>
             </div>
